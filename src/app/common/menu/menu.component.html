@@ -1,0 +1,19 @@
+<div class="mt-4">
+  <ng-container *ngFor="let item of navigation">
+    <a [routerLink]="[item.link]">
+      <div
+        class="text-slate-300 font-extrabold mx-4 py-3 mb-1 rounded-lg cursor-pointer hover:bg-slate-600"
+        [ngClass]="{ 'bg-slate-700 text-white': item.active }"
+      >
+        <div class="flex mx-4 items-center">
+          <mat-icon class="flex-none">{{ item.icon }}</mat-icon>
+          <div class="flex-1">
+            <div class="ml-4">
+              {{ item.title }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </ng-container>
+</div>

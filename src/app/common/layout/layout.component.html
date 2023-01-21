@@ -1,0 +1,69 @@
+<mat-drawer-container class="h-full" autosize>
+  <mat-drawer
+    #drawer
+    [mode]="!isScreenSmall ? 'over' : 'side'"
+    [opened]="isScreenSmall"
+    class="w-72 bg-gray-900"
+  >
+    <div class="flex items-center w-full p-4 pl-6">
+      <div class="flex items-center justify-center">
+        <img class="w-8" src="../../../assets/images/logo.png" />
+      </div>
+    </div>
+
+    <div *ngIf="currentUser" class="flex flex-col items-center w-full p-4">
+      <div class="relative w-24 h-24">
+        <img
+          *ngIf="currentUser.photoURL"
+          class="w-full h-full rounded-full"
+          [src]="currentUser.photoURL"
+          alt="User avatar"
+        />
+        <div *ngIf="!currentUser.photoURL" class="text-white">
+          <mat-icon class="text-8xl default-user">person</mat-icon>
+        </div>
+      </div>
+      <div class="flex flex-col items-center justify-center w-full mt-6">
+        <div
+          class="w-full whitespace-nowrap overflow-ellipsis overflow-hidden text-center leading-normal font-medium text-white"
+        >
+          {{ currentUser.name }}
+        </div>
+        <div
+          class="w-full mt-0.5 whitespace-nowrap overflow-ellipsis overflow-hidden text-center text-md leading-normal font-medium text-secondary text-slate-400"
+        >
+          {{ currentUser.email }}
+        </div>
+      </div>
+    </div>
+
+    <app-menu></app-menu>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <mat-toolbar
+      class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden"
+    >
+      <button
+        mat-icon-button
+        class="example-icon"
+        aria-label="Example icon-button with menu icon"
+        (click)="drawer.toggle()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Wah-Wah Productions</span>
+      <span class="flex-auto"></span>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>Logout
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
