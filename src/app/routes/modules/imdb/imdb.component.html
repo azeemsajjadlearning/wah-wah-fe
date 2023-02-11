@@ -1,0 +1,53 @@
+<div class="rounded-2xl overflow-auto pt-2 pl-2 md:pt-8 md:pl-8">
+  <h2>Popular Movies</h2>
+</div>
+<div class="rounded-2xl overflow-auto px-2 md:px-8">
+  <div
+    class="flex flex-nowrap gap-4 rounded-lg cursor-pointer hover:shadow-2xl hover:shadow-gray-800"
+  >
+    <div
+      *ngFor="let item of propularMovies"
+      class="md:w-1/5 w-2/5 flex-none last:pr-8"
+    >
+      <div
+        class="w-full h-full rounded-lg border-2"
+        (click)="getDetail(item, 'movie')"
+        [matBadge]="item.vote_average"
+        matBadgePosition="below"
+      >
+        <img
+          [src]="item.poster_path"
+          alt=""
+          class="h-full w-full object-cover rounded-lg"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rounded-2xl overflow-auto pt-2 pl-2 md:pt-8 md:pl-8">
+  <h2>Popular Tv</h2>
+</div>
+<div class="rounded-2xl overflow-auto px-2 md:px-8">
+  <div
+    class="flex flex-nowrap gap-4 rounded-lg cursor-pointer hover:shadow-2xl hover:shadow-gray-800"
+  >
+    <div
+      *ngFor="let item of propularTv"
+      class="md:w-1/5 w-2/5 flex-none last:pr-8"
+      [matBadge]="item.vote_average"
+      matBadgePosition="below"
+    >
+      <div
+        class="w-full h-full rounded-lg border-2"
+        (click)="getDetail(item, 'tv')"
+      >
+        <img
+          [src]="item.poster_path"
+          alt=""
+          class="h-full w-full object-cover rounded-lg"
+        />
+      </div>
+    </div>
+  </div>
+</div>

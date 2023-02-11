@@ -35,5 +35,12 @@ export class MenuComponent {
       icon: 'task',
       link: 'task',
     },
+    {
+      id: 'imdb',
+      title: 'IMDb',
+      type: 'basic',
+      icon: 'movie',
+      link: 'imdb',
+    },
   ];
 }

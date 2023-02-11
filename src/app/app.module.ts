@@ -25,6 +25,10 @@ import { LoadingBarService } from './common/loading-bar/loading-bar.service';
 import { ProfileComponent } from './routes/profile/profile.component';
 import { AuthService } from './services/auth.service';
 import { ThirdPartyService } from './services/third-party.service';
+import { IMDbComponent } from './routes/modules/imdb/imdb.component';
+import { IMDbService } from './services/imdb.service';
+import { MovieComponent } from './routes/modules/imdb/movie/movie.component';
+import { TvComponent } from './routes/modules/imdb/tv/tv.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,9 @@ import { ThirdPartyService } from './services/third-party.service';
     DashboardComponent,
     TaskComponent,
     ProfileComponent,
+    IMDbComponent,
+    MovieComponent,
+    TvComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +69,7 @@ import { ThirdPartyService } from './services/third-party.service';
     LoadingBarService,
     TaskService,
     ThirdPartyService,
+    IMDbService,
   ],
   bootstrap: [AppComponent],
 })

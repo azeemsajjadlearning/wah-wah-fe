@@ -1,0 +1,45 @@
+<div
+  *ngIf="movieDetails"
+  class="flex flex-col flex-auto min-w-0 bg-cover movie-header"
+  [style.background-image]="
+    'linear-gradient(to right, rgba(52.5, 10.5, 10.5, 1) calc((50vw - 170px) - 340px), rgba(52.5, 10.5, 10.5, 0.84) 30%, rgba(52.5, 10.5, 10.5, 0.84) 100%),url(' +
+    imageUrlPrefix +
+    movieDetails.detail.backdrop_path +
+    ')'
+  "
+>
+  <div
+    class="flex flex-col md:flex-row justify-between max-w-80 md:max-w-160 w-full p-8 pb-4 md:pt-24 filter-listing"
+  >
+    <div
+      class="order-2 md:order-1 w-full md:w-80 md:ml-6 mb-8 md:mb-4 rounded-lg overflow-hidden"
+    >
+      <img
+        [src]="imageUrlPrefix + movieDetails.detail.poster_path"
+        alt=""
+        class="h-96 w-auto"
+      />
+    </div>
+    <div class="flex flex-col flex-auto text-white order-1 md:order-2 md:ml-10">
+      <div class="text-2xl font-semibold leading-tight">
+        {{ movieDetails.detail.title }}
+        <span>({{ movieDetails.detail.release_date | date : "yyyy" }})</span>
+      </div>
+      <div class="text-base font-medium">
+        {{ movieDetails.detail.release_date }}
+      </div>
+
+      <div>
+        <span *ngFor="let gen of movieDetails.detail.genres"
+          >{{ gen.name }},
+        </span>
+      </div>
+
+      <div class="italic mt-4">{{ movieDetails.detail.tagline }}</div>
+      <div class="mt-4"><h2 class="">Overview</h2></div>
+      <div class="mt-4">{{ movieDetails.detail.overview }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- imageUrlPrefix + movieDetails.detail.backdrop_path -->
