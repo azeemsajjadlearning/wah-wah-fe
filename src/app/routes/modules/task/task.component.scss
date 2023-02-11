@@ -6,3 +6,13 @@
 table {
   width: 100%;
 }
+
+.mat-column-createdAt {
+  width: 200px !important;
+}
+
+@media (width<=768px) {
+  .table-section {
+    height: calc(100vh - 399px);
+  }
+}
