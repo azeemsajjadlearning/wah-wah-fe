@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
-import { SignInUser, SignUpUser } from '../models/auth';
+import { SignInUser, SignUpUser, User } from '../models/auth';
 
 @Injectable()
 export class AuthService {
@@ -28,5 +28,9 @@ export class AuthService {
     return this.http.post(environment.api_prefix + 'users/reset-password', {
       email,
     });
+  }
+
+  public updateUser(user: User) {
+    return this.http.post(environment.api_prefix + 'users', user);
   }
 }

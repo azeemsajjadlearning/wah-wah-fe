@@ -49,6 +49,7 @@ export class ConfirmationService {
       disableClose: !userConfig.dismissible,
       data: userConfig,
       panelClass: 'fuse-confirmation-dialog-panel',
+      maxWidth: '600px',
     });
   }
 }

@@ -10,7 +10,6 @@ import { ConfirmationService } from '../confirmation/confirmation.service';
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  providers: [AuthService],
 })
 export class LayoutComponent {
   constructor(
@@ -52,7 +51,7 @@ export class LayoutComponent {
           title: 'Error',
           icon: {
             color: 'warn',
-            name: 'block',
+            name: 'error',
             show: true,
           },
           message: res.err.message || 'something went wrong!',

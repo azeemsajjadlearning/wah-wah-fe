@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { catchError, finalize } from 'rxjs';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
+import { LoadingBarService } from 'src/app/common/loading-bar/loading-bar.service';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -30,7 +31,7 @@ export class TaskComponent implements OnInit {
 
   getAllTask() {
     this.taskService.getAllTask().subscribe((res) => {
-      this.allTask = new MatTableDataSource<Task>(res.result);
+      this.allTask = new MatTableDataSource<Task>(res);
       this.allTask.paginator = this.paginator;
     });
   }
@@ -45,7 +46,7 @@ export class TaskComponent implements OnInit {
               title: 'Error',
               icon: {
                 color: 'warn',
-                name: 'block',
+                name: 'error',
                 show: true,
               },
               message:
@@ -85,7 +86,7 @@ export class TaskComponent implements OnInit {
             title: 'Error',
             icon: {
               color: 'warn',
-              name: 'block',
+              name: 'error',
               show: true,
             },
             message:
@@ -120,7 +121,7 @@ export class TaskComponent implements OnInit {
             title: 'Error',
             icon: {
               color: 'warn',
-              name: 'block',
+              name: 'error',
               show: true,
             },
             message:

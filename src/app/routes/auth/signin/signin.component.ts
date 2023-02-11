@@ -10,7 +10,6 @@ import { AuthService } from 'src/app/services/auth.service';
   selector: 'selector-name',
   templateUrl: 'signin.component.html',
   styleUrls: ['signin.component.scss'],
-  providers: [AuthService],
 })
 export class SignInComponent implements OnInit {
   constructor(
@@ -40,7 +39,7 @@ export class SignInComponent implements OnInit {
             title: 'Error',
             icon: {
               color: 'warn',
-              name: 'block',
+              name: 'error',
               show: true,
             },
             message:
@@ -75,7 +74,7 @@ export class SignInComponent implements OnInit {
             title: 'Error',
             icon: {
               color: 'warn',
-              name: 'block',
+              name: 'error',
               show: true,
             },
             message: res.error || 'something went wrong',

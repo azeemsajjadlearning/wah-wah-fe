@@ -8,7 +8,6 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   templateUrl: 'signup.component.html',
   styleUrls: ['signup.component.scss'],
-  providers: [AuthService],
 })
 export class SignUpComponent implements OnInit {
   constructor(
@@ -37,7 +36,7 @@ export class SignUpComponent implements OnInit {
             title: 'Error',
             icon: {
               color: 'warn',
-              name: 'block',
+              name: 'error',
               show: true,
             },
             message: 'something went wrong',
@@ -88,7 +87,7 @@ export class SignUpComponent implements OnInit {
             title: 'Error',
             icon: {
               color: 'warn',
-              name: 'block',
+              name: 'error',
               show: true,
             },
             message: res.err.message,

@@ -7,6 +7,7 @@ import { SignInComponent } from './routes/auth/signin/signin.component';
 import { SignUpComponent } from './routes/auth/signup/signup.component';
 import { DashboardComponent } from './routes/modules/dashboard/dashboard.component';
 import { TaskComponent } from './routes/modules/task/task.component';
+import { ProfileComponent } from './routes/profile/profile.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -20,6 +21,7 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'task', component: TaskComponent },
+      { path: 'profile', component: ProfileComponent },
     ],
   },
 ];

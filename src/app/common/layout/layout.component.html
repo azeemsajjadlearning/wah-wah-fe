@@ -59,6 +59,9 @@
       </button>
 
       <mat-menu #menu="matMenu">
+        <a mat-menu-item routerLink="profile">
+          <mat-icon>account_circle</mat-icon>Profile
+        </a>
         <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>Logout
         </button>

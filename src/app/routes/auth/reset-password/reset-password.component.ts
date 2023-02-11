@@ -9,7 +9,6 @@ import { AuthService } from 'src/app/services/auth.service';
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss'],
-  providers: [AuthService],
 })
 export class ResetPasswordComponent {
   constructor(
@@ -38,7 +37,7 @@ export class ResetPasswordComponent {
             title: 'Error',
             icon: {
               color: 'warn',
-              name: 'block',
+              name: 'error',
               show: true,
             },
             message:
@@ -96,7 +95,7 @@ export class ResetPasswordComponent {
             title: 'Error',
             icon: {
               color: 'warn',
-              name: 'block',
+              name: 'error',
               show: true,
             },
             message: res.err.message,

@@ -1,0 +1,112 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <!-- Header -->
+  <div class="flex flex-col shadow bg-card">
+    <!-- Cover image -->
+    <div>
+      <img
+        class="h-40 w-full lg:h-80 object-cover"
+        src="../../../assets/images/profile-bg.jpg"
+        alt="Cover image"
+      />
+    </div>
+
+    <!-- User info -->
+    <div
+      class="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto px-8 lg:h-18 bg-card relative"
+    >
+      <!-- Details -->
+      <div
+        *ngIf="currentUser"
+        class="flex flex-col items-center lg:items-start mt-4 lg:mt-0 lg:ml-8"
+      >
+        <form [formGroup]="userForm" (ngSubmit)="userFormSubmit()">
+          <div class="grid grid-cols-1 md:grid-cols-3 md:gap-3 mt-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <input matInput placeholder="Name" formControlName="name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <input matInput placeholder="Email" formControlName="email" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                placeholder="Phone Number"
+                type="number"
+                formControlName="phone"
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                placeholder="Occupation"
+                formControlName="occupation"
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Gender</mat-label>
+              <mat-select formControlName="gender">
+                <mat-option value="male">Male</mat-option>
+                <mat-option value="female">Female</mat-option>
+                <mat-option value="other">Other</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>DOB</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="dob" />
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Country</mat-label>
+              <mat-select formControlName="country">
+                <mat-option *ngFor="let item of allCountry" [value]="item">{{
+                  item.name
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>State</mat-label>
+              <mat-select formControlName="state">
+                <mat-option *ngFor="let item of allState" [value]="item">{{
+                  item.name
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>City</mat-label>
+              <mat-select formControlName="city">
+                <mat-option *ngFor="let item of allCity" [value]="item">{{
+                  item.name
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="grid grid-cols-1">
+            <mat-form-field appearance="outline">
+              <mat-label>About</mat-label>
+              <textarea matInput formControlName="about"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="mb-6">
+            <button mat-raised-button color="primary" type="submit">
+              Save!
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

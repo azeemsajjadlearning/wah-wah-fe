@@ -17,7 +17,7 @@ export interface User {
   occupation?: any;
   photoURL?: any;
   dob?: any;
-  gender?: any;
+  gender?: 'male' | 'female' | 'other';
   country?: any;
   state?: any;
   city?: any;

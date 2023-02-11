@@ -20,6 +20,11 @@ import { AuthGaurd } from './auth.guard';
 import { RequestInterceptor } from './services/request.interceptor';
 import { TaskService } from './services/task.service';
 import { ResetPasswordComponent } from './routes/auth/reset-password/reset-password.component';
+import { LoadingBarModule } from './common/loading-bar/loading-bar.module';
+import { LoadingBarService } from './common/loading-bar/loading-bar.service';
+import { ProfileComponent } from './routes/profile/profile.component';
+import { AuthService } from './services/auth.service';
+import { ThirdPartyService } from './services/third-party.service';
 
 @NgModule({
   declarations: [
@@ -31,11 +36,13 @@ import { ResetPasswordComponent } from './routes/auth/reset-password/reset-passw
     ResetPasswordComponent,
     DashboardComponent,
     TaskComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ConfirmationModule,
+    LoadingBarModule,
     CommonModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -45,13 +52,16 @@ import { ResetPasswordComponent } from './routes/auth/reset-password/reset-passw
   ],
   providers: [
     AuthGaurd,
+    AuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,
       multi: true,
     },
     ConfirmationService,
+    LoadingBarService,
     TaskService,
+    ThirdPartyService,
   ],
   bootstrap: [AppComponent],
 })
