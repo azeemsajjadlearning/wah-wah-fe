@@ -1,45 +1,182 @@
-<div
-  *ngIf="movieDetails"
-  class="flex flex-col flex-auto min-w-0 bg-cover movie-header"
-  [style.background-image]="
-    'linear-gradient(to right, rgba(52.5, 10.5, 10.5, 1) calc((50vw - 170px) - 340px), rgba(52.5, 10.5, 10.5, 0.84) 30%, rgba(52.5, 10.5, 10.5, 0.84) 100%),url(' +
-    imageUrlPrefix +
-    movieDetails.detail.backdrop_path +
-    ')'
-  "
->
+<div *ngIf="movieDetails">
   <div
-    class="flex flex-col md:flex-row justify-between max-w-80 md:max-w-160 w-full p-8 pb-4 md:pt-24 filter-listing"
+    class="flex flex-col flex-auto min-w-0 bg-cover movie-header"
+    [style.background-image]="
+      'linear-gradient(to right, rgba(52.5, 10.5, 10.5, 1) calc((50vw - 170px) - 340px), rgba(52.5, 10.5, 10.5, 0.84) 30%, rgba(52.5, 10.5, 10.5, 0.84) 100%),url(' +
+      imageUrlPrefix +
+      movieDetails.detail.backdrop_path +
+      ')'
+    "
   >
     <div
-      class="order-2 md:order-1 w-full md:w-80 md:ml-6 mb-8 md:mb-4 rounded-lg overflow-hidden"
+      class="flex flex-col md:flex-row justify-between max-w-80 md:max-w-160 w-full p-8 pb-4 md:pt-24 filter-listing"
     >
-      <img
-        [src]="imageUrlPrefix + movieDetails.detail.poster_path"
-        alt=""
-        class="h-96 w-auto"
-      />
-    </div>
-    <div class="flex flex-col flex-auto text-white order-1 md:order-2 md:ml-10">
-      <div class="text-2xl font-semibold leading-tight">
-        {{ movieDetails.detail.title }}
-        <span>({{ movieDetails.detail.release_date | date : "yyyy" }})</span>
-      </div>
-      <div class="text-base font-medium">
-        {{ movieDetails.detail.release_date }}
+      <!-- Poster -->
+      <div
+        class="order-2 md:order-1 w-full md:w-96 md:ml-6 mb-8 md:mb-4 rounded-lg overflow-hidden"
+      >
+        <img
+          [src]="imageUrlPrefix + movieDetails.detail.poster_path"
+          alt=""
+          class="min-w-full"
+        />
       </div>
 
-      <div>
-        <span *ngFor="let gen of movieDetails.detail.genres"
-          >{{ gen.name }},
-        </span>
-      </div>
+      <!-- Details -->
+      <div
+        class="flex flex-col flex-auto text-white order-1 md:order-2 md:ml-10"
+      >
+        <div class="text-2xl font-semibold leading-tight">
+          {{ movieDetails.detail.title }}
+          <span>({{ movieDetails.detail.release_date | date : "yyyy" }})</span>
+        </div>
+        <div class="text-base font-medium">
+          {{ movieDetails.detail.release_date | date : "dd MMM yyyy" }}
+        </div>
 
-      <div class="italic mt-4">{{ movieDetails.detail.tagline }}</div>
-      <div class="mt-4"><h2 class="">Overview</h2></div>
-      <div class="mt-4">{{ movieDetails.detail.overview }}</div>
+        <div>
+          <span *ngFor="let gen of movieDetails.detail.genres"
+            >{{ gen.name }},
+          </span>
+          <span>{{ convertToHoursMinutes(movieDetails.detail.runtime) }}</span>
+        </div>
+
+        <!-- Links -->
+
+        <div class="mt-8">
+          <ul class="flex list-none gap-6 h-20">
+            <li class="flex">
+              <div>
+                <mat-progress-spinner
+                  class="example-margin"
+                  color="primary"
+                  mode="determinate"
+                  strokeWidth="15"
+                  [value]="movieDetails.detail.vote_average * 10"
+                >
+                </mat-progress-spinner>
+                <div
+                  class="text-lg"
+                  style="position: relative; top: -55px; left: 28px"
+                >
+                  {{
+                    (movieDetails.detail.vote_average * 10)
+                      .toString()
+                      .split(".")[0]
+                  }}
+                  <sup style="position: relative; top: -8px; left: -5px">%</sup>
+                </div>
+              </div>
+              <div class="self-center ml-4 text-lg">
+                <div class="m-0">User</div>
+                <div class="m-0">Score</div>
+              </div>
+            </li>
+            <li class="self-center">
+              <div class="example-button-container">
+                <button mat-mini-fab color="primary" (click)="snackBar()">
+                  <mat-icon>checklist</mat-icon>
+                </button>
+              </div>
+            </li>
+            <li class="self-center">
+              <div class="example-button-container">
+                <button mat-mini-fab color="primary" (click)="snackBar()">
+                  <mat-icon>favorite</mat-icon>
+                </button>
+              </div>
+            </li>
+            <li class="self-center">
+              <div class="example-button-container">
+                <button mat-mini-fab color="primary" (click)="snackBar()">
+                  <mat-icon>bookmark</mat-icon>
+                </button>
+              </div>
+            </li>
+            <li class="self-center">
+              <a
+                target="_blank"
+                [href]="
+                  'https://www.youtube.com/watch?v=' +
+                  movieDetails.videos[0].key
+                "
+                mat-fab
+                extended
+              >
+                <mat-icon>play_arrow</mat-icon>
+                Play Videos
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Info -->
+
+        <div class="italic mt-4 text-slate-400">
+          {{ movieDetails.detail.tagline }}
+        </div>
+        <div class="mt-4"><h2 class="">Overview</h2></div>
+        <div class="mt-2">{{ movieDetails.detail.overview }}</div>
+        <div class="grid grid-cols-3 mt-4">
+          <div *ngFor="let item of mainCrew" class="mb-3">
+            <div class="text-base">{{ item.original_name }}</div>
+            <div class="text-sm text-slate-400">{{ item.job }}</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- imageUrlPrefix + movieDetails.detail.backdrop_path -->
+  <!-- Casting -->
+
+  <h2 class="pl-2 pt-2">Top Billed Cast</h2>
+  <div class="overflow-auto p-2">
+    <div class="flex flex-nowrap gap-4 rounded-lg">
+      <div
+        *ngFor="let item of movieDetails.credits.cast"
+        class="w-40 flex-none last:pr-8 gap-4"
+      >
+        <div class="w-full gap-8 h-64 rounded-2xl shadow-lg shadow-slate-800">
+          <img
+            [src]="imageUrlPrefix + item.profile_path"
+            alt="profile pic not available"
+            class="object-cover h-40 w-full rounded-t-lg"
+          />
+          <div class="m-2 text-black">
+            <div class="text-base font-semibold leading-tight">
+              {{ item.original_name }}
+            </div>
+            <div class="text-secondary text-sm mt-1">
+              {{ item.character }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div>
+    
+    <div
+      *ngFor="let item of movieDetails.credits.cast"
+      class="flex flex-nowrap overflow-y-auto gap-8 mt-8 sm:mt-10 h-96 bg-slate-500 rounded-2xl shadow-xl shadow-slate-800"
+    >
+      <div class="w-40">
+        <img
+          [src]="imageUrlPrefix + item.profile_path"
+          alt="Card cover image"
+          class="object-cover h-40"
+        />
+        <div class="m-8">
+          <div class="text-base font-semibold leading-tight">
+            {{ item.original_name }}
+          </div>
+          <div class="text-secondary text-sm mt-1">
+            {{ item.character }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+</div>

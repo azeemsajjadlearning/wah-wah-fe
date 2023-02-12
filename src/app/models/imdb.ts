@@ -34,6 +34,7 @@ export interface PopularTv {
 export interface MovieDetail {
   detail: Detail;
   credits: Credits;
+  videos: Videos[];
 }
 
 interface Credits {
@@ -127,4 +128,17 @@ interface Belongstocollection {
   name: string;
   poster_path: string;
   backdrop_path: string;
+}
+
+interface Videos {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  id: string;
 }
