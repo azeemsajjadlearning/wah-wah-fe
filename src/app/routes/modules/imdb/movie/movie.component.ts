@@ -1,8 +1,16 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { environment } from 'src/app/environments/environment';
-import { MovieDetail } from 'src/app/models/imdb';
+import {
+  KeyValue,
+  MovieCast,
+  MovieDetail,
+  MovieExternals,
+  MovieReview,
+} from 'src/app/models/imdb';
+import { GeneralService } from 'src/app/services/general.service';
 import { IMDbService } from 'src/app/services/imdb.service';
 
 @Component({
@@ -11,15 +19,24 @@ import { IMDbService } from 'src/app/services/imdb.service';
   styleUrls: ['./movie.component.scss'],
 })
 export class MovieComponent {
-  movieDetails: MovieDetail;
   id: number;
   imageUrlPrefix: string = environment.imdb_image_prefix;
+  defaultImage = '../../../../../assets/svg/default.svg';
+
+  movieDetail: MovieDetail;
+  cast: MovieCast[];
+  crew: MovieCast[];
+  externalIds: MovieExternals;
+  keywords: KeyValue[];
+  reviews: MovieReview[];
+
   mainCrew: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private imdbService: IMDbService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public generalService: GeneralService
   ) {
     this.activatedRoute.params.subscribe((res: any) => {
       this.id = res.id;
@@ -27,16 +44,35 @@ export class MovieComponent {
   }
 
   ngOnInit() {
-    this.imdbService.getDetails('movie', this.id).subscribe((res: any) => {
-      this.movieDetails = res.result;
+    this.imdbService.getDetail('movie', this.id).subscribe((res) => {
+      this.movieDetail = res.result;
+    });
 
-      this.mainCrew = this.jobByName(this.movieDetails.credits.crew).filter(
-        (ele: any) => {
-          return this.matchArrays(ele.job, this.crew);
-        }
-      );
+    forkJoin([
+      this.imdbService.getDetails('movie', this.id, 'credits'),
+      this.imdbService.getDetails('movie', this.id, 'external_ids'),
+      this.imdbService.getDetails('movie', this.id, 'keywords'),
+      this.imdbService.getDetails('movie', this.id, 'reviews'),
+    ]).subscribe((results) => {
+      this.cast = results[0].result.cast;
+      this.crew = results[0].result.crew;
 
-      this.imageUrlPrefix + this.movieDetails.detail.backdrop_path;
+      this.mainCrew = this.generalService
+        .jobByName(this.crew)
+        .filter((ele: any) => {
+          return this.generalService.matchArrays(ele.job, [
+            'Director',
+            'Novel',
+            'Screenplay',
+            'Story',
+            'Producer',
+          ]);
+        });
+
+      this.externalIds = results[1].result;
+      this.keywords = results[2].result.keywords;
+      this.reviews = results[3].result.results;
+      console.log(this.reviews);
     });
   }
 
@@ -46,61 +82,4 @@ export class MovieComponent {
       verticalPosition: 'top',
     });
   }
-
-  jobByName(list: any) {
-    let result: any = [];
-    let map = new Map();
-    for (let i = 0; i < list.length; i++) {
-      let original_name = list[i].original_name;
-      let job = list[i].job;
-      if (!map.has(original_name)) {
-        map.set(original_name, []);
-      }
-      map.get(original_name).push(job);
-    }
-    map.forEach((value, key) => {
-      result.push({
-        original_name: key,
-        job: value,
-      });
-    });
-    return result;
-  }
-
-  groupByJob(list: any) {
-    let result: any = [];
-    let map = new Map();
-    for (let i = 0; i < list.length; i++) {
-      let name = list[i].name;
-      let job = list[i].job;
-      if (!map.has(job)) {
-        map.set(job, []);
-      }
-      map.get(job).push(name);
-    }
-    map.forEach((value, key) => {
-      result.push({
-        job: key,
-        names: value.join(', '),
-      });
-    });
-    return result;
-  }
-
-  convertToHoursMinutes(minutes: number) {
-    let hours = Math.floor(minutes / 60);
-    minutes = minutes % 60;
-    return `${hours}h ${minutes}m`;
-  }
-
-  matchArrays(arr1: any, arr2: any) {
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr2.includes(arr1[i])) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  crew: string[] = ['Director', 'Novel', 'Screenplay', 'Story', 'Producer'];
 }

@@ -29,6 +29,7 @@ import { IMDbComponent } from './routes/modules/imdb/imdb.component';
 import { IMDbService } from './services/imdb.service';
 import { MovieComponent } from './routes/modules/imdb/movie/movie.component';
 import { TvComponent } from './routes/modules/imdb/tv/tv.component';
+import { SearchResultsComponent } from './routes/modules/imdb/search-results/search-results.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { TvComponent } from './routes/modules/imdb/tv/tv.component';
     IMDbComponent,
     MovieComponent,
     TvComponent,
+    SearchResultsComponent,
   ],
   imports: [
     BrowserModule,

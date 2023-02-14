@@ -21,8 +21,8 @@ export class TvComponent {
   }
 
   ngOnInit() {
-    this.imdbService.getDetails('tv', this.id).subscribe((res) => {
-      console.log(res);
-    });
+    // this.imdbService.getDetails('tv', this.id).subscribe((res) => {
+    //   console.log(res);
+    // });
   }
 }

@@ -1,0 +1,27 @@
+<div
+  *ngFor="let item of serachResults"
+  class="m-4 border border-2 rounded-xl shadow-lg border-black cursor-pointer"
+  (click)="getDetail(item)"
+>
+  <div class="flex">
+    <img
+      [src]="
+        item.poster_path
+          ? imageUrlPrefix + 'w300/' + item.poster_path
+          : defaultImage
+      "
+      alt=""
+      class="h-40 w-auto rounded-l-xl"
+      [ngStyle]="{
+        'max-width': item.poster_path == null ? '100px' : 'auto'
+      }"
+    />
+    <div class="p-4">
+      <div class="text-xl font-bold">
+        {{ item.original_name || item.name || item.title }}
+      </div>
+      <div class="text-xs text-slate-400">{{ item.release_date }}</div>
+      <div>{{ item.overview }}</div>
+    </div>
+  </div>
+</div>

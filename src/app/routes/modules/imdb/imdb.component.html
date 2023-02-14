@@ -1,52 +1,124 @@
-<div class="rounded-2xl overflow-auto pt-2 pl-2 md:pt-8 md:pl-8">
-  <h2>Popular Movies</h2>
-</div>
-<div class="rounded-2xl overflow-auto px-2 md:px-8">
-  <div
-    class="flex flex-nowrap gap-4 rounded-lg cursor-pointer hover:shadow-2xl hover:shadow-gray-800"
-  >
-    <div
-      *ngFor="let item of propularMovies"
-      class="md:w-1/5 w-2/5 flex-none last:pr-8"
-    >
-      <div
-        class="w-full h-full rounded-lg border-2"
-        (click)="getDetail(item, 'movie')"
-        [matBadge]="item.vote_average"
-        matBadgePosition="below"
+<div
+  class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-100 lg:max-w-100 bg-card dark:bg-transparent"
+>
+  <!-- Header -->
+  <div class="flex flex-col flex-0 py-4 px-8 bg-gray-50 dark:bg-transparent">
+    <div class="text-lg md:text-3xl font-extrabold text-sky-300">Welcome.</div>
+    <div class="text-base md:text-xl font-light ml-8 text-sky-300">
+      Millions of movies, TV shows and people to discover. Explore now.
+    </div>
+    <!-- Search -->
+    <div class="mt-4 flex items-baseline">
+      <mat-form-field
+        appearance="outline"
+        class="fuse-mat-no-subscript fuse-mat-rounded fuse-mat-dense w-full"
+        [floatLabel]="'always'"
       >
-        <img
-          [src]="item.poster_path"
-          alt=""
-          class="h-full w-full object-cover rounded-lg"
+        <mat-icon matPrefix class="icon-size-5">search</mat-icon>
+        <input
+          matInput
+          autocomplete="off"
+          placeholder="Search for a movie, tv show, person......"
+          #searchField
+          [formControl]="search"
+          (keydown.enter)="onSearchSubmit()"
         />
+      </mat-form-field>
+      <button
+        class="ml-3 hidden md:block"
+        mat-fab
+        extended
+        color="primary"
+        (click)="onSearchSubmit()"
+      >
+        Search
+      </button>
+    </div>
+  </div>
+
+  <!-- Trending -->
+  <div class="flex-auto overflow-y-auto">
+    <div class="flex items-center pt-4 pl-4">
+      <div class="text-xl">Trending</div>
+      <mat-chip-listbox class="ml-4">
+        <mat-chip-option selected (selectionChange)="getTrendSelection('day')"
+          >Today</mat-chip-option
+        >
+        <mat-chip-option (selectionChange)="getTrendSelection('week')"
+          >Week</mat-chip-option
+        >
+      </mat-chip-listbox>
+    </div>
+
+    <div class="rounded-2xl overflow-auto px-2 md:px-2">
+      <div
+        class="flex flex-nowrap gap-4 rounded-lg cursor-pointer hover:shadow-2xl hover:shadow-gray-800"
+      >
+        <div
+          *ngFor="let item of trending"
+          class="md:w-40 w-20 flex-none last:pr-8"
+        >
+          <div
+            class="w-full h-full rounded-lg border-2"
+            (click)="getDetail(item, 'movie')"
+            [matBadge]="item.vote_average | number : '1.1-1'"
+            matBadgePosition="below"
+          >
+            <img
+              [src]="imageUrlPrefix + 'w300/' + item.poster_path"
+              alt=""
+              class="h-full w-full object-cover rounded-lg"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="rounded-2xl overflow-auto pt-2 pl-2 md:pt-8 md:pl-8">
-  <h2>Popular Tv</h2>
-</div>
-<div class="rounded-2xl overflow-auto px-2 md:px-8">
-  <div
-    class="flex flex-nowrap gap-4 rounded-lg cursor-pointer hover:shadow-2xl hover:shadow-gray-800"
-  >
-    <div
-      *ngFor="let item of propularTv"
-      class="md:w-1/5 w-2/5 flex-none last:pr-8"
-      [matBadge]="item.vote_average"
-      matBadgePosition="below"
-    >
+  <!-- Popular -->
+  <div class="flex-auto overflow-y-auto">
+    <div class="flex items-center pt-4 pl-4">
+      <div class="text-xl">What's Popular</div>
+      <mat-chip-listbox class="ml-4">
+        <mat-chip-option selected (selectionChange)="getPopSelection('movie')"
+          >Movie</mat-chip-option
+        >
+        <mat-chip-option (selectionChange)="getPopSelection('tv')"
+          >Tv</mat-chip-option
+        >
+        <mat-chip-option (selectionChange)="getPopSelection('person')"
+          >Person</mat-chip-option
+        >
+      </mat-chip-listbox>
+    </div>
+
+    <div class="rounded-2xl overflow-auto px-2 md:px-2">
       <div
-        class="w-full h-full rounded-lg border-2"
-        (click)="getDetail(item, 'tv')"
+        class="flex flex-nowrap gap-4 rounded-lg cursor-pointer hover:shadow-2xl hover:shadow-gray-800"
       >
-        <img
-          [src]="item.poster_path"
-          alt=""
-          class="h-full w-full object-cover rounded-lg"
-        />
+        <div
+          *ngFor="let item of popular"
+          class="md:w-40 w-20 flex-none last:pr-8"
+        >
+          <div
+            class="w-full h-full rounded-lg border-2"
+            (click)="getDetail(item, 'movie')"
+            [matBadge]="item.vote_average | number : '1.1-1'"
+            matBadgePosition="below"
+          >
+            <img
+              [src]="
+                imageUrlPrefix +
+                'w300/' +
+                (item.poster_path || item.profile_path)
+              "
+              alt=""
+              class="h-full w-full object-cover rounded-lg"
+            />
+          </div>
+
+          <div>{{ imageUrlPrefix + "w300/" + item.poster_path }}</div>
+        </div>
       </div>
     </div>
   </div>
