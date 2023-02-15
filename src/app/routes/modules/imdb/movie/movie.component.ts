@@ -29,6 +29,7 @@ export class MovieComponent {
   id: number;
   imageUrlPrefix: string = environment.imdb_image_prefix;
   defaultImage = '../../../../../assets/svg/default.svg';
+  window = window;
 
   movieDetail: MovieDetail;
   cast: MovieCast[];
@@ -111,8 +112,6 @@ export class MovieComponent {
             if (matchingVideo) {
               matchingVideo.thumbnailUrl = highestResolutionUrl;
             }
-
-            console.log(this.videos);
           });
       }
     });

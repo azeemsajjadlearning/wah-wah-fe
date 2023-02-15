@@ -261,11 +261,18 @@
               <div
                 class="w-full rounded-lg flex items-center justify-center shadow-lg"
               >
-                <img
-                  [src]="imageUrlPrefix + 'w300' + item.poster_path"
-                  alt=""
-                  class="w-60 h-84 rounded-lg object-cover"
-                />
+                <a
+                  [href]="
+                    window.location.href.slice(
+                      0,
+                      window.location.href.lastIndexOf('/') + 1
+                    ) + item.id
+                  "
+                  ><img
+                    [src]="imageUrlPrefix + 'w300' + item.poster_path"
+                    alt=""
+                    class="w-60 h-84 rounded-lg object-cover"
+                /></a>
               </div>
             </div>
           </div>
