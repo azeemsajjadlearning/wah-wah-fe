@@ -30,6 +30,8 @@ import { IMDbService } from './services/imdb.service';
 import { MovieComponent } from './routes/modules/imdb/movie/movie.component';
 import { TvComponent } from './routes/modules/imdb/tv/tv.component';
 import { SearchResultsComponent } from './routes/modules/imdb/search-results/search-results.component';
+import { ReviewsComponent } from './routes/modules/imdb/reviews/reviews.component';
+import { CastCrewComponent } from './routes/modules/imdb/cast-crew/cast-crew.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { SearchResultsComponent } from './routes/modules/imdb/search-results/sea
     MovieComponent,
     TvComponent,
     SearchResultsComponent,
+    ReviewsComponent,
+    CastCrewComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,5 +78,6 @@ import { SearchResultsComponent } from './routes/modules/imdb/search-results/sea
     IMDbService,
   ],
   bootstrap: [AppComponent],
+  entryComponents: [ReviewsComponent],
 })
 export class AppModule {}

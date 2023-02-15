@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Reviews</h2>
+<mat-dialog-content>
+  <div
+    *ngFor="let reviews of data"
+    class="mb-6 border border-gray-500 p-4 rounded-lg shadow-xl"
+  >
+    <div class="flex items-center">
+      <img
+        [src]="
+          reviews.author_details.avatar_path
+            ? imageUrlPrefix + '/w200' + reviews.author_details.avatar_path
+            : defaultImage
+        "
+        class="w-20 rounded-full"
+        alt=""
+      />
+      <div class="ml-4">
+        <div class="font-bold text-xl">A review by {{ reviews.author }}</div>
+        <div class="font-light text-sm">
+          Written by {{ reviews.author_details.username }} on
+          {{ reviews.created_at | date : "d MMMM y" }}
+        </div>
+      </div>
+    </div>
+    <div [innerHTML]="reviews.content" class="text-justify mt-2"></div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button alig mat-button [mat-dialog-close]="true">Close</button>
+</mat-dialog-actions>

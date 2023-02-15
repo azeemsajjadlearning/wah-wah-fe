@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>Cast & Crew</h2>
+<mat-dialog-content>
+  <div class="grid grid-cols-2">
+    <div class="flex flex-col mt-2">
+      <div *ngFor="let item of data.cast" class="flex items-center mb-2">
+        <img
+          class="w-14 h-14 object-cover mr-4 rounded-full"
+          [src]="
+            item.profile_path
+              ? imageUrlPrefix + '/w200' + item.profile_path
+              : defaultImage
+          "
+          alt="profile image"
+        />
+        <div class="flex flex-col min-w-0">
+          <div class="font-medium leading-none">{{ item.name }}</div>
+          <div class="text-md leading-none text-secondary mt-1">
+            {{ item.character }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col mt-2">
+      <div *ngFor="let item of data.crew" class="flex items-center mb-2">
+        <img
+          class="w-14 h-14 object-cover mr-4 rounded-full"
+          [src]="
+            item.profile_path
+              ? imageUrlPrefix + '/w200' + item.profile_path
+              : defaultImage
+          "
+          alt="profile image"
+        />
+        <div class="flex flex-col min-w-0">
+          <div class="font-medium leading-none">{{ item.name }}</div>
+          <div class="text-md leading-none text-secondary mt-1">
+            {{ item.job }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div
+    *ngFor="let reviews of data.cast"
+    class="mb-6 border border-gray-500 p-4 rounded-lg shadow-xl"
+  >
+    <div class="flex items-center">
+      <img
+        [src]="
+          reviews.author_details.avatar_path
+            ? imageUrlPrefix + '/w200' + reviews.author_details.avatar_path
+            : defaultImage
+        "
+        class="w-20 rounded-full"
+        alt=""
+      />
+      <div class="ml-4">
+        <div class="font-bold text-xl">A review by {{ reviews.author }}</div>
+        <div class="font-light text-sm">
+          Written by {{ reviews.author_details.username }} on
+          {{ reviews.created_at | date : "d MMMM y" }}
+        </div>
+      </div>
+    </div>
+    <div [innerHTML]="reviews.content" class="text-justify mt-2"></div>
+  </div> -->
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button alig mat-button [mat-dialog-close]="true">Close</button>
+</mat-dialog-actions>

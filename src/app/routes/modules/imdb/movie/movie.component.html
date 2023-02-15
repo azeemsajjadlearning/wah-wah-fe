@@ -9,24 +9,37 @@
       ')'
     "
   >
-    <div
-      class="flex flex-col md:flex-row justify-between max-w-80 md:max-w-160 w-full p-8 pb-4 md:pt-12 filter-listing"
-    >
+    <div class="flex flex-col md:flex-row gap-4 p-8 pb-4 md:pt-12">
       <!-- Poster -->
-      <div
-        class="order-1 md:order-1 w-full md:w-96 md:ml-6 mb-8 md:mb-4 rounded-lg overflow-hidden"
-      >
+      <div class="w-80">
         <img
-          [src]="imageUrlPrefix + '/w300' + movieDetail.poster_path"
-          alt=""
-          class="min-w-full"
+          [src]="imageUrlPrefix + 'w500' + movieDetail.poster_path"
+          alt="poster"
+          class="w-full rounded-t-md"
         />
+        <!-- watch provider -->
+        <div
+          *ngIf="watchProviders"
+          class="flex flex-row justify-center p-2 rounded-b-md bg-slate-500"
+        >
+          <div class="flex flex-col content-center items-center pr-2">
+            <img
+              [src]="imageUrlPrefix + 'w200' + watchProviders.logo_path"
+              alt=""
+              class="w-10 rounded-lg"
+            />
+          </div>
+          <div>
+            <div class="font-light">Now Streaming</div>
+            <div class="font-semibold">
+              {{ watchProviders.provider_name }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Details -->
-      <div
-        class="flex flex-col flex-auto text-white order-1 md:order-1 md:ml-10"
-      >
+      <div class="flex-1 flex-col text-white order-1 md:order-1 md:ml-10">
         <div class="text-2xl font-semibold leading-tight">
           {{ movieDetail.title }}
           <span>({{ movieDetail.release_date | date : "yyyy" }})</span>
@@ -138,7 +151,10 @@
     <div class="basis-9/12 max-w-5xl">
       <div class="overflow-auto p-2">
         <div class="flex flex-nowrap gap-4 rounded-lg">
-          <div *ngFor="let item of cast" class="w-40 flex-none last:pr-8 gap-4">
+          <div
+            *ngFor="let item of cast?.slice(0, 10)"
+            class="w-40 flex-none last:pr-8 gap-4"
+          >
             <div
               class="w-full gap-8 h-64 rounded-2xl shadow-lg shadow-slate-800"
             >
@@ -162,16 +178,26 @@
             </div>
           </div>
         </div>
+        <div
+          class="mt-4 text-lg text-blue-400 hover:text-blue-800"
+          (click)="getAllCastandCrew()"
+        >
+          Full Cast & Crew
+        </div>
       </div>
 
       <!-- Review -->
       <div *ngIf="reviews?.length" class="md:p-6">
         <div class="text-xl font-bold">Reviews</div>
-        <div class="border border-gray-400 rounded-md shadow-sm p-4">
+        <div class="border border-gray-400 rounded-md shadow-lg p-4">
           <div class="flex items-center">
             <img
               [src]="
-                imageUrlPrefix + '/w200' + reviews[0].author_details.avatar_path
+                reviews[0].author_details.avatar_path
+                  ? imageUrlPrefix +
+                    '/w200' +
+                    reviews[0].author_details.avatar_path
+                  : defaultImage
               "
               class="w-20 rounded-full"
               alt=""
@@ -188,8 +214,65 @@
           </div>
           <div [innerHTML]="reviews[0].content" class="text-justify mt-2"></div>
         </div>
+        <div
+          class="mt-4 text-lg text-blue-400 hover:text-blue-800"
+          (click)="getAllReview()"
+        >
+          Read All Reviews
+        </div>
+      </div>
+
+      <!-- Videos -->
+      <div class="md:p-6">
+        <div class="text-xl font-bold">Videos</div>
+        <div class="relative rounded-xl overflow-auto p-8">
+          <div
+            class="flex flex-nowrap gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-sky rounded-lg"
+          >
+            <div *ngFor="let item of videos" class="h-40 flex-none last:pr-8">
+              <div
+                class="w-full rounded-lg flex items-center justify-center shadow-lg"
+              >
+                <a
+                  target="_blank"
+                  [href]="'https://www.youtube.com/watch?v=' + item.key"
+                  ><img
+                    [src]="item.thumbnailUrl"
+                    alt=""
+                    class="w-60 h-40 rounded-lg object-cover"
+                /></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="md:p-6">
+        <div class="text-xl font-bold">Recommendations</div>
+        <div class="relative rounded-xl overflow-auto p-8">
+          <div
+            class="flex flex-nowrap gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-sky rounded-lg"
+          >
+            <div
+              *ngFor="let item of recommendation"
+              class="h-84 flex-none last:pr-8"
+            >
+              <div
+                class="w-full rounded-lg flex items-center justify-center shadow-lg"
+              >
+                <img
+                  [src]="imageUrlPrefix + 'w300' + item.poster_path"
+                  alt=""
+                  class="w-60 h-84 rounded-lg object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="basis-3/12 pl-4 pt-4">
       <div>
         <ul *ngIf="externalIds" class="flex list-none gap-6 h-14">
@@ -308,7 +391,7 @@
         <div class="font-bold text-lg">Keyword</div>
         <div class="font-normal">
           <mat-chip-listbox>
-            <mat-chip-option *ngFor="let item of keywords">
+            <mat-chip-option *ngFor="let item of keywords" disabled>
               {{ item.name }}
             </mat-chip-option>
           </mat-chip-listbox>

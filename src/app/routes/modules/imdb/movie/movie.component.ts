@@ -2,16 +2,23 @@ import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/app/environments/environment';
 import {
   KeyValue,
   MovieCast,
   MovieDetail,
   MovieExternals,
+  MovieImage,
+  MovieRecommendation,
   MovieReview,
+  MovieSimilar,
+  MovieVideo,
 } from 'src/app/models/imdb';
 import { GeneralService } from 'src/app/services/general.service';
 import { IMDbService } from 'src/app/services/imdb.service';
+import { ReviewsComponent } from '../reviews/reviews.component';
+import { CastCrewComponent } from '../cast-crew/cast-crew.component';
 
 @Component({
   selector: 'app-movie',
@@ -29,6 +36,11 @@ export class MovieComponent {
   externalIds: MovieExternals;
   keywords: KeyValue[];
   reviews: MovieReview[];
+  images: MovieImage;
+  videos: MovieVideo[];
+  recommendation: MovieRecommendation[];
+  similar: MovieSimilar[];
+  watchProviders: any;
 
   mainCrew: any;
 
@@ -36,7 +48,8 @@ export class MovieComponent {
     private activatedRoute: ActivatedRoute,
     private imdbService: IMDbService,
     private _snackBar: MatSnackBar,
-    public generalService: GeneralService
+    public generalService: GeneralService,
+    public dialog: MatDialog
   ) {
     this.activatedRoute.params.subscribe((res: any) => {
       this.id = res.id;
@@ -53,6 +66,11 @@ export class MovieComponent {
       this.imdbService.getDetails('movie', this.id, 'external_ids'),
       this.imdbService.getDetails('movie', this.id, 'keywords'),
       this.imdbService.getDetails('movie', this.id, 'reviews'),
+      this.imdbService.getDetails('movie', this.id, 'images'),
+      this.imdbService.getDetails('movie', this.id, 'videos'),
+      this.imdbService.getDetails('movie', this.id, 'recommendations'),
+      this.imdbService.getDetails('movie', this.id, 'similar'),
+      this.imdbService.getDetails('movie', this.id, 'watch/providers'),
     ]).subscribe((results) => {
       this.cast = results[0].result.cast;
       this.crew = results[0].result.crew;
@@ -72,7 +90,47 @@ export class MovieComponent {
       this.externalIds = results[1].result;
       this.keywords = results[2].result.keywords;
       this.reviews = results[3].result.results;
-      console.log(this.reviews);
+      this.images = results[4].result;
+      this.videos = results[5].result.results;
+      this.recommendation = results[6].result.results;
+      this.similar = results[7].result.results;
+      this.watchProviders = this.findProviderName(results[8].result);
+
+      for (const video of this.videos) {
+        this.generalService
+          .getYoutubeThumbnail(video.key)
+          .subscribe((response) => {
+            const thumbnails = response.result.items[0].snippet.thumbnails;
+            const highestResolutionUrl =
+              this.extractHighestResolutionImageUrl(thumbnails);
+
+            // Update the corresponding MovieVideo object with the thumbnail URL
+            const matchingVideo: any = this.videos.find(
+              (v) => v.key === video.key
+            );
+            if (matchingVideo) {
+              matchingVideo.thumbnailUrl = highestResolutionUrl;
+            }
+
+            console.log(this.videos);
+          });
+      }
+    });
+  }
+
+  getAllReview() {
+    this.dialog.open(ReviewsComponent, {
+      data: this.reviews,
+      width: '50%',
+      maxWidth: '900px',
+    });
+  }
+
+  getAllCastandCrew() {
+    this.dialog.open(CastCrewComponent, {
+      data: { cast: this.cast, crew: this.crew },
+      width: '90%',
+      maxWidth: '1400px',
     });
   }
 
@@ -82,4 +140,49 @@ export class MovieComponent {
       verticalPosition: 'top',
     });
   }
+
+  findProviderName(obj: any): any {
+    if (obj === null || typeof obj !== 'object') {
+      return null;
+    }
+
+    if ('provider_name' in obj && 'logo_path' in obj) {
+      return {
+        provider_name: obj.provider_name,
+        logo_path: obj.logo_path,
+      };
+    }
+
+    for (let key in obj) {
+      let result = this.findProviderName(obj[key]);
+      if (result !== null) {
+        return result;
+      }
+    }
+
+    return null;
+  }
+
+  extractHighestResolutionImageUrl(thumbnails: {
+    [key: string]: Thumbnail;
+  }): string {
+    let maxResThumbnail: Thumbnail | null = null;
+
+    // Iterate over all available thumbnails and select the one with the highest resolution
+    for (const key of ['maxres', 'standard', 'high', 'medium', 'default']) {
+      if (thumbnails[key]) {
+        if (!maxResThumbnail || thumbnails[key].width > maxResThumbnail.width) {
+          maxResThumbnail = thumbnails[key];
+        }
+      }
+    }
+
+    return maxResThumbnail ? maxResThumbnail.url : '';
+  }
+}
+
+interface Thumbnail {
+  url: string;
+  width: number;
+  height: number;
 }

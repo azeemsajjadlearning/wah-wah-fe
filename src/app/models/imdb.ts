@@ -264,3 +264,93 @@ export interface KeyValue {
   id: number;
   name: string;
 }
+
+export interface MovieImage {
+  backdrops: Backdrop[];
+  id: number;
+  logos: Logo[];
+  posters: Backdrop[];
+}
+
+interface Logo {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1: string;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+}
+
+interface Backdrop {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1?: string;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+}
+
+export interface MovieVideo {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  id: string;
+  thumbnailUrl?: string;
+}
+
+export interface MovieRecommendation {
+  adult: boolean;
+  backdrop_path: string;
+  id: number;
+  title: string;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  poster_path: string;
+  media_type: string;
+  genre_ids: number[];
+  popularity: number;
+  release_date: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface MovieSimilar {
+  adult: boolean;
+  backdrop_path?: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path?: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface MovieWatchProviderCountry {
+  link: string;
+  rent: ProviderInfo[];
+  flatrate: ProviderInfo[];
+  buy: ProviderInfo[];
+}
+
+interface ProviderInfo {
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+  display_priority: number;
+}
