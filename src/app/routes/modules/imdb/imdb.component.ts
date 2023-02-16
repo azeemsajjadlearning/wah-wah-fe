@@ -56,7 +56,10 @@ export class IMDbComponent implements OnInit {
 
   getPopSelection(event: 'movie' | 'tv' | 'person') {
     this.imdbService.getPopular(event).subscribe((res) => {
-      this.popular = res.result.results;
+      this.popular = res.result.results.map((ele: any) => {
+        ele['media_type'] = event;
+        return ele;
+      });
     });
   }
 
