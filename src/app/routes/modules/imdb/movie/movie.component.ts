@@ -122,8 +122,8 @@ export class MovieComponent {
   getAllReview() {
     this.dialog.open(ReviewsComponent, {
       data: this.reviews,
-      width: '50%',
-      maxWidth: '900px',
+      width: '90%',
+      maxWidth: '1400px',
     });
   }
 

@@ -1,7 +1,8 @@
 <h2 mat-dialog-title>Cast & Crew</h2>
 <mat-dialog-content>
-  <div class="grid grid-cols-2">
+  <div class="grid md:grid-cols-2">
     <div class="flex flex-col mt-2">
+      <h2>Cast</h2>
       <div *ngFor="let item of data.cast" class="flex items-center mb-2">
         <img
           class="w-14 h-14 object-cover mr-4 rounded-full"
@@ -21,6 +22,7 @@
       </div>
     </div>
     <div class="flex flex-col mt-2">
+      <h2>Crew</h2>
       <div *ngFor="let item of data.crew" class="flex items-center mb-2">
         <img
           class="w-14 h-14 object-cover mr-4 rounded-full"
