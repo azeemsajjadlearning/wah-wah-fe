@@ -1,163 +1,187 @@
-<div *ngIf="movieDetail">
+<div ngSwitch="movieDetail" class="flex flex-col flex-auto min-w-0 bg-default">
+  <!-- Header -->
   <div
-    class="flex flex-col flex-auto min-w-0 bg-cover movie-header"
+    class="bg-cover"
     [style.background-image]="
       'linear-gradient(to right, rgba(52.5, 10.5, 10.5, 1) calc((50vw - 170px) - 340px), rgba(52.5, 10.5, 10.5, 0.84) 30%, rgba(52.5, 10.5, 10.5, 0.84) 100%),url(' +
       imageUrlPrefix +
-      '/w500' +
+      '/original' +
       movieDetail.backdrop_path +
       ')'
     "
   >
-    <div class="flex flex-col md:flex-row gap-4 p-8 pb-4 md:pt-12">
-      <!-- Poster -->
-      <div class="w-80">
-        <img
-          [src]="imageUrlPrefix + 'w500' + movieDetail.poster_path"
-          alt="poster"
-          class="w-full rounded-t-md"
-        />
-        <!-- watch provider -->
+    <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+      <div
+        class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-8 sm:my-12"
+      >
         <div
-          *ngIf="watchProviders"
-          class="flex flex-row justify-center p-2 rounded-b-md bg-slate-500"
+          class="flex flex-col md:flex-row mx-auto md:mx-0 items-center min-w-0 text-white"
         >
-          <div class="flex flex-col content-center items-center pr-2">
+          <div class="flex-0 w-64 h-auto overflow-hidden">
             <img
-              [src]="imageUrlPrefix + 'w200' + watchProviders.logo_path"
-              alt=""
-              class="w-10 rounded-lg"
+              class="w-full h-full object-cover"
+              [src]="imageUrlPrefix + 'w500' + movieDetail.poster_path"
             />
-          </div>
-          <div>
-            <div class="font-light">Now Streaming</div>
-            <div class="font-semibold">
-              {{ watchProviders.provider_name }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Details -->
-      <div class="flex-1 flex-col text-white order-1 md:order-1 md:ml-10">
-        <div class="text-2xl font-semibold leading-tight">
-          {{ movieDetail.title }}
-          <span>({{ movieDetail.release_date | date : "yyyy" }})</span>
-        </div>
-        <div class="text-base font-medium">
-          {{ movieDetail.release_date | date : "dd MMM yyyy" }}
-        </div>
-
-        <div>
-          <span *ngFor="let gen of movieDetail.genres; let i = index"
-            >{{ gen.name
-            }}<span *ngIf="i + 1 != movieDetail.genres.length">, </span></span
-          ><br />
-          <span
-            [innerHTML]="
-              generalService.convertToHoursMinutes(movieDetail.runtime)
-            "
-          >
-          </span>
-        </div>
-
-        <!-- Links -->
-
-        <div class="mt-8">
-          <ul class="flex list-none gap-6 h-20">
-            <li class="flex">
+            <div
+              *ngIf="watchProviders"
+              class="flex flex-row justify-center p-2 rounded-b-md bg-slate-500"
+            >
+              <div class="flex flex-col content-center items-center pr-2">
+                <img
+                  [src]="imageUrlPrefix + 'w200' + watchProviders.logo_path"
+                  alt=""
+                  class="w-10 rounded-lg"
+                />
+              </div>
               <div>
-                <mat-progress-spinner
-                  class="example-margin"
-                  color="primary"
-                  mode="determinate"
-                  strokeWidth="15"
-                  [value]="movieDetail.vote_average * 10"
-                >
-                </mat-progress-spinner>
-                <div
-                  class="text-lg"
-                  style="position: relative; top: -55px; left: 28px"
-                >
-                  {{ (movieDetail.vote_average * 10).toString().split(".")[0] }}
-                  <sup style="position: relative; top: -8px; left: -5px">%</sup>
+                <div>
+                  <div class="font-light">Now Streaming</div>
+                  <div class="font-semibold">
+                    {{ watchProviders.provider_name }}
+                  </div>
                 </div>
               </div>
-              <div class="self-center ml-4 text-lg">
-                <div class="m-0">User</div>
-                <div class="m-0">Score</div>
-              </div>
-            </li>
-            <li class="self-center">
-              <div class="example-button-container">
-                <button mat-mini-fab color="primary" (click)="snackBar()">
-                  <mat-icon>checklist</mat-icon>
-                </button>
-              </div>
-            </li>
-            <li class="self-center">
-              <div class="example-button-container">
-                <button mat-mini-fab color="primary" (click)="snackBar()">
-                  <mat-icon>favorite</mat-icon>
-                </button>
-              </div>
-            </li>
-            <li class="self-center">
-              <div class="example-button-container">
-                <button mat-mini-fab color="primary" (click)="snackBar()">
-                  <mat-icon>bookmark</mat-icon>
-                </button>
-              </div>
-            </li>
-            <!-- <li class="self-center">
-              <a
-                target="_blank"
-                [href]="
-                  'https://www.youtube.com/watch?v=' +
-                  movieDetail.videos[0].key
-                "
-                mat-fab
-                extended
+            </div>
+          </div>
+          <div class="flex flex-col min-w-0 ml-4 mt-4 md:mt-0">
+            <ng-container>
+              <div
+                class="text-xl md:text-3xl font-semibold tracking-tight leading-7 md:leading-snug truncate"
               >
-                <mat-icon>play_arrow</mat-icon>
-                Play Videos
-              </a>
-            </li> -->
-          </ul>
-        </div>
-
-        <!-- Info -->
-
-        <div class="italic mt-4 text-slate-400">
-          {{ movieDetail.tagline }}
-        </div>
-        <div class="mt-4"><h2 class="">Overview</h2></div>
-        <div class="mt-2">{{ movieDetail.overview }}</div>
-        <div class="grid grid-cols-3 mt-4">
-          <div *ngFor="let item of mainCrew" class="mb-3">
-            <div class="text-base">{{ item.original_name }}</div>
-            <div class="text-sm text-slate-400">{{ item.job }}</div>
+                {{ movieDetail.title }}
+                <span class="font-light text-slate-400"
+                  >({{ movieDetail.release_date | date : "yyyy" }})</span
+                >
+              </div>
+            </ng-container>
+            <div class="flex flex-col">
+              <div class="md:flex ml-1.5 leading-6 truncate text-secondary">
+                <div>{{ movieDetail.release_date | date : "dd MMM yyyy" }}</div>
+                <div class="hidden lg:flex h-6 mx-4 border-l-2"></div>
+                <div>
+                  <span *ngFor="let gen of movieDetail.genres; let i = index"
+                    >{{ gen.name
+                    }}<span *ngIf="i + 1 != movieDetail.genres.length"
+                      >,
+                    </span></span
+                  >
+                </div>
+                <div class="hidden lg:flex h-6 mx-4 border-l-2"></div>
+                <div
+                  [innerHTML]="
+                    generalService.convertToHoursMinutes(movieDetail.runtime)
+                  "
+                ></div>
+              </div>
+              <div class="flex ml-1.5 my-4 leading-6 truncate text-secondary">
+                <ul class="flex list-none gap-6 h-20">
+                  <li class="flex">
+                    <div>
+                      <mat-progress-spinner
+                        class="example-margin"
+                        color="primary"
+                        mode="determinate"
+                        strokeWidth="8"
+                        [value]="movieDetail.vote_average * 10"
+                      >
+                      </mat-progress-spinner>
+                      <div
+                        class="text-lg"
+                        style="position: relative; top: -55px; left: 28px"
+                      >
+                        {{
+                          (movieDetail.vote_average * 10)
+                            .toString()
+                            .split(".")[0]
+                        }}
+                        <sup style="position: relative; top: -8px; left: -5px"
+                          >%</sup
+                        >
+                      </div>
+                    </div>
+                    <div class="self-center ml-4 text-lg">
+                      <div class="m-0">User</div>
+                      <div class="m-0">Score</div>
+                    </div>
+                  </li>
+                  <li class="self-center">
+                    <div class="example-button-container">
+                      <button mat-mini-fab color="primary" (click)="snackBar()">
+                        <mat-icon>checklist</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="self-center">
+                    <div class="example-button-container">
+                      <button mat-mini-fab color="primary" (click)="snackBar()">
+                        <mat-icon>favorite</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="self-center">
+                    <div class="example-button-container">
+                      <button mat-mini-fab color="primary" (click)="snackBar()">
+                        <mat-icon>bookmark</mat-icon>
+                      </button>
+                    </div>
+                  </li>
+                  <li *ngIf="videos" class="hidden md:block self-center">
+                    <a
+                      target="_blank"
+                      [href]="
+                        'https://www.youtube.com/watch?v=' + videos[0].key
+                      "
+                      mat-fab
+                      extended
+                    >
+                      <mat-icon>play_arrow</mat-icon>
+                      Play Videos
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="ml-1.5 leading-6 truncate italic text-slate-400">
+                {{ movieDetail.tagline }}
+              </div>
+              <div class="ml-1.5 leading-6 text-secondary">
+                <div class="mt-4"><h2 class="">Overview</h2></div>
+                <div>{{ movieDetail.overview }}</div>
+              </div>
+              <div class="ml-1.5 leading-6 text-secondary">
+                <div class="grid grid-cols-2 md:grid-cols-3 mt-4">
+                  <div *ngFor="let item of mainCrew" class="mb-3">
+                    <div
+                      class="text-base cursor-pointer"
+                      (click)="getPerson(item)"
+                    >
+                      {{ item.original_name }}
+                    </div>
+                    <div class="text-sm text-slate-400">{{ item.job }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Casting -->
-
-  <h2 class="pl-2 pt-2">Top Billed Cast</h2>
-
-  <div class="flex flex-row w-full">
-    <div class="basis-9/12 max-w-5xl">
-      <div class="overflow-auto p-2">
-        <div class="flex flex-nowrap gap-4 rounded-lg">
+  <!-- Details -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mt-8">
+    <div class="md:col-span-2 flex flex-col p-2">
+      <div class="w-full">
+        <h2>Top Billed Cast</h2>
+        <div
+          *ngIf="cast"
+          class="flex flex-nowwrap gap-4 w-full overflow-auto pb-8"
+        >
           <div
-            *ngFor="let item of cast?.slice(0, 10)"
-            class="w-40 flex-none last:pr-8 gap-4"
+            *ngFor="let item of cast.slice(0, 10)"
+            class="w-32 rounded-b-lg shadow-xl cursor-pointer"
+            (click)="getPerson(item)"
           >
-            <div
-              class="w-full gap-8 h-64 rounded-2xl shadow-lg shadow-slate-800"
-            >
+            <div class="w-32">
               <img
                 [src]="
                   item.profile_path
@@ -165,7 +189,7 @@
                     : defaultImage
                 "
                 alt="profile pic not available"
-                class="object-cover h-40 w-full rounded-t-lg"
+                class="object-cover w-full rounded-t-lg"
               />
               <div class="m-2 text-black">
                 <div class="text-base font-semibold leading-tight">
@@ -177,17 +201,17 @@
               </div>
             </div>
           </div>
-        </div>
-        <div
-          class="mt-4 text-lg text-blue-400 hover:text-blue-800"
-          (click)="getAllCastandCrew()"
-        >
-          Full Cast & Crew
+          <div class="my-auto w-32">
+            <div class="w-full">
+              <button mat-button class="w-full" (click)="getAllCastandCrew()">
+                View&nbsp;All
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Review -->
-      <div *ngIf="reviews?.length" class="md:p-6">
+      <div *ngIf="reviews" class="w-full pb-8">
         <div class="text-xl font-bold">Reviews</div>
         <div class="border border-gray-400 rounded-md shadow-lg p-4">
           <div class="flex items-center">
@@ -212,20 +236,22 @@
               </div>
             </div>
           </div>
-          <div [innerHTML]="reviews[0].content" class="text-justify mt-2"></div>
+          <div
+            [innerHTML]="reviews[0].content.slice(0, 1000)"
+            class="text-justify mt-2"
+          ></div>
         </div>
         <div
-          class="mt-4 text-lg text-blue-400 hover:text-blue-800"
+          class="mt-4 text-lg cursor-pointer text-blue-400 hover:text-blue-800"
           (click)="getAllReview()"
         >
           Read All Reviews
         </div>
       </div>
 
-      <!-- Videos -->
-      <div class="md:p-6">
+      <div *ngIf="videos" class="w-full pb-8">
         <div class="text-xl font-bold">Videos</div>
-        <div class="relative rounded-xl overflow-auto p-8">
+        <div class="relative rounded-xl overflow-auto">
           <div
             class="flex flex-nowrap gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-sky rounded-lg"
           >
@@ -247,10 +273,9 @@
         </div>
       </div>
 
-      <!-- Recommendations -->
-      <div class="md:p-6">
+      <div *ngIf="recommendation" class="w-full pb-8">
         <div class="text-xl font-bold">Recommendations</div>
-        <div class="relative rounded-xl overflow-auto p-8">
+        <div class="relative rounded-xl overflow-auto">
           <div
             class="flex flex-nowrap gap-4 font-mono text-white text-sm font-bold leading-6 bg-stripes-sky rounded-lg"
           >
@@ -280,7 +305,7 @@
       </div>
     </div>
 
-    <div class="basis-3/12 pl-4 pt-4">
+    <div class="flex flex-col p-2">
       <div>
         <ul *ngIf="externalIds" class="flex list-none gap-6 h-14">
           <li>

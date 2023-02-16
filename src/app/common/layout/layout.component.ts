@@ -29,13 +29,13 @@ export class LayoutComponent {
       this.currentUser = res.result;
     });
 
-    window.innerWidth > 768
+    window.innerWidth > 1024
       ? (this.isScreenSmall = true)
       : (this.isScreenSmall = false);
 
     this.resizeObservable$ = fromEvent(window, 'resize');
     this.resizeSubscription$ = this.resizeObservable$.subscribe((evt: any) => {
-      evt['currentTarget']['innerWidth'] > 768
+      evt['currentTarget']['innerWidth'] > 1024
         ? (this.isScreenSmall = true)
         : (this.isScreenSmall = false);
     });

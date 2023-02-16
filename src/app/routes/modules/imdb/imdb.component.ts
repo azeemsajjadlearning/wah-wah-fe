@@ -22,22 +22,6 @@ export class IMDbComponent implements OnInit {
   search: FormControl = new FormControl(null);
 
   ngOnInit() {
-    // this.imdbService.getUpcomingMovies('en-US', 'US', 1).subscribe((res) => {
-    //   res.result.results.forEach((element: any) => {
-    //     this.imdbService
-    //       .getDetails('movie', element.id, 'videos')
-    //       .subscribe((resp) => {
-    //         if (resp.result.results[0]?.key != undefined) {
-    //           this.gs
-    //             .getYoutubeThumbnail(resp.result.results[0].key)
-    //             .subscribe((result) => {
-    //               console.log(result);
-    //             });
-    //         }
-    //       });
-    //   });
-    // });
-
     forkJoin([
       this.imdbService.getPopular('movie'),
       this.imdbService.getTrending('movie', 'day'),
@@ -76,7 +60,9 @@ export class IMDbComponent implements OnInit {
     });
   }
 
-  getDetail(item: any, type: string) {
-    this.router.navigateByUrl('/imdb/' + type + '/' + item.id);
+  getDetail(item: any) {
+    this.router.navigateByUrl(
+      '/imdb/' + (item.media_type || 'movie') + '/' + item.id
+    );
   }
 }

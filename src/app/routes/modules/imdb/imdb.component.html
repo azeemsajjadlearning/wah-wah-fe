@@ -60,7 +60,7 @@
         >
           <div
             class="w-full h-full rounded-lg border-2"
-            (click)="getDetail(item, 'movie')"
+            (click)="getDetail(item)"
             [matBadge]="item.vote_average | number : '1.1-1'"
             matBadgePosition="below"
           >
@@ -102,7 +102,7 @@
         >
           <div
             class="w-full h-full rounded-lg border-2"
-            (click)="getDetail(item, 'movie')"
+            (click)="getDetail(item)"
             [matBadge]="item.vote_average | number : '1.1-1'"
             matBadgePosition="below"
           >

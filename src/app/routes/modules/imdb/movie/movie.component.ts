@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/app/environments/environment';
 import {
   KeyValue,
   MovieCast,
+  MovieCrew,
   MovieDetail,
   MovieExternals,
   MovieImage,
@@ -50,7 +51,8 @@ export class MovieComponent {
     private imdbService: IMDbService,
     private _snackBar: MatSnackBar,
     public generalService: GeneralService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router
   ) {
     this.activatedRoute.params.subscribe((res: any) => {
       this.id = res.id;
@@ -131,6 +133,16 @@ export class MovieComponent {
       width: '90%',
       maxWidth: '1400px',
     });
+  }
+
+  getPerson(item: MovieCast) {
+    if (!item.id) {
+      let x: any = this.crew.find(
+        (ele) => ele.original_name === item.original_name
+      );
+      item = x;
+    }
+    this.router.navigate(['imdb/person', item.id]);
   }
 
   snackBar() {
