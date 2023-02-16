@@ -68,7 +68,7 @@ export class IMDbService {
   }
 
   public getDetail(
-    media_type: 'tv' | 'movie',
+    media_type: 'tv' | 'movie' | 'person',
     media_id: number
   ): Observable<any> {
     let queryParams = new HttpParams();
@@ -81,7 +81,7 @@ export class IMDbService {
   }
 
   public getDetails(
-    media_type: 'tv' | 'movie',
+    media_type: 'tv' | 'movie' | 'person',
     media_id: number,
     type:
       | 'credits'
@@ -95,6 +95,9 @@ export class IMDbService {
       | 'translations'
       | 'videos'
       | 'watch/providers'
+      | 'movie_credits'
+      | 'tv_credits'
+      | 'combined_credits'
   ): Observable<any> {
     let queryParams = new HttpParams();
     queryParams = queryParams.append('media_type', media_type);
