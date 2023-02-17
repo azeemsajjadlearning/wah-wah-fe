@@ -29,5 +29,5 @@ jobs:
           status: ${{ job.status }}
           subject: Workflow ${{ github.workflow }} ${{ job.status }}
           message: ${{ github.repository }} - ${{ github.ref }} - ${{ github.sha }}
-          mailto: your-email@example.com
+          mailto: azeem.sajjad.117@gmail.com
           github_token: ${{ secrets.GITHUB_TOKEN }}
