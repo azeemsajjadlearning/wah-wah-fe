@@ -92,4 +92,81 @@ export class GeneralService {
     }
     return age;
   }
+
+  public async getMaxColor(imageUrl: string): Promise<string> {
+    const colorPercentage = await this.getColorPercentage(imageUrl);
+    let maxColor = '';
+    let maxPercentage = 0;
+
+    for (let color in colorPercentage) {
+      if (colorPercentage[color] > maxPercentage) {
+        maxColor = color;
+        maxPercentage = colorPercentage[color];
+      }
+    }
+
+    return maxColor;
+  }
+
+  private async getColorPercentage(
+    imageUrl: string
+  ): Promise<{ [key: string]: number }> {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = imageUrl;
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => {
+        resolve();
+      };
+      img.onerror = (error) => {
+        reject(error);
+      };
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    const context = canvas.getContext('2d');
+    if (!context) {
+      throw new Error('Could not create canvas context.');
+    }
+
+    context.drawImage(img, 0, 0);
+
+    const pixelData = context.getImageData(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    ).data;
+    const colorMap: { [key: string]: number } = {};
+
+    for (let i = 0; i < pixelData.length; i += 4) {
+      const r = pixelData[i];
+      const g = pixelData[i + 1];
+      const b = pixelData[i + 2];
+      const a = pixelData[i + 3];
+
+      if (a !== 0) {
+        const color = `rgb(${r}, ${g}, ${b})`;
+        if (color in colorMap) {
+          colorMap[color]++;
+        } else {
+          colorMap[color] = 1;
+        }
+      }
+    }
+
+    const totalCount = Object.values(colorMap).reduce((a, b) => a + b, 0);
+
+    const colorPercentage: { [key: string]: number } = {};
+
+    for (let color in colorMap) {
+      const percentage = (colorMap[color] / totalCount) * 100;
+      colorPercentage[color] = percentage;
+    }
+
+    return colorPercentage;
+  }
 }

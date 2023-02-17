@@ -1,10 +1,10 @@
-.movie-header {
-  div {
-    background-position: left calc((50vw - 170px) - 340px) top;
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-}
+// .movie-header {
+//   div {
+//     background-position: left calc((50vw - 170px) - 340px) top;
+//     background-size: cover;
+//     background-repeat: no-repeat;
+//   }
+// }
 
 .dot {
   font-size: 1.1em;
@@ -24,4 +24,8 @@
 mat-progress-spinner {
   width: 80px !important;
   height: 80px !important;
+}
+
+.header {
+  -webkit-text-stroke: 0.1px #828282;
 }

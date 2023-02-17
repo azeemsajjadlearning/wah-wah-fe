@@ -1,9 +1,15 @@
-<div ngSwitch="movieDetail" class="flex flex-col flex-auto min-w-0 bg-default">
+<div *ngIf="movieDetail" class="flex flex-col flex-auto min-w-0 bg-default">
   <!-- Header -->
   <div
-    class="bg-cover"
+    class="bg-cover header"
     [style.background-image]="
-      'linear-gradient(to right, rgba(52.5, 10.5, 10.5, 1) calc((50vw - 170px) - 340px), rgba(52.5, 10.5, 10.5, 0.84) 30%, rgba(52.5, 10.5, 10.5, 0.84) 100%),url(' +
+      'linear-gradient(to right, ' +
+      backgroundColor +
+      ', 1) calc((50vw - 170px) - 340px), ' +
+      backgroundColor +
+      ', 0.84) 30%, ' +
+      backgroundColor +
+      ', 0.84) 100%),url(' +
       imageUrlPrefix +
       '/original' +
       movieDetail.backdrop_path +

@@ -30,6 +30,7 @@ export class MovieComponent {
   id: number;
   imageUrlPrefix: string = environment.imdb_image_prefix;
   defaultImage = '../../../../../assets/svg/default.svg';
+  backgroundColor: string;
   window = window;
 
   movieDetail: MovieDetail;
@@ -62,6 +63,17 @@ export class MovieComponent {
   ngOnInit() {
     this.imdbService.getDetail('movie', this.id).subscribe((res) => {
       this.movieDetail = res.result;
+
+      this.generalService
+        .getMaxColor(
+          this.imageUrlPrefix + 'original' + this.movieDetail.backdrop_path
+        )
+        .then((res) => {
+          this.backgroundColor = res.slice(0, -1);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     });
 
     forkJoin([
