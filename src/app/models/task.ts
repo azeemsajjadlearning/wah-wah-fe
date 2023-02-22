@@ -1,9 +1,8 @@
 export interface Task {
   _id: string;
   title: string;
-  status: boolean;
-  user_id: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  notes: string;
+  completed: boolean;
+  dueDate: string | null;
+  priority: 0 | 1 | 2;
 }

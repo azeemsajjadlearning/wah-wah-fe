@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { ConfirmationService } from '../common/confirmation/confirmation.service';
 import { environment } from '../environments/environment';
+import { Task } from '../models/task';
 
 @Injectable()
 export class TaskService {
@@ -40,12 +41,24 @@ export class TaskService {
     );
   }
 
-  public createTask(task: string | null): Observable<any> {
-    return this.http.post(environment.api_prefix + 'tasks', { title: task });
+  public createTask(task: Task | null): Observable<any> {
+    return this.http.post(environment.api_prefix + 'tasks', {
+      title: task?.title,
+      completed: task?.completed,
+      dueDate: task?.dueDate,
+      notes: task?.notes,
+      priority: task?.priority,
+    });
   }
 
-  public updateStatus(id: string) {
-    return this.http.put(environment.api_prefix + 'tasks/' + id, {});
+  public updateTask(id: string, task: Task) {
+    return this.http.put(environment.api_prefix + 'tasks/' + id, {
+      title: task?.title,
+      completed: task?.completed,
+      dueDate: task?.dueDate,
+      notes: task?.notes,
+      priority: task?.priority,
+    });
   }
 
   public deleteTask(id: string) {

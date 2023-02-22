@@ -33,6 +33,8 @@ import { SearchResultsComponent } from './routes/modules/imdb/search-results/sea
 import { ReviewsComponent } from './routes/modules/imdb/reviews/reviews.component';
 import { CastCrewComponent } from './routes/modules/imdb/cast-crew/cast-crew.component';
 import { PersonComponent } from './routes/modules/imdb/person/person.component';
+import { ListComponent } from './routes/modules/task/list/list.component';
+import { DetailComponent } from './routes/modules/task/detail/detail.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { PersonComponent } from './routes/modules/imdb/person/person.component';
     ReviewsComponent,
     CastCrewComponent,
     PersonComponent,
+    ListComponent,
+    DetailComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { catchError, finalize } from 'rxjs';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
-import { LoadingBarService } from 'src/app/common/loading-bar/loading-bar.service';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -14,148 +17,98 @@ import { TaskService } from 'src/app/services/task.service';
   styleUrls: ['task.component.scss'],
 })
 export class TaskComponent implements OnInit {
+  @ViewChild(MatDrawer) drawer!: MatDrawer;
+  selectedTask: Task;
+  updateList: boolean = false;
+
   constructor(
     private taskService: TaskService,
     private confirmationService: ConfirmationService
   ) {}
 
-  allTask: any;
-  task = new FormControl(null);
-  displayedColumns = ['title', 'status', 'createdAt', 'actions'];
+  ngOnInit(): void {}
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  ngOnInit() {
-    this.getAllTask();
-  }
-
-  getAllTask() {
-    this.taskService.getAllTask().subscribe((res) => {
-      this.allTask = new MatTableDataSource<Task>(res);
-      this.allTask.paginator = this.paginator;
-    });
-  }
-
-  addTask() {
-    if (this.task.value != null) {
-      this.taskService
-        .createTask(this.task.value)
-        .pipe(
-          catchError((err) => {
-            this.confirmationService.open({
-              title: 'Error',
-              icon: {
-                color: 'warn',
-                name: 'error',
-                show: true,
-              },
-              message:
-                err.error?.err?.message ||
-                err.error?.error ||
-                'something went wrong!',
-              dismissible: false,
-              actions: {
-                confirm: {
-                  label: 'Ok!',
+  getNewTask(task: Task) {
+    if (task != null) {
+      if (task._id == null) {
+        this.taskService
+          .createTask(task)
+          .pipe(
+            catchError((err) => {
+              this.confirmationService.open({
+                title: 'Error',
+                icon: {
                   color: 'warn',
+                  name: 'error',
                   show: true,
                 },
-                cancel: {
-                  show: false,
+                message:
+                  err.error?.err?.message ||
+                  err.error?.error ||
+                  'something went wrong!',
+                dismissible: false,
+                actions: {
+                  confirm: {
+                    label: 'Ok!',
+                    color: 'warn',
+                    show: true,
+                  },
+                  cancel: {
+                    show: false,
+                  },
                 },
-              },
-            });
-
-            throw new Error(err);
-          }),
-          finalize(() => {
-            this.getAllTask();
-            this.task.setValue(null);
-          })
-        )
-        .subscribe(() => {});
+              });
+              throw new Error(err);
+            }),
+            finalize(() => {
+              this.updateList = true;
+            })
+          )
+          .subscribe();
+      } else {
+        this.taskService
+          .updateTask(task._id, task)
+          .pipe(
+            catchError((err) => {
+              this.confirmationService.open({
+                title: 'Error',
+                icon: {
+                  color: 'warn',
+                  name: 'error',
+                  show: true,
+                },
+                message:
+                  err.error?.err?.message ||
+                  err.error?.error ||
+                  'something went wrong!',
+                dismissible: false,
+                actions: {
+                  confirm: {
+                    label: 'Ok!',
+                    color: 'warn',
+                    show: true,
+                  },
+                  cancel: {
+                    show: false,
+                  },
+                },
+              });
+              throw new Error(err);
+            }),
+            finalize(() => {
+              this.updateList = true;
+            })
+          )
+          .subscribe();
+      }
+    } else {
+      this.updateList = true;
     }
   }
 
-  changeStatus(ele: Task) {
-    this.taskService
-      .updateStatus(ele._id)
-      .pipe(
-        catchError((err) => {
-          this.confirmationService.open({
-            title: 'Error',
-            icon: {
-              color: 'warn',
-              name: 'error',
-              show: true,
-            },
-            message:
-              err.error?.err?.message ||
-              err.error?.error ||
-              'something went wrong!',
-            dismissible: false,
-            actions: {
-              confirm: {
-                label: 'Ok!',
-                color: 'warn',
-                show: true,
-              },
-              cancel: {
-                show: false,
-              },
-            },
-          });
-
-          throw new Error(err);
-        })
-      )
-      .subscribe(() => {});
-  }
-
-  deleteTask(element: Task) {
-    this.taskService
-      .deleteTask(element._id)
-      .pipe(
-        catchError((err) => {
-          this.confirmationService.open({
-            title: 'Error',
-            icon: {
-              color: 'warn',
-              name: 'error',
-              show: true,
-            },
-            message:
-              err.error?.err?.message ||
-              err.error?.error ||
-              'something went wrong!',
-            dismissible: false,
-            actions: {
-              confirm: {
-                label: 'Ok!',
-                color: 'warn',
-                show: true,
-              },
-              cancel: {
-                show: false,
-              },
-            },
-          });
-
-          throw new Error(err);
-        }),
-        finalize(() => {
-          this.getAllTask();
-        })
-      )
-      .subscribe(() => {});
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.allTask.filter = filterValue.trim().toLowerCase();
-
-    if (this.allTask.paginator) {
-      this.allTask.paginator.firstPage();
-    }
+  editTask(ele: Task) {
+    this.updateList = false;
+    this.selectedTask = ele;
+    this.drawer.open();
   }
 }

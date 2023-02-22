@@ -1,77 +1,15 @@
-<div class="card relative">
-  <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4">
-    <div class="px-4">
-      <mat-form-field appearance="outline" class="w-full">
-        <input matInput (keyup)="applyFilter($event)" placeholder="filter..." />
-        <mat-hint>Filter Your Task</mat-hint>
-      </mat-form-field>
-    </div>
-    <div class="px-4">
-      <mat-form-field appearance="outline" class="w-full">
-        <input matInput [formControl]="task" placeholder="add..." />
-        <mat-hint>Add New Task</mat-hint>
-      </mat-form-field>
-    </div>
-    <div class="mt-2 relative h-20">
-      <button
-        mat-fab
-        extended
-        color="primary"
-        (click)="addTask()"
-        style="
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        "
-      >
-        <mat-icon>add</mat-icon>
-        Add
-      </button>
-    </div>
-  </div>
+<mat-drawer-container class="h-full" autosize>
+  <mat-drawer #drawer mode="side" [position]="'end'">
+    <app-detail
+      (onSubmit)="getNewTask($event); drawer.toggle()"
+      [task]="selectedTask"
+    ></app-detail>
+  </mat-drawer>
 
-  <section class="table-section">
-    <table mat-table [dataSource]="allTask">
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef>Task</th>
-        <td mat-cell *matCellDef="let element">{{ element.title }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-slide-toggle
-            color="primary"
-            [checked]="element.status"
-            (change)="changeStatus(element)"
-          ></mat-slide-toggle>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef>Created On</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.createdAt | date : "short" }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-mini-fab color="primary" (click)="deleteTask(element)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr
-        class="hover:bg-stone-900"
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-      ></tr>
-    </table>
-  </section>
-  <mat-paginator [pageSizeOptions]="[10, 20, 50]"> </mat-paginator>
-</div>
+  <mat-drawer-content class="flex flex-col">
+    <app-list
+      (createNewTask)="editTask($event)"
+      [updateList]="updateList"
+    ></app-list>
+  </mat-drawer-content>
+</mat-drawer-container>

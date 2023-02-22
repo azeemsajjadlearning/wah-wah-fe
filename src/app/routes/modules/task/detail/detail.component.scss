@@ -1,0 +1,9 @@
+.details {
+  width: 30rem;
+}
+
+@media (width<=640px) {
+  .details {
+    width: 100vw;
+  }
+}
