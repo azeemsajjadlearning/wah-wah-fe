@@ -17,7 +17,5 @@ export class ReviewsComponent {
     @Inject(MAT_DIALOG_DATA) public data: MovieReview[]
   ) {}
 
-  ngOnInit() {
-    console.log(this.data[0].author_details.username);
-  }
+  ngOnInit() {}
 }

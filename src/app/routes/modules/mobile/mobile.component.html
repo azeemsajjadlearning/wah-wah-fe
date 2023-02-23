@@ -1,0 +1,82 @@
+<form class="p-3">
+  <mat-form-field class="w-full" appearance="outline">
+    <input
+      type="text"
+      matInput
+      placeholder="Search"
+      [formControl]="search"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let option of filteredOptions | async"
+        [value]="option.id"
+        (click)="getDetail(option)"
+        >{{ option.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
+
+<div class="grid md:grid-cols-3 gap-3 p-3">
+  <div>
+    <h2>Top Brands</h2>
+    <div class="grid grid-cols-4">
+      <div
+        *ngFor="let item of popularBrands"
+        (click)="getBrand(item)"
+        class="p-2 text-center border cursor-pointer hover:bg-slate-300"
+      >
+        {{ item }}
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h2>TOP 10 BY DAILY INTEREST</h2>
+    <div>
+      <div class="grid grid-cols-5 font-bold">
+        <div>Position</div>
+        <div class="col-span-3">Device</div>
+        <div>Hits</div>
+      </div>
+      <div
+        *ngFor="let item of popular"
+        class="grid grid-cols-5 py-1 even:bg-gray-300"
+      >
+        <div>{{ item.position }}.</div>
+        <div
+          class="col-span-3 cursor-pointer hover:text-blue-300"
+          (click)="getDetail(item)"
+        >
+          {{ item.name }}
+        </div>
+        <div>{{ item.favorites }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h2>TOP 10 BY FAN</h2>
+    <div>
+      <div class="grid grid-cols-5 font-bold">
+        <div>Position</div>
+        <div class="col-span-3">Device</div>
+        <div>Hits</div>
+      </div>
+      <div
+        *ngFor="let item of popularByFan"
+        class="grid grid-cols-5 py-1 even:bg-gray-300"
+      >
+        <div>{{ item.position }}.</div>
+        <div
+          class="col-span-3 cursor-pointer hover:text-blue-300"
+          (click)="getDetail(item)"
+        >
+          {{ item.name }}
+        </div>
+        <div>{{ item.favorites }}</div>
+      </div>
+    </div>
+  </div>
+</div>

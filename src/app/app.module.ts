@@ -35,6 +35,10 @@ import { CastCrewComponent } from './routes/modules/imdb/cast-crew/cast-crew.com
 import { PersonComponent } from './routes/modules/imdb/person/person.component';
 import { ListComponent } from './routes/modules/task/list/list.component';
 import { DetailComponent } from './routes/modules/task/detail/detail.component';
+import { MobileComponent } from './routes/modules/mobile/mobile.component';
+import { MobileService } from './services/mobile.service';
+import { BrandsComponent } from './routes/modules/mobile/brands/brands.component';
+import { MobileDetailComponent } from './routes/modules/mobile/detail/detail.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +60,9 @@ import { DetailComponent } from './routes/modules/task/detail/detail.component';
     PersonComponent,
     ListComponent,
     DetailComponent,
+    MobileComponent,
+    BrandsComponent,
+    MobileDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,6 +89,7 @@ import { DetailComponent } from './routes/modules/task/detail/detail.component';
     TaskService,
     ThirdPartyService,
     IMDbService,
+    MobileService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [ReviewsComponent],

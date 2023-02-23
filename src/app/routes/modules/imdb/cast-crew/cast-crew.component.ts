@@ -17,9 +17,7 @@ export class CastCrewComponent {
     @Inject(MAT_DIALOG_DATA) public data: MatData
   ) {}
 
-  ngOnInit() {
-    console.log(this.data.cast[9].name);
-  }
+  ngOnInit() {}
 }
 
 interface MatData {

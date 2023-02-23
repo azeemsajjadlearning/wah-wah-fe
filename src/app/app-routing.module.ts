@@ -11,6 +11,9 @@ import { MovieComponent } from './routes/modules/imdb/movie/movie.component';
 import { PersonComponent } from './routes/modules/imdb/person/person.component';
 import { SearchResultsComponent } from './routes/modules/imdb/search-results/search-results.component';
 import { TvComponent } from './routes/modules/imdb/tv/tv.component';
+import { BrandsComponent } from './routes/modules/mobile/brands/brands.component';
+import { MobileDetailComponent } from './routes/modules/mobile/detail/detail.component';
+import { MobileComponent } from './routes/modules/mobile/mobile.component';
 import { TaskComponent } from './routes/modules/task/task.component';
 import { ProfileComponent } from './routes/profile/profile.component';
 
@@ -35,6 +38,9 @@ const routes: Routes = [
       { path: 'imdb/movie/:id', component: MovieComponent },
       { path: 'imdb/tv/:id', component: TvComponent },
       { path: 'imdb/person/:id', component: PersonComponent },
+      { path: 'mobile', component: MobileComponent },
+      { path: 'mobile/device', component: MobileDetailComponent },
+      { path: 'mobile/:brand', component: BrandsComponent },
     ],
   },
 ];

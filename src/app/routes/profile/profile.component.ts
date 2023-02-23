@@ -51,8 +51,6 @@ export class ProfileComponent {
         about: this.currentUser.about || null,
       });
 
-      console.log(this.userForm.value);
-
       this.userForm
         .get('country')
         ?.valueChanges.subscribe((country: Country) => {

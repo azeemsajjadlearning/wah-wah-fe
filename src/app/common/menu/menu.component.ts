@@ -32,6 +32,13 @@ export class MenuComponent {
       icon: 'movie',
       link: 'imdb',
     },
+    {
+      id: 'mobile',
+      title: 'Mobile Phone',
+      type: 'basic',
+      icon: 'phone_iphone',
+      link: 'mobile',
+    },
   ];
 
   constructor(private router: Router) {

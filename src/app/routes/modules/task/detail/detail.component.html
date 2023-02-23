@@ -51,9 +51,11 @@
 
     <!-- Title -->
     <div>
+      <mat-label class="font-bold">Task Title</mat-label>
       <mat-form-field
         appearance="outline"
         class="fuse-mat-textarea fuse-mat-no-subscript w-full"
+        [floatLabel]="'always'"
       >
         <textarea
           matInput
@@ -209,6 +211,7 @@
 
     <!-- Notes -->
     <div class="mt-8">
+      <mat-label class="font-bold">Notes</mat-label>
       <mat-form-field
         appearance="outline"
         class="fuse-mat-textarea fuse-mat-no-subscript w-full"

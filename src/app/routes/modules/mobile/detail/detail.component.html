@@ -1,0 +1,113 @@
+<div *ngIf="deviceDetail" class="m-4">
+  <h2>{{ deviceDetail.name }}</h2>
+  <div class="m-1 flex md:flex-row gap-4">
+    <div>
+      <img [src]="deviceDetail.img" alt="device img" class="w-52 h-auto" />
+    </div>
+    <div class="w-full">
+      <div class="grid md:grid-cols-4 w-full">
+        <div class="col-span-2 hidden md:block">
+          <div class="flex">
+            <div><mat-icon>event</mat-icon></div>
+            <div class="ml-2">
+              {{ deviceDetail.detailSpec[1].specifications[1].value.slice(11) }}
+            </div>
+          </div>
+          <div class="flex">
+            <div><mat-icon>smartphone</mat-icon></div>
+            <div class="ml-2">
+              {{
+                deviceDetail.detailSpec[2].specifications[1].value.slice(
+                  0,
+                  deviceDetail.detailSpec[2].specifications[1].value.indexOf(
+                    "g"
+                  ) + 1
+                )
+              }},
+              {{
+                deviceDetail.detailSpec[2].specifications[0].value.split(" ")[4]
+              }}
+              mm thickness
+            </div>
+          </div>
+          <div class="flex">
+            <div><mat-icon>code</mat-icon></div>
+            <div class="ml-2">
+              {{ deviceDetail.detailSpec[4].specifications[0].value }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-4 mt-3 w-full">
+        <div class="flex flex-row md:flex-col">
+          <div><mat-icon>screenshot</mat-icon></div>
+          <div>
+            <div class="ml-2 md:ml-0 text-xl md:text-2xl font-bold">
+              {{ deviceDetail.quickSpec[0].value }}
+            </div>
+            <div class="text-xs text-gray-500">
+              {{ deviceDetail.quickSpec[1].value }}
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-row md:flex-col">
+          <div><mat-icon>camera</mat-icon></div>
+          <div>
+            <div class="ml-2 md:ml-0 text-xl md:text-2xl font-bold">
+              {{ deviceDetail.quickSpec[2].value }}
+            </div>
+            <div class="text-xs text-gray-500">
+              {{ deviceDetail.quickSpec[3].value }}
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-row md:flex-col">
+          <div><mat-icon>memory</mat-icon></div>
+          <div>
+            <div class="ml-2 md:ml-0 text-xl md:text-2xl font-bold">
+              {{ deviceDetail.quickSpec[4].value }}
+            </div>
+            <div class="text-xs text-gray-500">
+              {{ deviceDetail.quickSpec[5].value }}
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-row md:flex-col">
+          <div><mat-icon>battery_5_bar</mat-icon></div>
+          <div>
+            <div class="ml-2 md:ml-0 text-xl md:text-2xl font-bold">
+              {{ deviceDetail.quickSpec[6].value }}
+            </div>
+            <div class="text-xs text-gray-500">
+              {{ deviceDetail.quickSpec[7].value }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-1 mt-4">
+    <div
+      *ngFor="let item of deviceDetail.detailSpec"
+      class="m-2 p-1 flex gap-4 border"
+    >
+      <div class="w-20 text-xl font-bold text-red-500">
+        {{ item.category }}
+      </div>
+      <div class="w-24 font-bold">
+        <div
+          *ngFor="let item of item.specifications"
+          class="flex flex-col border-b"
+        >
+          {{ item.name }}
+        </div>
+      </div>
+      <div>
+        <div *ngFor="let item of item.specifications" class="border-b">
+          {{ item.value }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
