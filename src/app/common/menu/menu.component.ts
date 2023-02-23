@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'src/app/models/menu';
 
@@ -8,17 +8,7 @@ import { MenuItem } from 'src/app/models/menu';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent {
-  constructor(private router: Router) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.navigation = this.navigation.map((ele: MenuItem) => {
-          if (ele.link === event.url.substring(1)) ele.active = true;
-          else ele.active = false;
-          return ele;
-        });
-      }
-    });
-  }
+  @Output() navbtn = new EventEmitter<any>();
 
   navigation: MenuItem[] = [
     {
@@ -43,4 +33,20 @@ export class MenuComponent {
       link: 'imdb',
     },
   ];
+
+  constructor(private router: Router) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.navigation = this.navigation.map((ele: MenuItem) => {
+          if (ele.link === event.url.substring(1)) ele.active = true;
+          else ele.active = false;
+          return ele;
+        });
+      }
+    });
+  }
+
+  route() {
+    this.navbtn.emit();
+  }
 }

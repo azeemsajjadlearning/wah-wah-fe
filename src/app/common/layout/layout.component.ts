@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { environment } from 'src/app/environments/environment';
@@ -23,6 +24,8 @@ export class LayoutComponent {
   isScreenSmall: boolean;
   resizeObservable$: Observable<Event>;
   resizeSubscription$: Subscription;
+
+  @ViewChild(MatDrawer) drawer!: MatDrawer;
 
   ngOnInit() {
     this.authService.getUser().subscribe((res) => {
@@ -69,5 +72,11 @@ export class LayoutComponent {
         });
       }
     });
+  }
+
+  btnClicked() {
+    if (window.innerWidth < 1024) {
+      this.drawer.close();
+    }
   }
 }
