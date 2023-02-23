@@ -4,7 +4,6 @@ import { DeviceDetail } from 'src/app/models/mobile';
 import { MobileService } from 'src/app/services/mobile.service';
 
 @Component({
-  selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss'],
 })
