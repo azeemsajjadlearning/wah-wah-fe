@@ -39,6 +39,8 @@ import { MobileComponent } from './routes/modules/mobile/mobile.component';
 import { MobileService } from './services/mobile.service';
 import { BrandsComponent } from './routes/modules/mobile/brands/brands.component';
 import { MobileDetailComponent } from './routes/modules/mobile/detail/detail.component';
+import { WeatherService } from './services/weather.service';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,7 @@ import { MobileDetailComponent } from './routes/modules/mobile/detail/detail.com
   imports: [
     BrowserModule,
     AppRoutingModule,
+    NgApexchartsModule,
     ConfirmationModule,
     LoadingBarModule,
     CommonModule,
@@ -90,6 +93,7 @@ import { MobileDetailComponent } from './routes/modules/mobile/detail/detail.com
     ThirdPartyService,
     IMDbService,
     MobileService,
+    WeatherService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [ReviewsComponent],

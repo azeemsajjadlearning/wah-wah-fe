@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { InSHORT } from 'src/app/models/third-party';
-import { ThirdPartyService } from 'src/app/services/third-party.service';
+import * as ApexCharts from 'apexcharts';
+import { WeatherReport } from 'src/app/models/weather';
+import { WeatherService } from 'src/app/services/weather.service';
 
 @Component({
   selector: 'selector-name',
@@ -9,38 +9,160 @@ import { ThirdPartyService } from 'src/app/services/third-party.service';
   styleUrls: ['dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  constructor(private thirdPartyService: ThirdPartyService) {}
+  chartOptions: ApexCharts.ApexOptions;
+  chartInstance: ApexCharts;
 
-  inShorts: InSHORT[];
+  weatherReport: WeatherReport | any;
 
-  category: FormControl = new FormControl('all');
+  constructor(private weatherService: WeatherService) {}
 
   ngOnInit() {
-    this.getInshort('all');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
 
-    this.category.valueChanges.subscribe((res) => {
-      this.getInshort(res);
-    });
+          this.getCurrentWeather(latitude, longitude);
+        },
+        (error) => {
+          console.log(`Error: ${error.message}`);
+          this.weatherReport = null;
+        }
+      );
+    } else {
+      console.log('Geolocation is not supported by this browser.');
+      this.weatherReport = null;
+    }
   }
 
-  getInshort(category: string) {
-    this.thirdPartyService.getInShort(category).subscribe((res) => {
-      this.inShorts = res.result.data;
-    });
+  getCurrentWeather(latitude: number, longitude: number) {
+    this.weatherService
+      .getCurrentWeatherByLocation(latitude, longitude)
+      .subscribe((res) => {
+        this.weatherReport = res.result;
+        const label: any = [];
+        const data: any = [];
+
+        this.weatherReport?.forecast.forecastday[0].hour.forEach((ele: any) => {
+          label.push(
+            `${new Date(ele.time)
+              .getHours()
+              .toString()
+              .padStart(2, '0')}:${new Date(ele.time)
+              .getMinutes()
+              .toString()
+              .padStart(2, '0')}`
+          );
+          data.push(ele.temp_c);
+        });
+
+        this.chartOptions = {
+          title: {
+            text: `${this.weatherReport?.location.name} (${this.weatherReport?.current.feelslike_c} ℃)`,
+            align: 'center',
+            style: {
+              fontSize: '30px',
+              fontWeight: 'bold',
+              color: '#CBD5E1',
+            },
+          },
+          chart: {
+            type: 'area',
+            animations: {
+              speed: 400,
+              animateGradually: {
+                enabled: true,
+              },
+            },
+            toolbar: {
+              show: false,
+            },
+            fontFamily: 'inherit',
+            foreColor: 'inherit',
+            width: '100%',
+            height: '100%',
+            zoom: {
+              enabled: false,
+            },
+          },
+          colors: ['#818CF8'],
+          dataLabels: {
+            enabled: false,
+          },
+          fill: {
+            colors: ['#818CF8'],
+          },
+          series: [
+            {
+              name: 'temp',
+              data: data,
+            },
+          ],
+          xaxis: {
+            crosshairs: {
+              stroke: {
+                color: '#475569',
+                dashArray: 0,
+                width: 2,
+              },
+            },
+            categories: label,
+            labels: {
+              style: {
+                colors: '#CBD5E1',
+              },
+            },
+            tickAmount: 20,
+            tooltip: {
+              enabled: false,
+            },
+          },
+          yaxis: {
+            labels: {
+              show: true,
+              style: { colors: '#CBD5E1' },
+            },
+          },
+          stroke: {
+            width: 2,
+          },
+          tooltip: {
+            followCursor: true,
+            theme: 'dark',
+          },
+          grid: {
+            borderColor: '#334155',
+            xaxis: {
+              lines: {
+                show: true,
+              },
+            },
+          },
+          noData: {
+            text: 'Loading...',
+            align: 'center',
+            verticalAlign: 'middle',
+            offsetX: 0,
+            offsetY: 0,
+            style: {
+              color: '#000000',
+              fontSize: '14px',
+              fontFamily: 'Helvetica',
+            },
+          },
+        };
+
+        this.chartInstance = new ApexCharts(
+          document.querySelector('#chart'),
+          this.chartOptions
+        );
+        this.chartInstance.render();
+      });
   }
 
-  inShortCategory = [
-    { value: 'all', viewValue: 'All' },
-    { value: 'national', viewValue: 'National' },
-    { value: 'business', viewValue: 'Business' },
-    { value: 'sports', viewValue: 'Sports' },
-    { value: 'world', viewValue: 'World' },
-    { value: 'politics', viewValue: 'Politics' },
-    { value: 'startup', viewValue: 'Start-Up' },
-    { value: 'entertainment', viewValue: 'Entertainment' },
-    { value: 'miscellaneous', viewValue: 'Miscellaneous' },
-    { value: 'hatke', viewValue: 'Hatke' },
-    { value: 'science', viewValue: 'Science' },
-    { value: 'automobile', viewValue: 'Automobile' },
-  ];
+  // ngAfterViewInit() {
+  //   console.log(this.weatherReport);
+
+  // }
 }
