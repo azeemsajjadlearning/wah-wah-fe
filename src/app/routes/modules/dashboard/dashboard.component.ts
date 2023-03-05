@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as ApexCharts from 'apexcharts';
 import { WeatherReport } from 'src/app/models/weather';
+import { StockService } from 'src/app/services/stock.service';
 import { WeatherService } from 'src/app/services/weather.service';
 
 @Component({
@@ -36,7 +37,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getCurrentWeather(latitude: number, longitude: number) {
+  private getCurrentWeather(latitude: number, longitude: number) {
     this.weatherService
       .getCurrentWeatherByLocation(latitude, longitude)
       .subscribe((res) => {
@@ -160,9 +161,4 @@ export class DashboardComponent implements OnInit {
         this.chartInstance.render();
       });
   }
-
-  // ngAfterViewInit() {
-  //   console.log(this.weatherReport);
-
-  // }
 }

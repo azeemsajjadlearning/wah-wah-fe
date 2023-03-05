@@ -1,0 +1,9 @@
+.chapter {
+  height: calc(100vh - 207px);
+}
+
+@media (width<=640px) {
+  .chapter {
+    height: calc(100vh - 271px);
+  }
+}

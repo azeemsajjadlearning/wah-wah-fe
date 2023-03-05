@@ -39,6 +39,13 @@ export class MenuComponent {
       icon: 'phone_iphone',
       link: 'mobile',
     },
+    {
+      id: 'quran',
+      title: 'Quran',
+      type: 'basic',
+      icon: 'menu_book',
+      link: 'quran',
+    },
   ];
 
   constructor(private router: Router) {

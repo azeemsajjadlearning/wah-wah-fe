@@ -54,10 +54,17 @@
       </button>
       <span>Wah-Wah Productions</span>
       <span class="flex-auto"></span>
+      <div class="hidden md:flex flex-col text-sm text-right">
+        <div>{{ currentTime | date : "longDate" }}</div>
+        <div>
+          <span>{{ currentTime | date : "HH" }}</span
+          ><span class="blink">:</span
+          ><span>{{ currentTime | date : "mm" }}</span>
+        </div>
+      </div>
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
-
       <mat-menu #menu="matMenu">
         <a mat-menu-item routerLink="profile">
           <mat-icon>account_circle</mat-icon>Profile

@@ -41,6 +41,10 @@ import { BrandsComponent } from './routes/modules/mobile/brands/brands.component
 import { MobileDetailComponent } from './routes/modules/mobile/detail/detail.component';
 import { WeatherService } from './services/weather.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { StockService } from './services/stock.service';
+import { QuranComponent } from './routes/modules/quran/quran.component';
+import { QuranService } from './services/quran.service';
+import { ChapterComponent } from './routes/modules/quran/chapter/chapter.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +69,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     MobileComponent,
     BrandsComponent,
     MobileDetailComponent,
+    QuranComponent,
+    ChapterComponent,
   ],
   imports: [
     BrowserModule,
@@ -94,6 +100,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     IMDbService,
     MobileService,
     WeatherService,
+    StockService,
+    QuranService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [ReviewsComponent],

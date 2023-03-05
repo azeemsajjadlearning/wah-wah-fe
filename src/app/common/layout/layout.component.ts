@@ -5,6 +5,7 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 import { environment } from 'src/app/environments/environment';
 import { User } from 'src/app/models/auth';
 import { AuthService } from 'src/app/services/auth.service';
+import { GeneralService } from 'src/app/services/general.service';
 import { ConfirmationService } from '../confirmation/confirmation.service';
 
 @Component({
@@ -17,9 +18,14 @@ export class LayoutComponent {
     private authService: AuthService,
     private router: Router,
     private confirmationService: ConfirmationService
-  ) {}
+  ) {
+    setInterval(() => {
+      this.currentTime = new Date();
+    }, 1000);
+  }
 
   currentUser: User;
+  currentTime: Date;
 
   isScreenSmall: boolean;
   resizeObservable$: Observable<Event>;
