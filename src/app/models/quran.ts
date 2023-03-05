@@ -119,10 +119,10 @@ export interface ChapterDetail {
 }
 
 interface Info {
-  chapter: Verse[];
+  chapter: VerseInfo[];
 }
 
-interface Verse {
+export interface VerseInfo {
   chapter: number;
   verse: number;
   text: string;

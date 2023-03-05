@@ -23,14 +23,19 @@
 <div class="mt-4 overflow-auto verses">
   <div
     *ngFor="let item of chapterDetail?.arabic?.chapter; let i = index"
-    class="mb-4 p-4 border-b hover:bg-slate-200"
+    class="mb-4 p-4 flex justify-between border-b hover:bg-slate-200"
   >
-    <div class="text-right text-2xl">{{ item.text }}</div>
-    <div class="text-left text-lg">
-      {{ chapterDetail.transcription.chapter[i].text }}
+    <div class="text-center" (click)="play(item)">
+      <mat-icon>play_arrow</mat-icon>
     </div>
-    <div class="text-left text-lg">
-      {{ chapterDetail.translation.chapter[i].text }}
+    <div>
+      <div class="text-right text-2xl">{{ item.text }}</div>
+      <div class="text-left text-lg">
+        {{ chapterDetail.transcription.chapter[i].text }}
+      </div>
+      <div class="text-left text-lg">
+        {{ chapterDetail.translation.chapter[i].text }}
+      </div>
     </div>
   </div>
 </div>
@@ -46,4 +51,24 @@
   >
     Next
   </button>
+</div>
+
+<div
+  *ngIf="showPlayer"
+  class="mt-4 p-4 fixed bottom-0 w-full flex justify-center items-center"
+>
+  <mat-icon
+    *ngIf="!isPlay"
+    class="my-auto"
+    style="height: 40px; width: 40px; font-size: 40px"
+    (click)="pause()"
+    >pause_circle</mat-icon
+  >
+  <mat-icon
+    *ngIf="isPlay"
+    class="my-auto"
+    style="height: 40px; width: 40px; font-size: 40px"
+    (click)="pause()"
+    >play_circle</mat-icon
+  >
 </div>
