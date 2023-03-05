@@ -28,8 +28,16 @@
     <div class="text-center" (click)="play(item)">
       <mat-icon>play_arrow</mat-icon>
     </div>
-    <div>
-      <div class="text-right text-2xl">{{ item.text }}</div>
+    <div #activeDiv>
+      <div
+        class="text-right text-2xl"
+        [ngClass]="{
+          'text-sky-600': i + 1 === audioText,
+          'text-black': i + 1 !== audioText
+        }"
+      >
+        {{ item.text }}
+      </div>
       <div class="text-left text-lg">
         {{ chapterDetail.transcription.chapter[i].text }}
       </div>

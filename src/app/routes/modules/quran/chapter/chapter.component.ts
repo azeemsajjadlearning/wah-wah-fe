@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { ChapterDetail, LanguageList, VerseInfo } from 'src/app/models/quran';
@@ -14,11 +14,14 @@ export class ChapterComponent {
   chapterId: number;
   chapterDetail: ChapterDetail;
   languages: LanguageList[];
+  audioText: number;
   audio = new Audio();
   audioUrlPrefix: string =
     'https://equran.nos.wjv-1.neo.id/audio-partial/Abdullah-Al-Juhany/';
   showPlayer: boolean = false;
   isPlay: boolean = false;
+
+  @ViewChildren('activeDiv') activeDiv: QueryList<ElementRef>;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -61,8 +64,15 @@ export class ChapterComponent {
       '.mp3';
 
     this.audio.addEventListener('canplaythrough', () => {
-      console.log(verse);
+      this.audioText = verse.verse;
       this.audio.play();
+
+      // this.activeDiv.forEach((elementRef) => {
+      //   elementRef.nativeElement.scrollIntoView({
+      //     behavior: 'smooth',
+      //     block: 'center',
+      //   });
+      // });
     });
 
     this.audio.addEventListener('ended', () => {
