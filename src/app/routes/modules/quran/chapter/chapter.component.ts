@@ -67,12 +67,10 @@ export class ChapterComponent {
       this.audioText = verse.verse;
       this.audio.play();
 
-      // this.activeDiv.forEach((elementRef) => {
-      //   elementRef.nativeElement.scrollIntoView({
-      //     behavior: 'smooth',
-      //     block: 'center',
-      //   });
-      // });
+      this.activeDiv['_results'][this.audioText].nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
     });
 
     this.audio.addEventListener('ended', () => {

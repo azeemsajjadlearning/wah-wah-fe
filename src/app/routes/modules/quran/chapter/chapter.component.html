@@ -26,9 +26,9 @@
     class="mb-4 p-4 flex justify-between border-b hover:bg-slate-200"
   >
     <div class="text-center" (click)="play(item)">
-      <mat-icon>play_arrow</mat-icon>
+      <mat-icon class="cursor-pointer">play_arrow</mat-icon>
     </div>
-    <div #activeDiv>
+    <div #activeDiv class="w-full">
       <div
         class="text-right text-2xl"
         [ngClass]="{
@@ -66,17 +66,9 @@
   class="mt-4 p-4 fixed bottom-0 w-full flex justify-center items-center"
 >
   <mat-icon
-    *ngIf="!isPlay"
-    class="my-auto"
+    class="cursor-pointer"
     style="height: 40px; width: 40px; font-size: 40px"
     (click)="pause()"
-    >pause_circle</mat-icon
-  >
-  <mat-icon
-    *ngIf="isPlay"
-    class="my-auto"
-    style="height: 40px; width: 40px; font-size: 40px"
-    (click)="pause()"
-    >play_circle</mat-icon
+    >{{ isPlay ? "pause_circle" : "play_circle" }}</mat-icon
   >
 </div>
