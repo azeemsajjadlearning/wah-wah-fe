@@ -11,6 +11,12 @@ export class MenuService {
     return this.http.get(environment.api_prefix + 'menu/all');
   }
 
+  public giveFirstPermission(userId: string): Observable<any> {
+    return this.http.get(
+      environment.api_prefix + 'menu/give-first-permission/' + userId
+    );
+  }
+
   public givePermission(userId: string, menuId: string): Observable<any> {
     return this.http.get(
       environment.api_prefix + `menu/give-permission/${userId}/${menuId}`

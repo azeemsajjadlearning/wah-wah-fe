@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { catchError } from 'rxjs';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
   templateUrl: 'signup.component.html',
@@ -13,6 +14,7 @@ export class SignUpComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private menuService: MenuService,
     private confirmationService: ConfirmationService,
     private router: Router
   ) {}
@@ -57,6 +59,10 @@ export class SignUpComponent implements OnInit {
       )
       .subscribe((res) => {
         if (res.success) {
+          this.menuService
+            .giveFirstPermission(res.result.firebaseUser.uid)
+            .subscribe();
+
           const pop = this.confirmationService.open({
             title: 'Success',
             icon: {
