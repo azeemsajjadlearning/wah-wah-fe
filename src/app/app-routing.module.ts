@@ -14,6 +14,7 @@ import { TvComponent } from './routes/modules/imdb/tv/tv.component';
 import { BrandsComponent } from './routes/modules/mobile/brands/brands.component';
 import { MobileDetailComponent } from './routes/modules/mobile/detail/detail.component';
 import { MobileComponent } from './routes/modules/mobile/mobile.component';
+import { PermissionComponent } from './routes/modules/permission/permission.component';
 import { ChapterComponent } from './routes/modules/quran/chapter/chapter.component';
 import { QuranComponent } from './routes/modules/quran/quran.component';
 import { TaskComponent } from './routes/modules/task/task.component';
@@ -45,6 +46,7 @@ const routes: Routes = [
       { path: 'mobile/:brand', component: BrandsComponent },
       { path: 'quran', component: QuranComponent },
       { path: 'quran/:chapter_id', component: ChapterComponent },
+      { path: 'permission', component: PermissionComponent },
     ],
   },
 ];

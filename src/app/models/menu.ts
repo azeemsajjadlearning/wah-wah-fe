@@ -29,3 +29,25 @@ export interface MenuItem {
   children?: MenuItem[];
   meta?: any;
 }
+
+export interface SideMenu {
+  _id: string;
+  id: string;
+  title: string;
+  type: string;
+  icon: string;
+  link: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface AllPermission {
+  _id: string;
+  users: string[];
+  menu: string;
+  permissions: string[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}

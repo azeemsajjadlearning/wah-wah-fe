@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'src/app/models/menu';
+import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
   selector: 'app-menu',
@@ -10,48 +11,16 @@ import { MenuItem } from 'src/app/models/menu';
 export class MenuComponent {
   @Output() navbtn = new EventEmitter<any>();
 
-  navigation: MenuItem[] = [
-    {
-      id: 'dashboards',
-      title: 'Dashboard',
-      type: 'basic',
-      icon: 'monitoring',
-      link: 'dashboard',
-    },
-    {
-      id: 'task',
-      title: 'Task',
-      type: 'basic',
-      icon: 'task',
-      link: 'task',
-    },
-    {
-      id: 'imdb',
-      title: 'IMDb',
-      type: 'basic',
-      icon: 'movie',
-      link: 'imdb',
-    },
-    {
-      id: 'mobile',
-      title: 'Mobile Phone',
-      type: 'basic',
-      icon: 'phone_iphone',
-      link: 'mobile',
-    },
-    {
-      id: 'quran',
-      title: 'Quran',
-      type: 'basic',
-      icon: 'menu_book',
-      link: 'quran',
-    },
-  ];
+  navigation: MenuItem[];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private menuService: MenuService) {
+    this.menuService.getPermission().subscribe((res) => {
+      this.navigation = res.result;
+    });
+
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.navigation = this.navigation.map((ele: MenuItem) => {
+        this.navigation = this.navigation?.map((ele: MenuItem) => {
           if (ele.link === event.url.substring(1)) ele.active = true;
           else ele.active = false;
           return ele;

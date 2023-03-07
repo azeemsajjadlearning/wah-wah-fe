@@ -24,6 +24,10 @@ export class AuthService {
     return this.http.get(environment.api_prefix + 'users');
   }
 
+  public getAllUser(): Observable<any> {
+    return this.http.get(environment.api_prefix + 'users/all');
+  }
+
   public resetPassword(email: string): Observable<any> {
     return this.http.post(environment.api_prefix + 'users/reset-password', {
       email,
