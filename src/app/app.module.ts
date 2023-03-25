@@ -47,6 +47,7 @@ import { QuranService } from './services/quran.service';
 import { ChapterComponent } from './routes/modules/quran/chapter/chapter.component';
 import { PermissionComponent } from './routes/modules/permission/permission.component';
 import { MenuService } from './services/menu.service';
+import { TranslateComponent } from './routes/modules/quran/translate/translate.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { MenuService } from './services/menu.service';
     QuranComponent,
     ChapterComponent,
     PermissionComponent,
+    TranslateComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,9 +106,10 @@ import { MenuService } from './services/menu.service';
     MobileService,
     WeatherService,
     StockService,
-    QuranService,MenuService
+    QuranService,
+    MenuService,
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ReviewsComponent],
+  entryComponents: [ReviewsComponent, TranslateComponent],
 })
 export class AppModule {}

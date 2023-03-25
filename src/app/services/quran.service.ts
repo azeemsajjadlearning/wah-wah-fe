@@ -15,9 +15,10 @@ export class QuranService {
     return this.http.get(environment.api_prefix + 'quran/language');
   }
 
-  public getChapter(chapterId: number, language: string = ''): Observable<any> {
+  public getChapter(chapterId: number, language: any = ''): Observable<any> {
     let queryParams = new HttpParams();
-    queryParams = queryParams.append('language', language);
+    if (language != null)
+      queryParams = queryParams.append('language', language);
 
     return this.http.get(environment.api_prefix + 'quran/' + chapterId, {
       params: queryParams,
