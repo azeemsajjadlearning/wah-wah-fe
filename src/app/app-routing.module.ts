@@ -19,6 +19,7 @@ import { ChapterComponent } from './routes/modules/quran/chapter/chapter.compone
 import { QuranComponent } from './routes/modules/quran/quran.component';
 import { TaskComponent } from './routes/modules/task/task.component';
 import { ProfileComponent } from './routes/profile/profile.component';
+import { MyInvestmentComponent } from './routes/modules/my-investment/my-investment.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -47,6 +48,7 @@ const routes: Routes = [
       { path: 'quran', component: QuranComponent },
       { path: 'quran/:chapter_id', component: ChapterComponent },
       { path: 'permission', component: PermissionComponent },
+      { path: 'my-investment', component: MyInvestmentComponent },
     ],
   },
 ];

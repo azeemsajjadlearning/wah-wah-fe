@@ -28,4 +28,10 @@ export class ThirdPartyService {
       environment.api_prefix + 'third-party/get-csc/' + country + '/' + state
     );
   }
+
+  public getMyInvestment(): Observable<any> {
+    return this.http.get(
+      environment.api_prefix + 'third-party/get-my-investment'
+    );
+  }
 }

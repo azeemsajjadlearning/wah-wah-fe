@@ -26,3 +26,15 @@ export interface City {
   id: number;
   name: string;
 }
+
+export interface MyInvestment {
+  cagr: number;
+  fund_name: string;
+  invested: number;
+  investing_date: Date;
+  return: number;
+  return_percentage: number;
+  today_value: number;
+  total: number;
+  value: number;
+}

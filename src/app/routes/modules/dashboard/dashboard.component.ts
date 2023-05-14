@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as ApexCharts from 'apexcharts';
 import { WeatherReport } from 'src/app/models/weather';
-import { StockService } from 'src/app/services/stock.service';
 import { WeatherService } from 'src/app/services/weather.service';
 
 @Component({

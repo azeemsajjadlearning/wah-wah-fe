@@ -48,6 +48,7 @@ import { ChapterComponent } from './routes/modules/quran/chapter/chapter.compone
 import { PermissionComponent } from './routes/modules/permission/permission.component';
 import { MenuService } from './services/menu.service';
 import { TranslateComponent } from './routes/modules/quran/translate/translate.component';
+import { MyInvestmentComponent } from './routes/modules/my-investment/my-investment.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { TranslateComponent } from './routes/modules/quran/translate/translate.c
     ChapterComponent,
     PermissionComponent,
     TranslateComponent,
+    MyInvestmentComponent,
   ],
   imports: [
     BrowserModule,
