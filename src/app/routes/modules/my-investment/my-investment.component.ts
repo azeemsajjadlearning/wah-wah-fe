@@ -27,7 +27,6 @@ export class MyInvestmentComponent {
   ngOnInit() {
     this.thirdPartyService.getMyInvestment().subscribe((res) => {
       this.myInvestment = res.result;
-      console.log(this.myInvestment);
     });
   }
 }

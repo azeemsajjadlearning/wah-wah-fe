@@ -71,8 +71,6 @@ export class TvComponent {
         this.imdbService.getDetails('tv', this.id, 'videos'),
         this.imdbService.getDetails('tv', this.id, 'watch/providers'),
       ]).subscribe((result) => {
-        console.log(result);
-
         this.cast = result[0].result.cast;
         this.crew = result[0].result.crew;
         this.externalIds = result[1].result;

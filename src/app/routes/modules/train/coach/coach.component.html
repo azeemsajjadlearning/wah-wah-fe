@@ -1,0 +1,140 @@
+<div *ngIf="coachDetail" class="mt-6">
+  <div class="flex justify-center">
+    <div class="w-1/2">
+      <table class="table-auto w-full border border-collapse">
+        <thead class="bg-gray-800 text-white text-left">
+          <tr>
+            <th class="p-2">Train No</th>
+            <th class="p-2">Train Name</th>
+            <th class="p-2">Train Start Date</th>
+            <th class="p-2">From</th>
+            <th class="p-2">To</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr class="bg-gray-100 hover:bg-gray-400">
+            <td class="p-2">{{ coachDetail.trainNo }}</td>
+            <td class="p-2">{{ coachDetail.trainName }}</td>
+            <td class="p-2">{{ coachDetail.trainStartDate }}</td>
+            <td class="p-2">{{ coachDetail.from }}</td>
+            <td class="p-2">{{ coachDetail.to }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flex justify-center">
+    <div class="mt-4">
+      <table class="border-collapse border border-slate-400">
+        <tr>
+          <th
+            *ngFor="let item of totalVacantSeats"
+            class="border border-slate-300 p-2"
+          >
+            {{ item.classCode }}
+          </th>
+        </tr>
+        <tr>
+          <td
+            *ngFor="let item of totalVacantSeats"
+            class="border border-slate-300 p-2"
+          >
+            {{ item.vacantBerths }}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="flex justify-center mt-4">
+    <div class="flex flex-col">
+      <div class="flex gap-2 justify-between text-white">
+        <div class="p-3 w-32 text-center bg-red-700 rounded-lg">Engine</div>
+        <ng-container *ngFor="let item of coachDetail.cdd">
+          <div
+            class="p-3 w-14 text-center bg-blue-700 cursor-pointer rounded-lg"
+            (click)="getDetails(item)"
+          >
+            {{ item.coachName }}
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="flex gap-2 justify-between">
+        <div class="p-3 w-32 text-center">Class</div>
+        <ng-container *ngFor="let item of coachDetail.cdd">
+          <div class="p-3 w-14 text-center">{{ item.classCode }}</div>
+        </ng-container>
+      </div>
+
+      <div class="flex gap-2 justify-between">
+        <div class="p-3 w-32 text-center">Vacant Berths</div>
+        <ng-container *ngFor="let item of coachDetail.cdd">
+          <div class="p-3 w-14 text-center">{{ item.vacantBerths }}</div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flex justify-center mt-4">
+  <div *ngIf="berthDetail" class="flex flex-wrap gap-4">
+    <div *ngFor="let item of coachLayout" class="flex flex-row mb-4">
+      <div class="overflow-x-auto">
+        <table class="border-separate border-spacing-2">
+          <ng-container *ngFor="let seat of item.data; let i = index">
+            <ng-container *ngIf="i % 2 === 0">
+              <tr>
+                <td
+                  class="p-2 rounded-lg cursor-pointer"
+                  [ngClass]="{
+                    'bg-green-600': hasSingleFalseOccupancy(seat.bsd),
+                    'bg-orange-400': hasMultipleOccupancyWithFalse(seat.bsd),
+                    'bg-red-600':
+                      !hasSingleFalseOccupancy(seat.bsd) &&
+                      !hasMultipleOccupancyWithFalse(seat.bsd)
+                  }"
+                  (click)="getSeatDetail(seat)"
+                >
+                  {{ seat.berthNo }}-{{
+                    seat.berthCode === "R"
+                      ? "SL"
+                      : seat.berthCode === "P"
+                      ? "SU"
+                      : seat.berthCode
+                  }}
+                </td>
+                <td
+                  class="p-2 rounded-lg cursor-pointer"
+                  *ngIf="i + 1 < item.data.length"
+                  [ngClass]="{
+                    'bg-green-600': hasSingleFalseOccupancy(
+                      item.data[i + 1].bsd
+                    ),
+                    'bg-orange-400': hasMultipleOccupancyWithFalse(
+                      item.data[i + 1].bsd
+                    ),
+                    'bg-red-600':
+                      !hasSingleFalseOccupancy(item.data[i + 1].bsd) &&
+                      !hasMultipleOccupancyWithFalse(item.data[i + 1].bsd)
+                  }"
+                  (click)="getSeatDetail(item.data[i + 1])"
+                >
+                  {{ item.data[i + 1].berthNo }}-{{
+                    item.data[i + 1].berthCode === "R"
+                      ? "SL"
+                      : item.data[i + 1].berthCode === "P"
+                      ? "SU"
+                      : item.data[i + 1].berthCode
+                  }}
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

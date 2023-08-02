@@ -20,6 +20,9 @@ import { QuranComponent } from './routes/modules/quran/quran.component';
 import { TaskComponent } from './routes/modules/task/task.component';
 import { ProfileComponent } from './routes/profile/profile.component';
 import { MyInvestmentComponent } from './routes/modules/my-investment/my-investment.component';
+import { WebScrapingComponent } from './routes/modules/web-scraping/web-scraping.component';
+import { TrainComponent } from './routes/modules/train/train.component';
+import { CoachComponent } from './routes/modules/train/coach/coach.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -49,6 +52,9 @@ const routes: Routes = [
       { path: 'quran/:chapter_id', component: ChapterComponent },
       { path: 'permission', component: PermissionComponent },
       { path: 'my-investment', component: MyInvestmentComponent },
+      { path: 'web-scraping', component: WebScrapingComponent },
+      { path: 'train', component: TrainComponent },
+      { path: 'train/coach', component: CoachComponent },
     ],
   },
 ];

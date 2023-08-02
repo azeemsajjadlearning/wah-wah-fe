@@ -71,8 +71,6 @@ export class ChapterComponent {
       '.mp3';
 
     this.audio.addEventListener('canplaythrough', () => {
-      console.log(verse.verse);
-
       this.audioText = verse.verse;
       this.audio.play();
 

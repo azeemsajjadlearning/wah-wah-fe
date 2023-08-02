@@ -49,6 +49,12 @@ import { PermissionComponent } from './routes/modules/permission/permission.comp
 import { MenuService } from './services/menu.service';
 import { TranslateComponent } from './routes/modules/quran/translate/translate.component';
 import { MyInvestmentComponent } from './routes/modules/my-investment/my-investment.component';
+import { WebScrapingComponent } from './routes/modules/web-scraping/web-scraping.component';
+import { WebScrapingService } from './services/web-scarping.service';
+import { TrainComponent } from './routes/modules/train/train.component';
+import { TrainService } from './services/train.service';
+import { CoachComponent } from './routes/modules/train/coach/coach.component';
+import { SeatDetailComponent } from './routes/modules/train/coach/seat-detail.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +84,10 @@ import { MyInvestmentComponent } from './routes/modules/my-investment/my-investm
     PermissionComponent,
     TranslateComponent,
     MyInvestmentComponent,
+    WebScrapingComponent,
+    TrainComponent,
+    CoachComponent,
+    SeatDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -110,8 +120,10 @@ import { MyInvestmentComponent } from './routes/modules/my-investment/my-investm
     StockService,
     QuranService,
     MenuService,
+    WebScrapingService,
+    TrainService,
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ReviewsComponent, TranslateComponent],
+  entryComponents: [ReviewsComponent, TranslateComponent, SeatDetailComponent],
 })
 export class AppModule {}
