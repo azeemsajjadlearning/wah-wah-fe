@@ -55,9 +55,14 @@ import { TrainComponent } from './routes/modules/train/train.component';
 import { TrainService } from './services/train.service';
 import { CoachComponent } from './routes/modules/train/coach/coach.component';
 import { SeatDetailComponent } from './routes/modules/train/coach/seat-detail.component';
+import { ChartComponent } from './routes/modules/train/chart/chart.component';
+import { AvailabilityComponent } from './routes/modules/train/availability/availability.component';
+import { PNRComponent } from './routes/modules/train/availability/pnr.component';
+import { DurationPipe } from './pipes/duration.pipe';
 
 @NgModule({
   declarations: [
+    DurationPipe,
     AppComponent,
     LayoutComponent,
     MenuComponent,
@@ -86,8 +91,11 @@ import { SeatDetailComponent } from './routes/modules/train/coach/seat-detail.co
     MyInvestmentComponent,
     WebScrapingComponent,
     TrainComponent,
+    ChartComponent,
     CoachComponent,
     SeatDetailComponent,
+    AvailabilityComponent,
+    PNRComponent,
   ],
   imports: [
     BrowserModule,

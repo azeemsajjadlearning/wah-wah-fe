@@ -52,4 +52,44 @@ export class TrainService {
       }
     );
   }
+
+  public getStationSuggestion(query: string): Observable<any> {
+    return this.http.get(
+      environment.api_prefix + 'train/get-station-suggestion/' + query
+    );
+  }
+
+  public getTrainsBetweenStation(
+    source: string,
+    destination: string,
+    departureDate: string
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'train/get-trains-between', {
+      source: source,
+      destination: destination,
+      departureDate: departureDate,
+    });
+  }
+
+  public getPNRStatus(pnr: number): Observable<any> {
+    return this.http.get(
+      environment.api_prefix + 'train/get-pnr-status/' + pnr
+    );
+  }
+
+  public searchTrain(query: string): Observable<any> {
+    return this.http.get(
+      environment.api_prefix + 'train/search-train/' + query
+    );
+  }
+
+  public getRunningStatus(
+    trainNo: string,
+    departureDate: string
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'train/get-running-status', {
+      departure_date: departureDate,
+      train_number: trainNo,
+    });
+  }
 }

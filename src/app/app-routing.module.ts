@@ -23,6 +23,8 @@ import { MyInvestmentComponent } from './routes/modules/my-investment/my-investm
 import { WebScrapingComponent } from './routes/modules/web-scraping/web-scraping.component';
 import { TrainComponent } from './routes/modules/train/train.component';
 import { CoachComponent } from './routes/modules/train/coach/coach.component';
+import { ChartComponent } from './routes/modules/train/chart/chart.component';
+import { AvailabilityComponent } from './routes/modules/train/availability/availability.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -54,7 +56,9 @@ const routes: Routes = [
       { path: 'my-investment', component: MyInvestmentComponent },
       { path: 'web-scraping', component: WebScrapingComponent },
       { path: 'train', component: TrainComponent },
+      { path: 'train/chart', component: ChartComponent },
       { path: 'train/coach', component: CoachComponent },
+      { path: 'train/availability', component: AvailabilityComponent },
     ],
   },
 ];
