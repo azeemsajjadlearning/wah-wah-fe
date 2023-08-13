@@ -1,14 +1,12 @@
-<div class="flex m-2 p-2 gap-4">
-  <div
-    class="tab border border-solid rounded-xl p-10 cursor-pointer"
-    (click)="navigate('chart')"
-  >
-    Reservation Chart
-  </div>
-  <div
-    class="tab border border-solid rounded-xl p-10 cursor-pointer"
-    (click)="navigate('availability')"
-  >
-    Train Availability
-  </div>
-</div>
+<mat-tab-group [selectedIndex]="1">
+  <mat-tab label="Reservation Chart">
+    <app-chart></app-chart>
+  </mat-tab>
+  <mat-tab label="Availability">
+    <app-availability class="m-4"></app-availability>
+  </mat-tab>
+  <mat-tab label="Check PNR Status"> <app-pnr class="m-4"></app-pnr> </mat-tab>
+  <mat-tab label="Live Train Status">
+    <app-running-status class="m-4"></app-running-status>
+  </mat-tab>
+</mat-tab-group>

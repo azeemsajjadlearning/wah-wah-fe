@@ -6,7 +6,7 @@ export interface TrainList {
 export interface TrainDetail {
   duration: string;
   stationFrom: string;
-  stationList: StationList[];
+  stationCode: StationList[];
   stationTo: string;
   timeStamp: Date;
   trainName: string;
@@ -59,84 +59,34 @@ export interface Cdd {
   vacantBerths: number;
 }
 
-export interface Stations {
-  body: Body[];
-  code: number;
-  error: null;
-  meta: any;
-  status: any;
-}
-
-export interface StationData {
-  airport_code?: string;
-  airport_name?: string;
-  airport_name_hi?: string;
-  code: string;
-  display_location: string;
-  display_name: string;
-  display_name_bn: string;
-  display_name_gu: string;
-  display_name_hi: string;
-  display_name_kn: string;
-  display_name_ml: string;
-  display_name_mr: string;
-  display_name_or: string;
-  display_name_pa: string;
-  display_name_ta: string;
-  display_name_te: string;
+export interface StationCode {
   name: string;
-  name_bn: string;
-  name_gu: string;
-  name_hi: string;
-  name_kn: string;
-  name_ml: string;
-  name_mr: string;
-  name_or: string;
-  name_pa: string;
-  name_ta: string;
-  name_te: string;
-  type: string;
+  code: string;
 }
 
-export interface SearchedTrain {
-  alternate_stations: boolean;
-  alternate_stations_data?: any[];
-  alternate_stations_text?: string;
-  alternate_stations_title?: string;
-  arrival: Date;
-  availability: any[];
-  availability_count: number;
-  cache_time: number;
-  category: string[];
-  classes: any[];
-  departure: Date;
-  destination: any;
-  destination_name: any;
+export interface TrainList {
+  arrivalTime: string;
+  atasOpted: string;
+  avlClasses: string[];
+  departureTime: string;
+  distance: string;
   duration: string;
-  least_price: number;
-  message_enabled: string;
-  message_text: string;
-  runningOn: RunningOn;
-  source: any;
-  source_name: any;
-  stationCodeMatch: number;
-  tatkal_enabled: boolean;
-  tatkal_text: any;
-  trainFullName: string;
+  flexiFlag: string;
+  fromStnCode: string;
+  runningFri: string;
+  runningMon: string;
+  runningSat: string;
+  runningSun: string;
+  runningThu: string;
+  runningTue: string;
+  runningWed: string;
+  toStnCode: string;
   trainName: string;
   trainNumber: string;
-  trainOwner: number;
-  train_type: any;
-}
-
-export interface RunningOn {
-  sun: string;
-  mon: string;
-  tue: string;
-  wed: string;
-  thu: string;
-  fri: string;
-  sat: string;
+  trainOwner: string;
+  trainType: string[];
+  trainsiteId: string;
+  availability: any;
 }
 
 export interface TrainStatus {

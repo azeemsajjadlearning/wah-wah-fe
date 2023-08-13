@@ -6,10 +6,4 @@ import { Router } from '@angular/router';
   templateUrl: './train.component.html',
   styleUrls: ['./train.component.scss'],
 })
-export class TrainComponent {
-  constructor(private router: Router) {}
-
-  navigate(route: string) {
-    this.router.navigateByUrl('train/' + route);
-  }
-}
+export class TrainComponent {}

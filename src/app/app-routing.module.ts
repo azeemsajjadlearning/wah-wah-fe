@@ -22,7 +22,7 @@ import { ProfileComponent } from './routes/profile/profile.component';
 import { MyInvestmentComponent } from './routes/modules/my-investment/my-investment.component';
 import { WebScrapingComponent } from './routes/modules/web-scraping/web-scraping.component';
 import { TrainComponent } from './routes/modules/train/train.component';
-import { CoachComponent } from './routes/modules/train/coach/coach.component';
+import { CoachComponent } from './routes/modules/train/chart/coach/coach.component';
 import { ChartComponent } from './routes/modules/train/chart/chart.component';
 import { AvailabilityComponent } from './routes/modules/train/availability/availability.component';
 

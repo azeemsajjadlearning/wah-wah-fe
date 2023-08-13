@@ -14,7 +14,7 @@ import { TrainService } from 'src/app/services/train.service';
 export class ChartComponent {
   trainList: TrainList[];
   filteredTrainList: TrainList[];
-  trainDetails: TrainDetail | null;
+  trainDetails: any;
 
   form: FormGroup;
 

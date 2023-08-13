@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../environments/environment';
+import { StationCode } from '../models/train';
 
 @Injectable()
 export class TrainService {
+  private stationList = '../../assets/station-list.json';
+
   constructor(private http: HttpClient) {}
 
   public getAllTrains(): Observable<any> {
@@ -53,24 +56,6 @@ export class TrainService {
     );
   }
 
-  public getStationSuggestion(query: string): Observable<any> {
-    return this.http.get(
-      environment.api_prefix + 'train/get-station-suggestion/' + query
-    );
-  }
-
-  public getTrainsBetweenStation(
-    source: string,
-    destination: string,
-    departureDate: string
-  ): Observable<any> {
-    return this.http.post(environment.api_prefix + 'train/get-trains-between', {
-      source: source,
-      destination: destination,
-      departureDate: departureDate,
-    });
-  }
-
   public getPNRStatus(pnr: number): Observable<any> {
     return this.http.get(
       environment.api_prefix + 'train/get-pnr-status/' + pnr
@@ -91,5 +76,42 @@ export class TrainService {
       departure_date: departureDate,
       train_number: trainNo,
     });
+  }
+
+  public getTrainsBetweenStation(
+    source: string,
+    destination: String,
+    date: string
+  ): Observable<any> {
+    return this.http.post(
+      environment.api_prefix + 'train/get-train-bw-station',
+      {
+        source: source,
+        destination: destination,
+        date: date,
+      }
+    );
+  }
+
+  public getAvailability(
+    trainNo: string,
+    journey_date: string,
+    source: string,
+    destination: string,
+    cls: string,
+    quota: string = 'GN'
+  ) {
+    return this.http.post(environment.api_prefix + 'train/get-availability', {
+      train_no: trainNo,
+      journey_date: journey_date,
+      source: source,
+      destination: destination,
+      class: cls,
+      quota: quota,
+    });
+  }
+
+  public getStationList(): Observable<StationCode[]> {
+    return this.http.get<StationCode[]>(this.stationList);
   }
 }

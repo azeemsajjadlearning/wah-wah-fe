@@ -1,0 +1,33 @@
+<form
+  [formGroup]="pnrForm"
+  (ngSubmit)="onSubmitPNRForm()"
+  class="flex flex-row justify-center gap-4"
+>
+  <mat-form-field>
+    <mat-label>PNR</mat-label>
+    <input matInput type="text" formControlName="pnr" />
+    <button
+      *ngIf="pnrForm.get('pnr')?.value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="pnrForm.get('pnr')?.setValue('')"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    class="my-auto"
+    color="primary"
+    type="submit"
+    [disabled]="pnrForm.invalid"
+  >
+    Search
+  </button>
+</form>
+
+<div *ngIf="pnrStatus">
+  <pnr [content]="pnrStatus"></pnr>
+</div>

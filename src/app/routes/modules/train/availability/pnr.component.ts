@@ -10,7 +10,7 @@ import {
   selector: 'pnr',
   template: `<div #dynamicContent></div>`,
 })
-export class PNRComponent {
+export class PNRStatusComponent {
   @Input() content: string;
   @ViewChild('dynamicContent', { static: false }) dynamicContent: ElementRef;
 
