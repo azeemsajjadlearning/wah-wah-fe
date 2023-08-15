@@ -1,17 +1,1 @@
-<h1 mat-dialog-title>Berth Number: {{ seatData.berthNo }}</h1>
-<div mat-dialog-content>
-  <div *ngFor="let item of seatData.bsd">
-    <span
-      [ngClass]="{
-        'text-orange-600': item.occupancy,
-        'text-lime-500': !item.occupancy
-      }"
-      >{{ getStationName(item.from) }} ({{ item.from }}) to
-      {{ getStationName(item.to) }} ({{ item.to }})
-      {{ item.occupancy == true ? "occupied" : "vacant" }}</span
-    >
-  </div>
-</div>
-<div mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close cdkFocusInitial>Ok</button>
-</div>
+SeatDetailComponent

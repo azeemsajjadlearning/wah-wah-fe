@@ -57,7 +57,6 @@ import { CoachComponent } from './routes/modules/train/chart/coach/coach.compone
 import { SeatDetailComponent } from './routes/modules/train/chart/coach/seat-detail.component';
 import { ChartComponent } from './routes/modules/train/chart/chart.component';
 import { AvailabilityComponent } from './routes/modules/train/availability/availability.component';
-import { PNRStatusComponent } from './routes/modules/train/availability/pnr.component';
 import { DurationPipe } from './pipes/duration.pipe';
 import { PNRComponent } from './routes/modules/train/pnr/pnr.component';
 import { RunningStatusComponent } from './routes/modules/train/running-status/running-status.component';
@@ -98,7 +97,6 @@ import { RunningStatusComponent } from './routes/modules/train/running-status/ru
     SeatDetailComponent,
     AvailabilityComponent,
     PNRComponent,
-    PNRStatusComponent,
     RunningStatusComponent,
   ],
   imports: [
