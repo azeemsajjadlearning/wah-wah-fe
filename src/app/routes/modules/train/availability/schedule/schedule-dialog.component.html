@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{ data.trainNumber }} - {{ data.trainName }}</h2>
+<mat-dialog-content class="mat-typography">
+  <table class="min-w-full border-collapse border border-gray-300">
+    <thead>
+      <tr>
+        <th class="border border-gray-300 px-4 py-2">S.N.</th>
+        <th class="border border-gray-300 px-4 py-2">Station Code</th>
+        <th class="border border-gray-300 px-4 py-2">Station Name</th>
+        <th class="border border-gray-300 px-4 py-2">Route Number</th>
+        <th class="border border-gray-300 px-4 py-2">Arrival Time</th>
+        <th class="border border-gray-300 px-4 py-2">Departure Time</th>
+        <th class="border border-gray-300 px-4 py-2">Halt Time (min)</th>
+        <th class="border border-gray-300 px-4 py-2">Distance</th>
+        <th class="border border-gray-300 px-4 py-2">Day</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        *ngFor="let item of data.stationList; let i = index"
+        class="{{ i % 2 === 0 ? 'bg-gray-100' : 'bg-white' }}"
+      >
+        <td class="border border-gray-300 px-4 py-2">{{ i + 1 }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ item.stationCode }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ item.stationName }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ item.routeNumber }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ item.arrivalTime }}</td>
+        <td class="border border-gray-300 px-4 py-2">
+          {{ item.departureTime }}
+        </td>
+        <td class="border border-gray-300 px-4 py-2">{{ item.haltTime }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ item.distance }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ item.dayCount }}</td>
+      </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>

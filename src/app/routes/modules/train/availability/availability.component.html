@@ -188,7 +188,12 @@
 
           <div class="grid grid-cols-3">
             <div class="font-light">{{ item.fromStnCode }}</div>
-            <div class="mx-auto">view route</div>
+            <div
+              class="mx-auto text-blue-400 cursor-pointer"
+              (click)="getRoute(item)"
+            >
+              view route
+            </div>
             <div class="font-light text-right">{{ item.toStnCode }}</div>
           </div>
         </div>

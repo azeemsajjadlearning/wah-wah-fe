@@ -31,6 +31,12 @@ export class TrainService {
     });
   }
 
+  public getTrainSchedule(trainNo: number): Observable<any> {
+    return this.http.get(
+      environment.api_prefix + 'train/get-train-schedule/' + trainNo
+    );
+  }
+
   public getAvailability(
     trainNo: string,
     source: string,

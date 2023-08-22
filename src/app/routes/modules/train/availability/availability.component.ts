@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { debounceTime } from 'rxjs';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
 import { TrainBtwnStnsList, TrainList } from 'src/app/models/train';
 import { TrainService } from 'src/app/services/train.service';
+import { ScheduleDialogComponent } from './schedule/schedule-dialog.component';
 
 @Component({
   selector: 'app-availability',
@@ -31,10 +33,15 @@ export class AvailabilityComponent {
   constructor(
     private trainService: TrainService,
     private fb: FormBuilder,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private matDialog: MatDialog
   ) {}
 
   ngOnInit() {
+    this.trainService.getTrains('LKO', 'NDLS', '20230930').subscribe((res) => {
+      this.trainList = res.result;
+    });
+
     this.form = this.fb.group({
       source: [null, Validators.required],
       destination: [null, Validators.required],
@@ -113,6 +120,16 @@ export class AvailabilityComponent {
             return ele;
           });
         }
+      });
+  }
+
+  getRoute(train: TrainBtwnStnsList) {
+    this.trainService
+      .getTrainSchedule(parseInt(train.trainNumber))
+      .subscribe((res) => {
+        this.matDialog.open(ScheduleDialogComponent, {
+          data: res.result,
+        });
       });
   }
 

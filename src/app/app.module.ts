@@ -60,6 +60,7 @@ import { AvailabilityComponent } from './routes/modules/train/availability/avail
 import { DurationPipe } from './pipes/duration.pipe';
 import { PNRComponent } from './routes/modules/train/pnr/pnr.component';
 import { RunningStatusComponent } from './routes/modules/train/running-status/running-status.component';
+import { ScheduleDialogComponent } from './routes/modules/train/availability/schedule/schedule-dialog.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { RunningStatusComponent } from './routes/modules/train/running-status/ru
     AvailabilityComponent,
     PNRComponent,
     RunningStatusComponent,
+    ScheduleDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -134,6 +136,11 @@ import { RunningStatusComponent } from './routes/modules/train/running-status/ru
     TrainService,
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ReviewsComponent, TranslateComponent, SeatDetailComponent],
+  entryComponents: [
+    ReviewsComponent,
+    TranslateComponent,
+    SeatDetailComponent,
+    ScheduleDialogComponent,
+  ],
 })
 export class AppModule {}

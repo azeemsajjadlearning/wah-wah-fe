@@ -89,3 +89,34 @@ export interface InformationMessage {
   paramName: string;
   popup: string;
 }
+
+export interface TrainSchedule {
+  duration: string;
+  stationFrom: string;
+  stationList: StationList[];
+  stationTo: string;
+  timeStamp: Date;
+  trainName: string;
+  trainNumber: string;
+  trainOwner: string;
+  trainRunsOnFri: string;
+  trainRunsOnMon: string;
+  trainRunsOnSat: string;
+  trainRunsOnSun: string;
+  trainRunsOnThu: string;
+  trainRunsOnTue: string;
+  trainRunsOnWed: string;
+}
+
+export interface StationList {
+  arrivalTime: string;
+  boardingDisabled: string;
+  dayCount: string;
+  departureTime: string;
+  distance: string;
+  haltTime: string;
+  routeNumber: string;
+  stationCode: string;
+  stationName: string;
+  stnSerialNumber: string;
+}
