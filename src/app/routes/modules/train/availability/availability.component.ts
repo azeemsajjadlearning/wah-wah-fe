@@ -38,10 +38,6 @@ export class AvailabilityComponent {
   ) {}
 
   ngOnInit() {
-    this.trainService.getTrains('LKO', 'NDLS', '20230930').subscribe((res) => {
-      this.trainList = res.result;
-    });
-
     this.form = this.fb.group({
       source: [null, Validators.required],
       destination: [null, Validators.required],
