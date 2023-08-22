@@ -66,12 +66,7 @@ export class AvailabilityComponent {
       .getTrains(
         this.form.get('source')?.value.split(' - ')[1],
         this.form.get('destination')?.value.split(' - ')[1],
-        this.form
-          .get('dateOfJourney')
-          ?.value.toLocaleDateString()
-          .split('/')
-          .reverse()
-          .join(''),
+        this.formatDate(this.form.get('dateOfJourney')?.value),
         this.form.get('quota')?.value
       )
       .subscribe((res) => {
@@ -85,12 +80,7 @@ export class AvailabilityComponent {
         train.trainNumber,
         train.fromStnCode,
         train.toStnCode,
-        this.form
-          .get('dateOfJourney')
-          ?.value.toLocaleDateString()
-          .split('/')
-          .reverse()
-          .join(''),
+        this.formatDate(this.form.get('dateOfJourney')?.value),
         cls,
         this.form.get('quota')?.value
       )
@@ -124,5 +114,13 @@ export class AvailabilityComponent {
           });
         }
       });
+  }
+
+  private formatDate(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return year + month + day;
   }
 }
