@@ -59,6 +59,12 @@ export class TrainService {
     return this.http.get(environment.api_prefix + 'train/get-all-trains');
   }
 
+  public getPNRStatus(pnr: number): Observable<any> {
+    return this.http.get(
+      environment.api_prefix + 'train/get-pnr-status/' + pnr
+    );
+  }
+
   private getAllStation(): Observable<any[]> {
     return this.http
       .get<any>(environment.api_prefix + 'train/get-all-stations')

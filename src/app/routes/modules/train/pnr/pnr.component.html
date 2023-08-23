@@ -1,1 +1,111 @@
-PNRComponent
+<div class="p-4 bg-slate-100">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onFormSubmit()"
+    class="flex gap-4 items-center justify-center mb-8"
+  >
+    <mat-form-field class="w-60">
+      <mat-label>PNR</mat-label>
+      <input matInput placeholder="Search PNR.." formControlName="pnr" />
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      type="submit"
+      color="primary"
+      [disabled]="form.invalid"
+    >
+      Search
+    </button>
+  </form>
+
+  <div *ngIf="pnrStatus" class="w-full flex justify-center">
+    <div class="max-w-2xl bg-blue-600 rounded-xl float-left relative">
+      <div class="w-full float-left p-6">
+        <p class="w-1/3 float-left text-white">
+          <mat-icon>train</mat-icon>
+        </p>
+        <p class="w-2/3 float-right text-right text-lg text-white uppercase">
+          <span
+            class="text-lg text-teal-400 text-right block w-full tracking-wide pb-1"
+            >PNR Number</span
+          >{{ form.get("pnr")?.value }}
+        </p>
+      </div>
+      <div class="w-full clear-both relative h-12 divider">
+        <span></span>
+      </div>
+      <div class="stn-to-stn w-full float-left relative">
+        <ul class="m-0 p-0 text-xl text-white w-full float-left">
+          <li class="float-left py-3 px-4 relative m-0 w-1/2 uppercase">
+            <span>From</span>{{ pnrStatus.data.boardingInfo.stationName }} ({{
+              pnrStatus.data.boardingInfo.stationCode
+            }})
+          </li>
+          <li
+            class="float-right text-right py-3 px-4 relative m-0 w-1/2 uppercase"
+          >
+            <span>To</span>{{ pnrStatus.data.destinationInfo.stationName }} ({{
+              pnrStatus.data.destinationInfo.stationCode
+            }})
+          </li>
+        </ul>
+      </div>
+      <div class="date_time w-full float-left my-4">
+        <ul
+          class="m-0 p-0 text-xl text-white flex gap-4 items-center justify-between"
+        >
+          <li>
+            <div><span>Date</span></div>
+            <div>{{ pnrStatus.data.trainInfo.dt | date : "EEEE, d MMMM" }}</div>
+          </li>
+          <li class="text-center">
+            <div><span>Time</span></div>
+            <div>
+              {{ pnrStatus.data.boardingInfo.departureTime.slice(0, 5) }}
+            </div>
+          </li>
+          <li class="text-right">
+            <div><span>Train Name</span></div>
+            <div>
+              {{ pnrStatus.data.trainInfo.name }} ({{
+                pnrStatus.data.trainInfo.trainNo
+              }})
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <table class="w-full border-collapse">
+          <thead class="text-teal-400">
+            <tr>
+              <th class="px-4 py-2"></th>
+              <th class="px-4 py-2 text-right">Current Status</th>
+            </tr>
+          </thead>
+
+          <tbody class="border-y-2 border-dotted">
+            <tr
+              *ngFor="let item of pnrStatus.data.passengerInfo; let i = index"
+              class="text-white border-b-2 border-dotted"
+            >
+              <td class="px-4 py-2">Passenger {{ i + 1 }}</td>
+              <td class="px-4 py-2 text-right">
+                {{ item.currentCoach }} - {{ item.currentBerthNo }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="m-4 flex items-center justify-between">
+        <div class="p-3 text-white rounded-xl bg-red-500">Chart NOT Ready</div>
+        <div
+          class="p-3 text-white rounded-xl bg-blue-300 cursor-pointer"
+          (click)="onFormSubmit()"
+        >
+          just now
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

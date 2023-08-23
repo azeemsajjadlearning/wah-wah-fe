@@ -120,3 +120,56 @@ export interface StationList {
   stationName: string;
   stnSerialNumber: string;
 }
+
+export interface PNRStatus {
+  code: number;
+  data: Data;
+  error: string;
+  message: string;
+  status: boolean;
+}
+
+export interface Data {
+  boardingInfo: BoardingInfo;
+  destinationInfo: BoardingInfo;
+  passengerInfo: PassengerInfo[];
+  seatInfo: SeatInfo;
+  trainInfo: TrainInfo;
+  trainRoutes: BoardingInfo[];
+}
+
+export interface BoardingInfo {
+  arrivalTime: string;
+  departureTime: string;
+  distance: string;
+  haltTime: string;
+  platform: string;
+  stationCode: string;
+  stationId: number;
+  stationName: string;
+  trainId: number;
+  travellingDay: number;
+}
+
+export interface PassengerInfo {
+  currentBerthNo: string;
+  currentCoach: string;
+}
+
+export interface SeatInfo {
+  berth: string;
+  coach: string;
+  noOfSeats: number;
+}
+
+export interface TrainInfo {
+  boarding: string;
+  boardingDayCount: null;
+  destination: string;
+  dt: string;
+  fromStationName: null;
+  name: string;
+  origin: null;
+  toStationName: null;
+  trainNo: string;
+}
