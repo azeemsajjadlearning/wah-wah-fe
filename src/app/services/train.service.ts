@@ -55,8 +55,14 @@ export class TrainService {
     });
   }
 
-  public getAllTrain(): Observable<any> {
-    return this.http.get(environment.api_prefix + 'train/get-all-trains');
+  public searchTrain(query: string): Observable<any[]> {
+    return this.getAllTrain().pipe(
+      map((trains) =>
+        trains.filter((train) =>
+          train.toLowerCase().includes(query.toLowerCase())
+        )
+      )
+    );
   }
 
   public getPNRStatus(pnr: number): Observable<any> {
@@ -65,9 +71,22 @@ export class TrainService {
     );
   }
 
+  public getLiveTrainStatus(trainNo: number, date: string): Observable<any> {
+    return this.http.post(environment.api_prefix + 'train/get-running-status', {
+      train_no: trainNo,
+      date: date,
+    });
+  }
+
   private getAllStation(): Observable<any[]> {
     return this.http
       .get<any>(environment.api_prefix + 'train/get-all-stations')
+      .pipe(map((response) => response.result));
+  }
+
+  private getAllTrain(): Observable<any[]> {
+    return this.http
+      .get<any>(environment.api_prefix + 'train/get-all-trains')
       .pipe(map((response) => response.result));
   }
 }

@@ -173,3 +173,115 @@ export interface TrainInfo {
   toStationName: null;
   trainNo: string;
 }
+
+export interface LiveStatus {
+  age: string;
+  dest: string;
+  dest_city: City;
+  doo: string;
+  message: string;
+  origin: string;
+  origin_city: City;
+  rakes: Rake[];
+  trainNo: string;
+  train_detail: TrainDetail;
+  train_name: string;
+}
+
+export interface City {
+  city: string;
+  city_id: number;
+  scode: string;
+  sname: string;
+}
+
+export interface Rake {
+  alertMessage: string;
+  cncldBwFrom: string;
+  cncldBwTo: string;
+  cncldFrmStn: string;
+  cncldToStn: string;
+  crowdsourced_at: null;
+  csTrainTravelled: number;
+  departed: boolean;
+  isRunningDataAvailable: boolean;
+  longSummaryMessage: string;
+  scraped_at: Date;
+  scraped_by: string;
+  scraped_by_version: string;
+  shortSummaryMsg: any[];
+  startDate: string;
+  stations: Station[];
+  terminated: boolean;
+  totalLateMins: number;
+}
+
+export interface Station {
+  actArr?: string;
+  actDep?: string;
+  arr: boolean;
+  arr_from_crowd: boolean;
+  arrive?: string;
+  day: number;
+  dayCnt: number;
+  delayArr: number;
+  delayDep: number;
+  dep: boolean;
+  dep_from_crowd: boolean;
+  depart?: string;
+  departed?: boolean;
+  device_count: number;
+  distance: number;
+  dvrtdStn: boolean;
+  halt: Halt;
+  isDummyData: boolean;
+  lastUpdateTime?: string;
+  lat?: number;
+  lng?: number;
+  location_count: number;
+  pfNo: number;
+  platform?: string;
+  schDayCnt: number;
+  scode: string;
+  scraped: boolean;
+  sid: number;
+  sname: string;
+  stnCode: string;
+  stoppingStn: boolean;
+  stops: number;
+  travelled: boolean;
+  updWaitngArr: boolean;
+  updWaitngDep: boolean;
+  intermediateStation?: Station[];
+}
+
+export enum Halt {
+  The0000 = '00:00',
+  The0100 = '01:00',
+  The0200 = '02:00',
+  The0400 = '04:00',
+  The0500 = '05:00',
+  The0700 = '07:00',
+  The0800 = '08:00',
+  The1000 = '10:00',
+}
+
+export interface TrainDetail {
+  class: string;
+  distance: number;
+  duration: number;
+  meta_info: MetaInfo;
+  pantry_car: number;
+  rake_type: string;
+}
+
+export interface MetaInfo {
+  content: Content[];
+  popular_stations: Array<Array<number | string>>;
+  train_description: null;
+}
+
+export interface Content {
+  data: string;
+  title: string;
+}

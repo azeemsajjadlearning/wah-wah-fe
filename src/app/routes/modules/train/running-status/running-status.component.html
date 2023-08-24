@@ -1,1 +1,172 @@
-RunningStatusComponent
+<div class="p-4 bg-slate-100">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onFormSubmit()"
+    class="flex gap-4 items-center justify-center mb-8"
+  >
+    <mat-form-field class="w-80">
+      <mat-label>Train Number</mat-label>
+      <input
+        type="text"
+        placeholder="Train Number"
+        matInput
+        formControlName="train_no"
+        [matAutocomplete]="train_no"
+      />
+      <mat-autocomplete #train_no="matAutocomplete">
+        <mat-option *ngFor="let item of allTrains" [value]="item">
+          {{ item }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field class="w-80">
+      <mat-label>Select Date</mat-label>
+      <mat-select formControlName="date">
+        <mat-option *ngFor="let date of dates" [value]="date">
+          {{ date | date : "longDate" }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      type="submit"
+      color="primary"
+      [disabled]="form.invalid"
+    >
+      Search
+    </button>
+  </form>
+
+  <div *ngIf="lastStation" class="my-1">
+    Departed from {{ lastStation.sname }} ({{ lastStation.stnCode }}) at
+    <span *ngIf="lastStation.lastUpdateTime; else nolastStation">{{
+      lastStation.lastUpdateTime
+    }}</span>
+    <ng-template #nolastStation
+      >{{ lastStation.actDep }} {{ lastStation.depart }}
+    </ng-template>
+    <div *ngIf="nextStation">
+      {{ nextStation.distance - lastStation.distance }} km left from
+      {{ nextStation.sname }} ({{ nextStation.stnCode }})
+    </div>
+  </div>
+
+  <div *ngIf="liveStatus && nextStationIndex" class="mt-4 text-center">
+    <div class="flex items-center justify-between bg-gray-200 px-4 py-2">
+      <div class="w-1/12"></div>
+      <div class="w-2/12">Station</div>
+      <div class="w-2/12">Schedule Time</div>
+      <div class="w-2/12">Actual Time</div>
+      <div class="w-2/12">Delay</div>
+    </div>
+
+    <div *ngFor="let item of stations; let i = index">
+      <div class="relative border-t px-4 flex items-center justify-between">
+        <div class="w-1/12">
+          <div class="w-1 h-16" [ngClass]="{ 'bg-green-400': item.dep }"></div>
+        </div>
+        <div class="w-2/12">
+          <div>{{ item.sname }} ({{ item.stnCode }})</div>
+          <div class="font-thin text-xs text-slate-500">
+            Platform {{ item.platform }}
+          </div>
+          <div class="font-thin text-xs text-slate-500">
+            {{ item.distance }} km (day {{ item.day }})
+          </div>
+        </div>
+        <div class="w-2/12">
+          <div class="w-16 mx-auto grid gap-2 grid-cols-2">
+            <div class="font-thin text-xs text-slate-500">Arr</div>
+            <div>{{ item.arrive || "Starts" }}</div>
+            <div class="font-thin text-xs text-slate-500">Dep</div>
+            <div>{{ item.depart || "Ends" }}</div>
+          </div>
+        </div>
+        <div class="w-2/12">
+          <div class="w-16 mx-auto grid gap-2 grid-cols-1">
+            <div
+              [ngClass]="{
+                'text-green-400': item.delayArr < 1,
+                'text-red-400': item.delayArr > 0
+              }"
+            >
+              {{ item.actArr }}
+            </div>
+            <div
+              [ngClass]="{
+                'text-green-400': item.delayDep < 1,
+                'text-red-400': item.delayDep > 0
+              }"
+            >
+              {{ item.actDep }}
+            </div>
+          </div>
+        </div>
+        <div class="w-2/12">
+          <div
+            [ngClass]="{
+              'text-green-400': item.delayDep < 1,
+              'text-red-400': item.delayDep > 0
+            }"
+          >
+            {{ item.delayDep < 1 ? "No Delay" : item.delayDep }}
+            <span *ngIf="item.delayDep > 0">min</span>
+          </div>
+          <div *ngIf="!item.dep" class="font-thin text-xs text-slate-500">
+            (expected)
+          </div>
+        </div>
+        <div
+          *ngIf="i !== stations.length - 1"
+          class="absolute px-1 py-0.5 border rounded-xl bg-gray-200 -bottom-3 left-24 cursor-pointer z-10"
+          (click)="getIntermediateStation(i)"
+        >
+          {{ item.intermediateStation?.length }} intermediate stations
+        </div>
+
+        <div
+          *ngIf="stations[nextStationIndex - 1].stnCode == item.stnCode"
+          class="absolute -bottom-5 left-1 z-10"
+          [ngClass]="{ 'animate-pulse': lastStation?.stnCode == item.stnCode }"
+        >
+          <mat-icon class="text-blue-500">train</mat-icon>
+        </div>
+      </div>
+
+      <ng-container *ngIf="showIntermediate && indexNumber == i">
+        <div
+          *ngFor="let station of item.intermediateStation"
+          class="relative border-t px-4 flex items-center justify-between"
+        >
+          <div class="w-1/12">
+            <div class="animate-pulse inline-block">
+              <mat-icon
+                *ngIf="lastStation?.stnCode == station.stnCode"
+                class="text-blue-500"
+                >train</mat-icon
+              >
+            </div>
+          </div>
+          <div class="w-2/12">
+            <div>{{ station.sname }} ({{ station.stnCode }})</div>
+            <div class="font-thin text-xs text-slate-500">
+              {{ station.distance }} km (day {{ station.day }})
+            </div>
+          </div>
+          <div class="w-2/12">
+            <div class="w-16 mx-auto grid gap-2 grid-cols-2">
+              <div class="font-thin text-xs text-slate-500">Arr</div>
+              <div>{{ station.arrive }}</div>
+              <div class="font-thin text-xs text-slate-500">Dep</div>
+              <div>{{ station.depart }}</div>
+            </div>
+          </div>
+          <div class="w-2/12"></div>
+          <div class="w-2/12"></div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
