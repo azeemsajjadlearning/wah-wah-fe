@@ -73,7 +73,30 @@ export class AvailabilityComponent {
         this.form.get('quota')?.value
       )
       .subscribe((res) => {
-        this.trainList = res.result;
+        if (res.result.errorMessage) {
+          this.confirmationService.open({
+            title: 'Error',
+            icon: {
+              color: 'warn',
+              name: 'error',
+              show: true,
+            },
+            message: res.result.errorMessage || 'something went wrong!',
+            dismissible: false,
+            actions: {
+              confirm: {
+                label: 'Ok!',
+                color: 'warn',
+                show: true,
+              },
+              cancel: {
+                show: false,
+              },
+            },
+          });
+        } else {
+          this.trainList = res.result;
+        }
       });
   }
 

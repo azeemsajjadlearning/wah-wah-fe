@@ -54,13 +54,14 @@ import { WebScrapingService } from './services/web-scarping.service';
 import { TrainComponent } from './routes/modules/train/train.component';
 import { TrainService } from './services/train.service';
 import { CoachComponent } from './routes/modules/train/chart/coach/coach.component';
-import { SeatDetailComponent } from './routes/modules/train/chart/coach/seat-detail.component';
 import { ChartComponent } from './routes/modules/train/chart/chart.component';
 import { AvailabilityComponent } from './routes/modules/train/availability/availability.component';
 import { DurationPipe } from './pipes/duration.pipe';
 import { PNRComponent } from './routes/modules/train/pnr/pnr.component';
 import { RunningStatusComponent } from './routes/modules/train/running-status/running-status.component';
 import { ScheduleDialogComponent } from './routes/modules/train/availability/schedule/schedule-dialog.component';
+import { SeatMapComponent } from './routes/modules/train/chart/seat-map/seat-map.component';
+import { StockComponent } from './routes/modules/stock/stock.component';
 
 @NgModule({
   declarations: [
@@ -95,11 +96,12 @@ import { ScheduleDialogComponent } from './routes/modules/train/availability/sch
     TrainComponent,
     ChartComponent,
     CoachComponent,
-    SeatDetailComponent,
     AvailabilityComponent,
     PNRComponent,
     RunningStatusComponent,
     ScheduleDialogComponent,
+    SeatMapComponent,
+    StockComponent,
   ],
   imports: [
     BrowserModule,
@@ -139,8 +141,8 @@ import { ScheduleDialogComponent } from './routes/modules/train/availability/sch
   entryComponents: [
     ReviewsComponent,
     TranslateComponent,
-    SeatDetailComponent,
     ScheduleDialogComponent,
+    SeatMapComponent,
   ],
 })
 export class AppModule {}

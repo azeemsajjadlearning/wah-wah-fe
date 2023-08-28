@@ -1,1 +1,90 @@
-CoachComponent
+<div *ngIf="trainComposition" class="p-4 bg-slate-100">
+  <div class="flex gap-4 items-center justify-between mb-4 font-bold">
+    <div>Train No. {{ trainComposition.trainNo }}</div>
+    <div>Journey Date: {{ trainComposition.trainStartDate }}</div>
+    <div>Boarding Station: {{ query.station }}</div>
+    <div>
+      Charting Station:
+      {{ trainComposition.chartStatusResponseDto.remoteStationCode }}
+    </div>
+    <div>First Chart Creation: {{ trainComposition.chartOneDate }}</div>
+  </div>
+
+  <div class="flex gap-4 items-center justify-center mb-4">
+    <div
+      *ngFor="let item of classVacancy"
+      class="w-40 p-2 border-2 rounded-xl text-center cursor-pointer"
+      (click)="getClass(item)"
+    >
+      <div>{{ getFullClass(item.classCode) }} ({{ item.classCode }})</div>
+      <div>{{ item.vacantBerths }}</div>
+    </div>
+  </div>
+
+  <div class="flex gap-4 items-center justify-center">
+    <div
+      *ngFor="let item of trainCar"
+      class="p-2 bg-cyan-400 rounded-xl"
+      [ngClass]="{
+        'bg-red-300': item.classCode == 'E',
+        'cursor-pointer': item.classCode != 'E'
+      }"
+      (click)="getCoach(item)"
+    >
+      {{ item.coachName }}
+    </div>
+  </div>
+
+  <!-- <div *ngIf="coachChart" class="flex">
+    <div
+      *ngFor="let cabin of seatMap; let i = index"
+      class="flex border-2 gap-2 rounded-xl"
+    >
+      <div *ngFor="let seat of seatMap[i]" class="">
+        {{ seat.berthNo }}
+      </div>
+    </div>
+  </div> -->
+
+  <table *ngIf="vacantBerth" mat-table [dataSource]="vacantBerth" class="mt-4">
+    <ng-container matColumnDef="from">
+      <th mat-header-cell *matHeaderCellDef>From Station</th>
+      <td mat-cell *matCellDef="let element">{{ element.from }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="to">
+      <th mat-header-cell *matHeaderCellDef>To Station</th>
+      <td mat-cell *matCellDef="let element">{{ element.to }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="coachName">
+      <th mat-header-cell *matHeaderCellDef>Coach</th>
+      <td mat-cell *matCellDef="let element">{{ element.coachName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="berthCode">
+      <th mat-header-cell *matHeaderCellDef>Berth</th>
+      <td mat-cell *matCellDef="let element">{{ element.berthCode }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="berthNumber">
+      <th mat-header-cell *matHeaderCellDef>Berth No</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.berthNumber }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cabinCoupe">
+      <th mat-header-cell *matHeaderCellDef>Cabin</th>
+      <td mat-cell *matCellDef="let element">{{ element.cabinCoupe }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cabinCoupeNo">
+      <th mat-header-cell *matHeaderCellDef>Cabin No</th>
+      <td mat-cell *matCellDef="let element">{{ element.cabinCoupeNo }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

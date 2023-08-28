@@ -285,3 +285,82 @@ export interface Content {
   data: string;
   title: string;
 }
+
+export interface TrainComposition {
+  avlRemoteForBooking: string;
+  cdd: Car[];
+  chartOneDate: Date;
+  chartStatusResponseDto: ChartStatusResponseDto;
+  chartTwoDate: Date;
+  destinationStation: string;
+  error: null;
+  from: string;
+  nextRemote: string;
+  remote: string;
+  remoteLocationChartDate: Date;
+  to: string;
+  trainName: string;
+  trainNo: string;
+  trainStartDate: Date;
+}
+
+export interface Car {
+  classCode: string;
+  coachName: string;
+  positionFromEngine: number;
+  vacantBerths: number;
+}
+
+export interface ChartStatusResponseDto {
+  chartOneFlag: number;
+  chartTwoFlag: number;
+  messageIndex: number;
+  messageType: string;
+  remoteStationCode: string;
+  trainStartDate: Date;
+}
+
+export interface VacantBerth {
+  berthCode: string;
+  berthNumber: number;
+  cabinCoupe: null;
+  cabinCoupeNo: string;
+  coachName: string;
+  from: string;
+  splitNo: number;
+  to: string;
+}
+
+export interface Coach {
+  bdd: Bdd[];
+  coachName: string;
+  error: null;
+}
+
+export interface Bdd {
+  berthCode: BerthCode;
+  berthNo: number;
+  bsd: BSD[];
+  cabinCoupe: null;
+  cabinCoupeNameNo: string;
+  enable: boolean;
+  from: string;
+  quotaCntStn: string;
+  to: string;
+}
+
+export enum BerthCode {
+  L = 'L',
+  M = 'M',
+  P = 'P',
+  R = 'R',
+  U = 'U',
+}
+
+export interface BSD {
+  from: string;
+  occupancy: boolean;
+  quota: string;
+  splitNo: number;
+  to: string;
+}

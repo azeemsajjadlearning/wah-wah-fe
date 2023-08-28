@@ -25,6 +25,7 @@ import { TrainComponent } from './routes/modules/train/train.component';
 import { CoachComponent } from './routes/modules/train/chart/coach/coach.component';
 import { ChartComponent } from './routes/modules/train/chart/chart.component';
 import { AvailabilityComponent } from './routes/modules/train/availability/availability.component';
+import { StockComponent } from './routes/modules/stock/stock.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -59,6 +60,7 @@ const routes: Routes = [
       { path: 'train/chart', component: ChartComponent },
       { path: 'train/coach', component: CoachComponent },
       { path: 'train/availability', component: AvailabilityComponent },
+      { path: 'stock', component: StockComponent },
     ],
   },
 ];

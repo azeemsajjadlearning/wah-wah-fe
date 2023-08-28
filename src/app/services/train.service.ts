@@ -78,6 +78,59 @@ export class TrainService {
     });
   }
 
+  public getTrainComposition(
+    trainNo: string,
+    date: string,
+    boardingStation: string
+  ): Observable<any> {
+    return this.http.post(
+      environment.api_prefix + 'train/get-train-composition',
+      {
+        train_no: trainNo,
+        date: date,
+        boarding_station: boardingStation,
+      }
+    );
+  }
+
+  public getClassChart(
+    trainNo: string,
+    boardingStation: string,
+    remoteStation: string,
+    source: string,
+    date: string,
+    cls: string
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'train/get-class-chart', {
+      train_no: trainNo,
+      boarding_station: boardingStation,
+      remote_station: remoteStation,
+      source: source,
+      date: date,
+      cls: cls,
+    });
+  }
+
+  public getCoachChart(
+    trainNo: string,
+    boardingStation: string,
+    remoteStation: string,
+    source: string,
+    date: string,
+    coach: string,
+    cls: string
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'train/get-coach-chart', {
+      train_no: trainNo,
+      boarding_station: boardingStation,
+      remote_station: remoteStation,
+      source: source,
+      date: date,
+      coach: coach,
+      cls: cls,
+    });
+  }
+
   private getAllStation(): Observable<any[]> {
     return this.http
       .get<any>(environment.api_prefix + 'train/get-all-stations')
