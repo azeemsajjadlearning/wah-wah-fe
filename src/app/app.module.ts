@@ -40,7 +40,6 @@ import { MobileService } from './services/mobile.service';
 import { BrandsComponent } from './routes/modules/mobile/brands/brands.component';
 import { MobileDetailComponent } from './routes/modules/mobile/detail/detail.component';
 import { WeatherService } from './services/weather.service';
-import { NgApexchartsModule } from 'ng-apexcharts';
 import { StockService } from './services/stock.service';
 import { QuranComponent } from './routes/modules/quran/quran.component';
 import { QuranService } from './services/quran.service';
@@ -62,6 +61,8 @@ import { RunningStatusComponent } from './routes/modules/train/running-status/ru
 import { ScheduleDialogComponent } from './routes/modules/train/availability/schedule/schedule-dialog.component';
 import { SeatMapComponent } from './routes/modules/train/chart/seat-map/seat-map.component';
 import { StockComponent } from './routes/modules/stock/stock.component';
+import { SearchListComponent } from './routes/modules/stock/search-list/search-list.component';
+import { FundDetailsComponent } from './routes/modules/stock/fund-details/fund-details.component';
 
 @NgModule({
   declarations: [
@@ -102,11 +103,12 @@ import { StockComponent } from './routes/modules/stock/stock.component';
     ScheduleDialogComponent,
     SeatMapComponent,
     StockComponent,
+    SearchListComponent,
+    FundDetailsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgApexchartsModule,
     ConfirmationModule,
     LoadingBarModule,
     CommonModule,

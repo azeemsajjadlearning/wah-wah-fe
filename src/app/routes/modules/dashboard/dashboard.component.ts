@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import * as ApexCharts from 'apexcharts';
 import { WeatherReport } from 'src/app/models/weather';
 import { WeatherService } from 'src/app/services/weather.service';
 
@@ -9,9 +8,6 @@ import { WeatherService } from 'src/app/services/weather.service';
   styleUrls: ['dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  chartOptions: ApexCharts.ApexOptions;
-  chartInstance: ApexCharts;
-
   weatherReport: WeatherReport | any;
 
   constructor(private weatherService: WeatherService) {}
@@ -56,108 +52,6 @@ export class DashboardComponent implements OnInit {
           );
           data.push(ele.temp_c);
         });
-
-        this.chartOptions = {
-          title: {
-            text: `${this.weatherReport?.location.name} (${this.weatherReport?.current.feelslike_c} ℃)`,
-            align: 'center',
-            style: {
-              fontSize: '30px',
-              fontWeight: 'bold',
-              color: '#CBD5E1',
-            },
-          },
-          chart: {
-            type: 'area',
-            animations: {
-              speed: 400,
-              animateGradually: {
-                enabled: true,
-              },
-            },
-            toolbar: {
-              show: false,
-            },
-            fontFamily: 'inherit',
-            foreColor: 'inherit',
-            width: '100%',
-            height: '100%',
-            zoom: {
-              enabled: false,
-            },
-          },
-          colors: ['#818CF8'],
-          dataLabels: {
-            enabled: false,
-          },
-          fill: {
-            colors: ['#818CF8'],
-          },
-          series: [
-            {
-              name: 'temp',
-              data: data,
-            },
-          ],
-          xaxis: {
-            crosshairs: {
-              stroke: {
-                color: '#475569',
-                dashArray: 0,
-                width: 2,
-              },
-            },
-            categories: label,
-            labels: {
-              style: {
-                colors: '#CBD5E1',
-              },
-            },
-            tickAmount: 20,
-            tooltip: {
-              enabled: false,
-            },
-          },
-          yaxis: {
-            labels: {
-              show: true,
-              style: { colors: '#CBD5E1' },
-            },
-          },
-          stroke: {
-            width: 2,
-          },
-          tooltip: {
-            followCursor: true,
-            theme: 'dark',
-          },
-          grid: {
-            borderColor: '#334155',
-            xaxis: {
-              lines: {
-                show: true,
-              },
-            },
-          },
-          noData: {
-            text: 'Loading...',
-            align: 'center',
-            verticalAlign: 'middle',
-            offsetX: 0,
-            offsetY: 0,
-            style: {
-              color: '#000000',
-              fontSize: '14px',
-              fontFamily: 'Helvetica',
-            },
-          },
-        };
-
-        this.chartInstance = new ApexCharts(
-          document.querySelector('#chart'),
-          this.chartOptions
-        );
-        this.chartInstance.render();
       });
   }
 }

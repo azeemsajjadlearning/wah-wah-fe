@@ -1,66 +1,121 @@
 <div class="p-4 bg-slate-100">
-  <form></form>
+  <div class="mt-4 flex gap-4 items-center">
+    <mat-form-field class="w-80">
+      <mat-label>Search Mutual Fund</mat-label>
+      <input
+        matInput
+        placeholder="search..."
+        [formControl]="search"
+        (keydown.enter)="searchFund()"
+      />
+    </mat-form-field>
+
+    <div class="block sm:hidden">
+      <button mat-raised-button color="primary" (click)="searchFund()">
+        Search
+      </button>
+    </div>
+  </div>
 
   <div class="mt-4">
-    <div class="font-bold text-2xl">Collections</div>
+    <div class="font-bold text-2xl mb-8">Popular Funds</div>
+    <div class="grid grid-cols-4 gap-8 items-center justify-between">
+      <div
+        *ngFor="let item of popularMF"
+        class="border rounded-xl shadow cursor-pointer p-4"
+        (click)="getFund(item)"
+      >
+        <div>
+          <div><img class="h-8 w-auto" [src]="item.logo_url" alt="" /></div>
+          <div class="text-lg">
+            {{ item.scheme_name }}
+          </div>
+          <div>
+            {{ item.return3y }}% <span class="text-slate-400">(3Y)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="font-bold text-2xl mb-8">Collections</div>
     <div
       class="grid grid grid-cols-3 sm:grid-cols-6 text-center items-center justify-center"
     >
-      <div class="cursor-pointer" (click)="getCollection('best-high-return')">
+      <div
+        class="cursor-pointer p-3 hover:shadow-lg rounded-xl"
+        (click)="getCollection('best-high-return')"
+      >
         <div>
           <img
             class="mx-auto"
-            src="https://storage.googleapis.com/groww-assets/mf-assets/web/collection/light/high_returns.svg"
+            src="../../../../assets/svg/high_returns.svg"
             alt=""
           />
         </div>
         <div class="mt-2">High Return</div>
       </div>
-      <div class="cursor-pointer" (click)="getCollection('best-sip-with-500')">
+      <div
+        class="cursor-pointer p-3 hover:shadow-lg rounded-xl"
+        (click)="getCollection('best-sip-with-500')"
+      >
         <div>
           <img
             class="mx-auto"
-            src="https://storage.googleapis.com/groww-assets/mf-assets/web/collection/light/sip_with_500.svg"
+            src="../../../../assets/svg/sip_with_500.svg"
             alt=""
           />
         </div>
         <div class="mt-2">SIP with ₹500</div>
       </div>
-      <div class="cursor-pointer" (click)="getCollection('best-tax-saving')">
+      <div
+        class="cursor-pointer p-3 hover:shadow-lg rounded-xl"
+        (click)="getCollection('best-tax-saving')"
+      >
         <div>
           <img
             class="mx-auto"
-            src="https://storage.googleapis.com/groww-assets/mf-assets/web/collection/light/tax_saving.svg"
+            src="../../../../assets/svg/tax_saving.svg"
             alt=""
           />
         </div>
         <div class="mt-2">Tax Saving</div>
       </div>
-      <div class="cursor-pointer" (click)="getCollection('best-large-cap')">
+      <div
+        class="cursor-pointer p-3 hover:shadow-lg rounded-xl"
+        (click)="getCollection('best-large-cap')"
+      >
         <div>
           <img
             class="mx-auto"
-            src="https://storage.googleapis.com/groww-assets/mf-assets/web/collection/light/large_cap.svg"
+            src="../../../../assets/svg/large_cap.svg"
             alt=""
           />
         </div>
         <div class="mt-2">Large Cap</div>
       </div>
-      <div class="cursor-pointer" (click)="getCollection('best-mid-cap')">
+      <div
+        class="cursor-pointer p-3 hover:shadow-lg rounded-xl"
+        (click)="getCollection('best-mid-cap')"
+      >
         <div>
           <img
             class="mx-auto"
-            src="https://storage.googleapis.com/groww-assets/mf-assets/web/collection/light/mid_cap.svg"
+            src="../../../../assets/svg/mid_cap.svg"
             alt=""
           />
         </div>
         <div class="mt-2">Mid Cap</div>
       </div>
-      <div class="cursor-pointer" (click)="getCollection('best-small-cap')">
+      <div
+        class="cursor-pointer p-3 hover:shadow-lg rounded-xl"
+        (click)="getCollection('best-small-cap')"
+      >
         <div>
           <img
             class="mx-auto"
-            src="https://storage.googleapis.com/groww-assets/mf-assets/web/collection/light/small_cap.svg"
+            src="../../../../assets/svg/small_cap.svg"
             alt=""
           />
         </div>

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { CollectionType } from 'src/app/models/stock';
+import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CollectionType, PopularMutualFund } from 'src/app/models/stock';
 import { StockService } from 'src/app/services/stock.service';
 
 @Component({
@@ -8,37 +10,38 @@ import { StockService } from 'src/app/services/stock.service';
   styleUrls: ['./stock.component.scss'],
 })
 export class StockComponent {
-  constructor(private stockService: StockService) {}
+  search: FormControl = new FormControl(null);
+  popularMF: PopularMutualFund[];
+
+  constructor(private stockService: StockService, private router: Router) {}
 
   ngOnInit() {
     this.stockService.getPopularMF().subscribe((res) => {
-      console.log(res.result);
+      this.popularMF = res.result;
     });
+  }
 
-    this.stockService.searchMF('canara').subscribe((res) => {
-      console.log(res.result);
+  searchFund() {
+    this.router.navigate(['stock/list'], {
+      queryParams: {
+        type: 'search',
+        q: this.search.value,
+      },
     });
-
-    this.stockService
-      .getMFInfo('quant-small-cap-fund-direct-plan-growth')
-      .subscribe((res) => {
-        console.log(res.result);
-      });
-
-    this.stockService.getMFGraph('120828').subscribe((res) => {
-      console.log(res.result);
-    });
-
-    this.stockService
-      .getMFDetails('INF966L01689', 'Growth')
-      .subscribe((res) => {
-        console.log(res.result);
-      });
   }
 
   getCollection(type: CollectionType) {
-    this.stockService.getCollection(type).subscribe((res) => {
-      console.log(res.result);
+    this.router.navigate(['stock/list'], {
+      queryParams: {
+        type: 'collection',
+        q: type,
+      },
+    });
+  }
+
+  getFund(ele: any) {
+    this.router.navigate(['stock/fund-details'], {
+      queryParams: { search_id: ele.search_id },
     });
   }
 }

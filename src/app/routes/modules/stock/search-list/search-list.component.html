@@ -1,0 +1,64 @@
+<div class="table-container">
+  <div class="flex flex-col p-8">
+    <div *ngIf="searchList && type == 'search'" class="w-full overflow-x-auto">
+      <div class="flex bg-gray-100 font-bold">
+        <div class="w-1/2 p-2">Fund Name</div>
+        <div class="w-1/2 p-2">Type</div>
+      </div>
+      <div
+        class="flex items-center hover:bg-slate-200 cursor-pointer"
+        *ngFor="let element of searchList.content"
+        (click)="getFund(element)"
+      >
+        <div class="w-1/2 p-2">
+          {{ element.scheme_name || element.title }}
+        </div>
+        <div class="w-1/2 p-2">
+          {{ element.entity_type == "Scheme" ? "MF" : "Other" }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col p-8">
+    <div
+      *ngIf="collectionList && type == 'collection'"
+      class="w-full overflow-x-auto"
+    >
+      <div class="flex bg-gray-100 font-bold">
+        <div class="w-9/12 p-2">Fund Name</div>
+        <div class="w-1/12 p-2">1Y</div>
+        <div class="w-1/12 p-2">3Y</div>
+        <div class="w-1/12 p-2">5Y</div>
+      </div>
+      <div
+        class="hover:bg-slate-200 cursor-pointer flex items-center"
+        *ngFor="let element of collectionList.collections"
+        (click)="getFund(element)"
+      >
+        <div class="w-9/12 p-2">{{ element.scheme_name }}</div>
+        <div class="w-1/12 p-2">
+          {{
+            element.return1y == null
+              ? "N/A"
+              : (element.return1y / 100 | percent : "1.2-5")
+          }}
+        </div>
+        <div class="w-1/12 p-2">
+          {{
+            element.return3y == null
+              ? "N/A"
+              : (element.return3y / 100 | percent : "1.2-5")
+          }}
+        </div>
+        <div class="w-1/12 p-2">
+          {{
+            element.return5y == null
+              ? "N/A"
+              : (element.return5y / 100 | percent : "1.2-5")
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
