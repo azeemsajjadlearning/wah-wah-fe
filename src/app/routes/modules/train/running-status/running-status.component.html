@@ -2,9 +2,9 @@
   <form
     [formGroup]="form"
     (ngSubmit)="onFormSubmit()"
-    class="flex gap-4 items-center justify-center mb-8"
+    class="flex flex-col md:flex-row gap-4 items-center justify-center mb-8"
   >
-    <mat-form-field class="w-80">
+    <mat-form-field class="w-full md:w-80">
       <mat-label>Train Number</mat-label>
       <input
         type="text"
@@ -20,7 +20,7 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <mat-form-field class="w-80">
+    <mat-form-field class="w-full md:w-80">
       <mat-label>Select Date</mat-label>
       <mat-select formControlName="date">
         <mat-option *ngFor="let date of dates" [value]="date">
@@ -30,6 +30,7 @@
     </mat-form-field>
 
     <button
+      class="w-full md:w-auto"
       mat-raised-button
       type="submit"
       color="primary"

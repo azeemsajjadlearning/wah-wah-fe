@@ -6,14 +6,30 @@
       <mat-chip> {{ fundDetail.category }} </mat-chip>
       <mat-chip> {{ fundDetail.sub_category }} </mat-chip>
       <mat-chip> {{ fundDetail.return_stats[0].risk }} risk </mat-chip>
-      <mat-chip *ngIf="fundDetail.lock_in">
-        <span *ngIf="fundDetail.lock_in?.years != 0"
+      <mat-chip
+        *ngIf="
+          fundDetail.lock_in?.years != null &&
+          fundDetail.lock_in?.months != null &&
+          fundDetail.lock_in?.days != null
+        "
+      >
+        <span
+          *ngIf="
+            fundDetail.lock_in?.years != null && fundDetail.lock_in?.years != 0
+          "
           >{{ fundDetail.lock_in.years }}Y</span
         >
-        <span *ngIf="fundDetail.lock_in?.months != 0"
+        <span
+          *ngIf="
+            fundDetail.lock_in?.months != null &&
+            fundDetail.lock_in?.months != 0
+          "
           >{{ fundDetail.lock_in.months }}M</span
         >
-        <span *ngIf="fundDetail.lock_in?.days != 0"
+        <span
+          *ngIf="
+            fundDetail.lock_in?.days != null && fundDetail.lock_in?.days != 0
+          "
           >{{ fundDetail.lock_in.days }}D</span
         >
         Lock In <mat-icon class="lock_icon">lock</mat-icon>
@@ -21,11 +37,44 @@
     </mat-chip-listbox>
   </div>
   <div class="mt-3">
-    <div>
+    <div *ngIf="months == 1 && fundDetail.return_stats[0].return1m">
+      <span class="font-bold text-lg">{{
+        fundDetail.return_stats[0].return1m / 100 | percent : "1.2-5"
+      }}</span>
+      <span class="text-slate-400">&nbsp;&nbsp;&nbsp; 1Y annualised</span>
+    </div>
+    <div *ngIf="months == 6 && fundDetail.return_stats[0].return6m">
+      <span class="font-bold text-lg">{{
+        fundDetail.return_stats[0].return6m / 100 | percent : "1.2-5"
+      }}</span>
+      <span class="text-slate-400">&nbsp;&nbsp;&nbsp; 1Y annualised</span>
+    </div>
+    <div *ngIf="months == 12">
+      <span class="font-bold text-lg">{{
+        fundDetail.stats[0].stat_1y / 100 | percent : "1.2-5"
+      }}</span>
+      <span class="text-slate-400">&nbsp;&nbsp;&nbsp; 1Y annualised</span>
+    </div>
+    <div *ngIf="months == 36">
       <span class="font-bold text-lg">{{
         fundDetail.stats[0].stat_3y / 100 | percent : "1.2-5"
       }}</span>
       <span class="text-slate-400">&nbsp;&nbsp;&nbsp; 3Y annualised</span>
+    </div>
+    <div *ngIf="months == 60">
+      <span class="font-bold text-lg">{{
+        fundDetail.stats[0].stat_5y / 100 | percent : "1.2-5"
+      }}</span>
+      <span class="text-slate-400">&nbsp;&nbsp;&nbsp; 1Y annualised</span>
+    </div>
+    <div
+      *ngIf="months == 1000 && fundDetail.return_stats[0].return_since_created"
+    >
+      <span class="font-bold text-lg">{{
+        fundDetail.return_stats[0].return_since_created / 100
+          | percent : "1.2-2"
+      }}</span>
+      <span class="text-slate-400">&nbsp;&nbsp;&nbsp; 1Y annualised</span>
     </div>
     <div
       *ngIf="fundDetail.return_stats[0].return1d"
@@ -36,6 +85,141 @@
     >
       {{ fundDetail.return_stats[0].return1d / 100 | percent : "1.2-5"
       }}<span class="text-slate-400">&nbsp;&nbsp;&nbsp; 1D</span>
+    </div>
+  </div>
+  <div class="p-8">
+    <canvas id="canvas"></canvas>
+    <div class="flex item-center justify-between">
+      <mat-chip-listbox class="w-fit">
+        <mat-chip
+          *ngIf="fundDetail.return_stats[0].return1m"
+          (click)="getChart(1)"
+        >
+          1M
+        </mat-chip>
+        <mat-chip
+          *ngIf="fundDetail.return_stats[0].return6m"
+          (click)="getChart(6)"
+        >
+          6M
+        </mat-chip>
+        <mat-chip *ngIf="fundDetail.stats[0].stat_1y" (click)="getChart(12)">
+          1Y
+        </mat-chip>
+        <mat-chip *ngIf="fundDetail.stats[0].stat_1y" (click)="getChart(36)">
+          3Y
+        </mat-chip>
+        <mat-chip *ngIf="fundDetail.stats[0].stat_1y" (click)="getChart(60)">
+          5Y
+        </mat-chip>
+        <mat-chip
+          *ngIf="fundDetail.return_stats[0].return_since_created"
+          (click)="getChart(1000)"
+        >
+          All
+        </mat-chip>
+      </mat-chip-listbox>
+    </div>
+  </div>
+  <div class="mt-4 flex item-center justify-between mx-20">
+    <div>
+      <strong>NAV {{ fundDetail.nav_date }}</strong
+      >: ₹{{ fundDetail.nav }}
+    </div>
+    <div>
+      <strong>Minimum SIP</strong>: ₹{{ fundDetail.min_sip_investment }}
+    </div>
+    <div><strong>Rating</strong>: {{ fundDetail.groww_rating }} stars</div>
+    <div>
+      <strong>Fund Size</strong>: ₹{{ fundDetail.aum | number : "1.2-2" }} Cr
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <div>Return Calculator</div>
+    <div class="border-2 rounded p-10">
+      <form [formGroup]="investment">
+        <div class="my-2">
+          <mat-radio-group formControlName="type">
+            <mat-radio-button value="sip">Monthly SIP</mat-radio-button>
+            <mat-radio-button value="onetime">One-Time</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="my-2">
+          ₹{{
+            investment.get("amount")?.value *
+              (investment.get("type")?.value == "sip" ? 500 : 1000)
+          }}
+          <span *ngIf="investment.get('type')?.value == 'sip'">per month</span
+          ><span *ngIf="investment.get('type')?.value == 'onetime'"
+            >one time</span
+          >
+        </div>
+
+        <div class="my-2">
+          <mat-slider
+            style="width: 25rem !important"
+            [min]="fundDetail.min_investment_amount / 500"
+          >
+            <input matSliderThumb formControlName="amount" />
+          </mat-slider>
+        </div>
+
+        <div>
+          <mat-radio-group formControlName="time">
+            <mat-radio-button value="1">1 Year</mat-radio-button>
+            <mat-radio-button value="3">3 Years</mat-radio-button>
+            <mat-radio-button value="5">5 Years</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="my-4">
+          <strong>Total Investment: </strong>
+          ₹{{
+            investment.get("amount")?.value *
+              (investment.get("type")?.value == "sip"
+                ? 500 * 12 * +investment.get("time")?.value
+                : 1000)
+          }}
+        </div>
+
+        <div class="my-4">
+          <strong>Would have become ₹</strong>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <div class="flex p-4 bg-slate-800 text-white border">
+      <div class="w-3/6">Name</div>
+      <div class="w-1/6">Sector</div>
+      <div class="w-1/6">Instrument</div>
+      <div class="w-1/6">Assets</div>
+    </div>
+
+    <div
+      *ngFor="let hold of holdings; let i = index"
+      class="flex p-4 border {{ i % 2 === 0 ? 'bg-zinc-300' : 'bg-zinc-200' }}"
+    >
+      <div class="w-3/6">{{ hold.company_name || "N/A" }}</div>
+      <div class="w-1/6">{{ hold.sector_name || "N/A" }}</div>
+      <div class="w-1/6">{{ hold.instrument_name || "N/A" }}</div>
+      <div class="w-1/6">
+        {{ hold.corpus_per / 100 | percent : "1.2-2" || "N/A" }}
+      </div>
+    </div>
+    <div class="flex p-4 border bg-zinc-300">
+      <div
+        class="w-3/6 text-blue-500 cursor-pointer"
+        (click)="getAllHoldings()"
+      >
+        <span *ngIf="holdings.length == 10">See All</span
+        ><span *ngIf="holdings.length != 10">See less</span>
+      </div>
     </div>
   </div>
 </div>

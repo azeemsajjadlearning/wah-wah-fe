@@ -44,4 +44,12 @@ export class StockService {
       scheme_type: schemeType,
     });
   }
+
+  public getLatestAggregate(): Observable<any> {
+    return this.http.get(environment.api_prefix + 'stock/get-latest-aggregate');
+  }
+
+  public getAllIndices(): Observable<any> {
+    return this.http.get(environment.api_prefix + 'stock/get-all-indices');
+  }
 }

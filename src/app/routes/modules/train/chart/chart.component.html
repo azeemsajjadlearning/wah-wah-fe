@@ -1,8 +1,8 @@
-<div class="flex gap-2 p-4 bg-slate-100">
+<div class="flex flex-col md:flex-row gap-2 p-4 bg-slate-100">
   <form
     [formGroup]="form"
     (ngSubmit)="onFormSubmit()"
-    class="w-1/4 flex flex-col gap-4"
+    class="w-full md:w-1/4 flex flex-col gap-4"
   >
     <mat-form-field class="w-full">
       <mat-label>Train No</mat-label>
@@ -62,7 +62,7 @@
     </button>
   </form>
 
-  <div class="w-3/4 schedule-table">
+  <div class="w-full md:w-3/4 mt-4 md:mt-0 schedule-table">
     <table
       *ngIf="trainSchedule"
       mat-table

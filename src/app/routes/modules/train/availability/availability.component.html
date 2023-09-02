@@ -2,9 +2,9 @@
   <form
     [formGroup]="form"
     (ngSubmit)="onFormSubmit()"
-    class="flex gap-4 items-center justify-center mb-8"
+    class="flex flex-col md:flex-row gap-4 items-center justify-center mb-8"
   >
-    <mat-form-field class="w-60">
+    <mat-form-field class="w-full md:w-60">
       <mat-label>From</mat-label>
       <input
         type="text"
@@ -20,7 +20,7 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <mat-form-field class="w-60">
+    <mat-form-field class="w-full md:w-60">
       <mat-label>To</mat-label>
       <input
         type="text"
@@ -36,7 +36,7 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field class="w-full md:w-60">
       <mat-label>Date Of Journey</mat-label>
       <input
         matInput
@@ -52,7 +52,7 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
-    <mat-form-field class="w-60">
+    <mat-form-field class="w-full md:w-60">
       <mat-select formControlName="quota">
         <mat-option *ngFor="let item of quotas" [value]="item.value">
           {{ item.viewValue }}
@@ -61,6 +61,7 @@
     </mat-form-field>
 
     <button
+      class="w-full md:w-auto"
       mat-raised-button
       type="submit"
       color="primary"

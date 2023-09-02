@@ -414,3 +414,16 @@ export interface Folio {
   data: Array<number[]>;
   name: string;
 }
+
+export interface LiveStock {
+  close: number;
+  dayChange: number;
+  dayChangePerc: number;
+  high: number;
+  low: number;
+  open: number;
+  symbol: string;
+  tsInMillis: number;
+  type: string;
+  value: number;
+}
