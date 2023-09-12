@@ -11,8 +11,11 @@
         [matAutocomplete]="schema"
       />
       <mat-autocomplete #schema="matAutocomplete">
-        <mat-option *ngFor="let item of mutualFundList" [value]="item.title">
-          {{ item.title }}
+        <mat-option
+          *ngFor="let item of mutualFundList"
+          [value]="item.scheme_name"
+        >
+          {{ item.scheme_name }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
