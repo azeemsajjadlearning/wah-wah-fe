@@ -1,9 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FundDetails, FundGraph, Holding } from 'src/app/models/stock';
 import { StockService } from 'src/app/services/stock.service';
 import { Chart } from 'chart.js';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-fund-details',
@@ -16,6 +16,10 @@ export class FundDetailsComponent {
   fundGraph: FundGraph;
   holdings: Holding[];
   months: number = 36;
+  return = null;
+  returnChart: any;
+  equityShare: any = [];
+  equityShareChart: any;
 
   investment: FormGroup;
 
@@ -29,13 +33,12 @@ export class FundDetailsComponent {
     });
   }
 
-  chart: any;
-
   ngOnInit() {
     this.stockService.getMFInfo(this.searchId).subscribe((res) => {
       this.fundDetail = res.result;
       this.holdings = res.result.holdings.slice(0, 10);
       this.getChart(this.months);
+      this.getEquity(res.result.holdings);
 
       this.investment = this.fb.group({
         type: 'sip',
@@ -44,10 +47,8 @@ export class FundDetailsComponent {
       });
 
       this.investment.valueChanges.subscribe((val) => {
-        console.log(this.getReturn(val.type, val.amount, val.time));
+        this.return = this.getReturn(val.type, val.amount, val.time);
       });
-
-      console.log(res.result);
 
       this.stockService
         .getMFDetails(this.fundDetail.isin, this.fundDetail.scheme_type)
@@ -72,9 +73,9 @@ export class FundDetailsComponent {
           return ele[1];
         });
 
-        this.chart?.destroy();
+        this.returnChart?.destroy();
 
-        this.chart = new Chart('canvas', {
+        this.returnChart = new Chart('canvas', {
           type: 'line',
           data: {
             labels: dates,
@@ -117,6 +118,56 @@ export class FundDetailsComponent {
           },
         });
       });
+  }
+
+  getEquity(holdings: Holding[]) {
+    const validSectors = [
+      'Construction',
+      'Metals & Mining',
+      'Healthcare',
+      'Financial',
+      'Consumer Staples',
+      'Services',
+      'Chemicals',
+    ];
+
+    holdings.forEach((item) => {
+      const sectorName = item.sector_name || 'Others';
+
+      if (validSectors.includes(sectorName)) {
+        if (this.equityShare[sectorName]) {
+          this.equityShare[sectorName]++;
+        } else {
+          this.equityShare[sectorName] = 1;
+        }
+      } else {
+        if (this.equityShare['Others']) {
+          this.equityShare['Others']++;
+        } else {
+          this.equityShare['Others'] = 1;
+        }
+      }
+    });
+
+    this.equityShareChart = new Chart('canvasEquity', {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(this.equityShare),
+        datasets: [
+          {
+            data: Object.values(this.equityShare) as number[],
+            backgroundColor: this.generateDistinctColors(
+              Object.keys(this.equityShare).length
+            ),
+          },
+        ],
+      },
+      options: {
+        legend: {
+          display: false,
+        },
+      },
+    });
   }
 
   getAllHoldings() {
@@ -177,6 +228,48 @@ export class FundDetailsComponent {
         return amount * Math.pow(1 + rate / 12 / 100, 12 * +time);
     } else {
       if (rate != null) return amount * Math.pow(1 + rate / 100, +time);
+    }
+  }
+
+  private generateDistinctColors(n: number) {
+    const distinctColors = [
+      '#FF5733',
+      '#33FF57',
+      '#5733FF',
+      '#FF33A6',
+      '#33A6FF',
+      '#A6FF33',
+      '#FF3366',
+      '#3366FF',
+      '#66FF33',
+      '#FF3366',
+      '#3366FF',
+      '#66FF33',
+      '#FFCC33',
+      '#33CCFF',
+      '#CC33FF',
+      '#FF9933',
+      '#33FF99',
+      '#9933FF',
+      '#FF33CC',
+      '#33CCFF',
+      '#CC33FF',
+      '#FFFF33',
+      '#33FFFF',
+      '#FF33FF',
+      '#33FF33',
+    ];
+
+    if (n <= distinctColors.length) {
+      return distinctColors.slice(0, n);
+    } else {
+      const generatedColors = [];
+      for (let i = 0; i < n; i++) {
+        const randomColor =
+          '#' + Math.floor(Math.random() * 16777215).toString(16);
+        generatedColors.push(randomColor);
+      }
+      return generatedColors;
     }
   }
 }

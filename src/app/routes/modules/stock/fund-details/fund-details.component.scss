@@ -1,5 +1,15 @@
-.lock_icon {
+mat-icon {
   font-size: 14px !important;
   height: 14px !important;
   width: 14px !important;
+}
+
+.investment-slider {
+  width: 25rem !important;
+}
+
+@media (max-width: 767px) {
+  .investment-slider {
+    width: 100% !important;
+  }
 }

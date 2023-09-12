@@ -19,6 +19,7 @@ export class StockComponent implements OnInit, OnDestroy {
   search: FormControl = new FormControl(null);
   popularMF: PopularMutualFund[] = [];
   liveStatus: LiveStock[] = [];
+  allIndices: any;
   private refreshSubscription: Subscription;
 
   constructor(private stockService: StockService, private router: Router) {}
@@ -31,12 +32,16 @@ export class StockComponent implements OnInit, OnDestroy {
           forkJoin([
             this.stockService.getPopularMF(),
             this.stockService.getLatestAggregate(),
+            this.stockService.getAllIndices(),
           ])
         )
       )
-      .subscribe(([popularMFResponse, liveStatusResponse]) => {
+      .subscribe(([popularMFResponse, liveStatusResponse, allIndices]) => {
         this.popularMF = popularMFResponse.result;
         this.liveStatus = liveStatusResponse.result;
+        this.allIndices = allIndices.result;
+
+        console.log(this.allIndices);
       });
   }
 

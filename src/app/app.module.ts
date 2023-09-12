@@ -63,6 +63,10 @@ import { SeatMapComponent } from './routes/modules/train/chart/seat-map/seat-map
 import { StockComponent } from './routes/modules/stock/stock.component';
 import { SearchListComponent } from './routes/modules/stock/search-list/search-list.component';
 import { FundDetailsComponent } from './routes/modules/stock/fund-details/fund-details.component';
+import { InvestmentService } from './services/investment.service';
+import { AddInvestment } from './routes/modules/my-investment/add-investment/add-investment';
+import { CricketService } from './services/cricket.service';
+import { AllInvestment } from './routes/modules/my-investment/all-investment/all-investment';
 
 @NgModule({
   declarations: [
@@ -105,6 +109,8 @@ import { FundDetailsComponent } from './routes/modules/stock/fund-details/fund-d
     StockComponent,
     SearchListComponent,
     FundDetailsComponent,
+    AddInvestment,
+    AllInvestment,
   ],
   imports: [
     BrowserModule,
@@ -138,6 +144,8 @@ import { FundDetailsComponent } from './routes/modules/stock/fund-details/fund-d
     MenuService,
     WebScrapingService,
     TrainService,
+    InvestmentService,
+    CricketService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -145,6 +153,8 @@ import { FundDetailsComponent } from './routes/modules/stock/fund-details/fund-d
     TranslateComponent,
     ScheduleDialogComponent,
     SeatMapComponent,
+    AddInvestment,
+    AllInvestment,
   ],
 })
 export class AppModule {}

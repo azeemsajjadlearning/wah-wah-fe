@@ -1,85 +1,111 @@
-<section class="example-container mat-elevation-z8" tabindex="0">
-  <table mat-table [dataSource]="myInvestment">
-    <ng-container matColumnDef="fund_name">
-      <th mat-header-cell *matHeaderCellDef>Fund&nbsp;Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.fund_name }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="investing_date">
-      <th mat-header-cell *matHeaderCellDef>Investing&nbsp;Date</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.investing_date | date : "dd/MM/yy" }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="invested">
-      <th mat-header-cell *matHeaderCellDef>Invested&nbsp;Amount</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.invested | number : "1.2-2" }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="value">
-      <th mat-header-cell *matHeaderCellDef>Value</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.value | number : "1.2-2" }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="today_value">
-      <th mat-header-cell *matHeaderCellDef>Today's&nbsp;Value</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.today_value | number : "1.2-2" }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="return">
-      <th mat-header-cell *matHeaderCellDef>Return</th>
-      <td mat-cell *matCellDef="let element">
+<div class="mt-2">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+    <div>
+      <div class="font-bold text-2xl">{{ totalReturn | currency : "INR" }}</div>
+      <div class="text-xl">Current Value</div>
+    </div>
+    <div class="col-span-2">
+      <div class="grid grid-cols-2">
+        <div>Invested Value</div>
+        <div>{{ totalInvestment | currency : "INR" }}</div>
+      </div>
+      <div class="grid grid-cols-2">
+        <div>Total Return</div>
         <div
-          class="text-{{
-            element.return_percentage < 0 ? 'red-500' : 'green-500'
-          }}"
+          [ngClass]="{
+            'text-green-600': totalReturn - totalInvestment > 0,
+            'text-red-600': totalReturn - totalInvestment < 0
+          }"
         >
-          {{ element.return | number : "1.2-2" }}
+          {{ totalReturn - totalInvestment | currency : "INR" }} ({{
+            (totalReturn - totalInvestment) / totalInvestment
+              | percent : "1.2-2"
+          }})
         </div>
-      </td>
-    </ng-container>
+      </div>
+      <div class="grid grid-cols-2">
+        <div>XIRR</div>
+        <div>{{ totalXIRR | percent : "1.2-2" }}</div>
+      </div>
+    </div>
+    <div>
+      <button
+        class=""
+        mat-raised-button
+        color="primary"
+        (click)="addInvestment()"
+      >
+        Add Investment
+      </button>
+    </div>
+  </div>
 
-    <ng-container matColumnDef="return_percentage">
-      <th mat-header-cell *matHeaderCellDef>Return&nbsp;%</th>
-      <td mat-cell *matCellDef="let element">
-        <div
-          class="text-{{
-            element.return_percentage < 0 ? 'red-500' : 'green-500'
-          }}"
-        >
-          {{ element.return_percentage | percent : "0.0-2" }}
-        </div>
-      </td>
-    </ng-container>
+  <section class="mt-4" *ngIf="filteredInvestment">
+    <table mat-table [dataSource]="filteredInvestment">
+      <ng-container matColumnDef="schema_name">
+        <th mat-header-cell *matHeaderCellDef>Scheme Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.schema_name }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="total">
-      <th mat-header-cell *matHeaderCellDef>Total</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.total | number : "1.2-2" }}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="return">
+        <th mat-header-cell *matHeaderCellDef>Return</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="text-bolder text-lg">
+            {{
+              element.total_return - element.total_amount_invested
+                | currency : "INR"
+            }}
+          </div>
+          <div
+            [ngClass]="{
+              'text-green-600':
+                element.total_return - element.total_amount_invested > 0,
+              'text-red-600':
+                element.total_return - element.total_amount_invested < 0
+            }"
+          >
+            ({{
+              (element.total_return - element.total_amount_invested) /
+                element.total_amount_invested | percent : "1.2-2"
+            }})
+          </div>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="cagr">
-      <th mat-header-cell *matHeaderCellDef>CAGR</th>
-      <td mat-cell *matCellDef="let element">
-        <div
-          class="text-{{
-            element.return_percentage < 0 ? 'red-500' : 'green-500'
-          }}"
-        >
-          {{ element.cagr | percent : "0.0-2" }}
-        </div>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="current">
+        <th mat-header-cell *matHeaderCellDef>Current</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="text-bolder text-lg">
+            {{ element.total_return | currency : "INR" }}
+          </div>
+          <div>{{ element.total_amount_invested | currency : "INR" }}</div>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</section>
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon
+            [matMenuTriggerFor]="menu"
+            *ngIf="element.type == 'sip'"
+            (click)="$event.stopPropagation()"
+            >more_vert</mat-icon
+          >
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="addMoreInvestment(element)">
+              Add Investment
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        class="cursor-pointer hover:bg-red-300"
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="getDetail(row)"
+      ></tr>
+    </table>
+  </section>
+</div>

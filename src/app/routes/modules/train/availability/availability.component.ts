@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { debounceTime } from 'rxjs';
+import { catchError, debounceTime } from 'rxjs';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
 import { TrainBtwnStnsList, TrainList } from 'src/app/models/train';
 import { TrainService } from 'src/app/services/train.service';
@@ -71,6 +71,33 @@ export class AvailabilityComponent {
         this.form.get('destination')?.value.split(' - ')[1],
         this.formatDate(this.form.get('dateOfJourney')?.value),
         this.form.get('quota')?.value
+      )
+      .pipe(
+        catchError((err) => {
+          this.confirmationService.open({
+            title: 'Error',
+            icon: {
+              color: 'warn',
+              name: 'error',
+              show: true,
+            },
+            message:
+              'Please visit IRCTC offical website becuase this is the time for tatkal booking...',
+            dismissible: false,
+            actions: {
+              confirm: {
+                label: 'Ok!',
+                color: 'warn',
+                show: true,
+              },
+              cancel: {
+                show: false,
+              },
+            },
+          });
+
+          throw err;
+        })
       )
       .subscribe((res) => {
         if (res.result.errorMessage) {
