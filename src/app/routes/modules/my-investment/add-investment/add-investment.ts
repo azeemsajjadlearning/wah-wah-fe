@@ -36,7 +36,9 @@ export class AddInvestment implements OnInit {
         switchMap((val) => this.stockService.searchMF(val))
       )
       .subscribe((res) => {
-        this.mutualFundList = res.result.content;
+        this.mutualFundList = res.result.content.filter(
+          (ele: any) => ele.fund_name
+        );
       });
   }
 
