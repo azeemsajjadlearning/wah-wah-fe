@@ -29,9 +29,7 @@ export class AddInvestment implements OnInit {
     private investmentService: InvestmentService,
     private stockService: StockService,
     private confirmationService: ConfirmationService
-  ) {
-    console.log(this.data);
-  }
+  ) {}
 
   ngOnInit() {
     this.initializeForm();
@@ -59,8 +57,6 @@ export class AddInvestment implements OnInit {
 
     this.form = this.fb.group(formData);
 
-    console.log(this.data.detail);
-
     if (this.data) {
       this.form.get('schema_code')?.setValue(this.data.detail.schema_code);
       this.form.get('type')?.setValue('sip');
@@ -70,7 +66,6 @@ export class AddInvestment implements OnInit {
         this.form.get('amount')?.setValue(this.data.detail.amount);
       }
     }
-    console.log(this.form.value);
   }
 
   onFormSubmit() {
