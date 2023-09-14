@@ -72,7 +72,11 @@ export class AddInvestment implements OnInit {
     if (!this.data) {
       this.form
         .get('schema_code')
-        ?.setValue(this.mutualFundList[0]?.scheme_code);
+        ?.setValue(
+          this.mutualFundList.find(
+            (ele) => ele.scheme_name == this.form.get('schema_code')?.value
+          )?.scheme_code
+        );
 
       this.investmentService
         .createNewInvestment(this.form.value)
