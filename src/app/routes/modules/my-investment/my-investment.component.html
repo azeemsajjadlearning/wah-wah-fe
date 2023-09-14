@@ -33,79 +33,129 @@
         class=""
         mat-raised-button
         color="primary"
-        (click)="addInvestment()"
+        (click)="createInvestment()"
       >
         Add Investment
       </button>
     </div>
   </div>
 
-  <section class="mt-4" *ngIf="filteredInvestment">
-    <table mat-table [dataSource]="filteredInvestment">
-      <ng-container matColumnDef="schema_name">
-        <th mat-header-cell *matHeaderCellDef>Scheme Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.schema_name }}</td>
-      </ng-container>
+  <table
+    *ngIf="investment"
+    class="mt-4 overflow-x-auto"
+    mat-table
+    [dataSource]="investment"
+  >
+    <ng-container matColumnDef="schema_name">
+      <th mat-header-cell *matHeaderCellDef>Scheme Name</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="py-1">
+          <div class="py-2 text-lg">{{ element.schema_name }}</div>
+          <div class="py text-xs font-lighter">
+            ({{ element.type == "sip" ? "SIP" : (element.type | titlecase) }})
+          </div>
+        </div>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="return">
-        <th mat-header-cell *matHeaderCellDef>Return</th>
-        <td mat-cell *matCellDef="let element">
-          <div class="text-bolder text-lg">
+    <ng-container matColumnDef="day">
+      <th mat-header-cell *matHeaderCellDef class="hidden lg:table-cell">
+        Day Change
+      </th>
+      <td mat-cell *matCellDef="let element" class="hidden lg:table-cell">
+        <div class="py-1">
+          <div class="py-2 text-lg">
             {{
-              element.total_return - element.total_amount_invested
+              (element.current_nav - element.one_day_nav) / element.current_nav
+                | percent : "1.2-2"
+            }}
+          </div>
+          <div
+            class="py-2"
+            [ngClass]="{
+              'text-green-600': element.current_nav - element.one_day_nav > 0,
+              'text-red-600': element.current_nav - element.one_day_nav < 0
+            }"
+          >
+            {{
+              ((element.current_nav - element.one_day_nav) /
+                element.current_nav) *
+                element.total_value | currency : "INR"
+            }}
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="return">
+      <th mat-header-cell *matHeaderCellDef class="hidden lg:table-cell">
+        Return
+      </th>
+      <td mat-cell *matCellDef="let element" class="hidden lg:table-cell">
+        <div class="py-1">
+          <div class="py-2 text-lg">
+            {{
+              (element.total_value - element.total_amount).toFixed(2)
                 | currency : "INR"
             }}
           </div>
           <div
+            class="py-2"
             [ngClass]="{
-              'text-green-600':
-                element.total_return - element.total_amount_invested > 0,
-              'text-red-600':
-                element.total_return - element.total_amount_invested < 0
+              'text-green-600': element.total_value - element.total_amount > 0,
+              'text-red-600': element.total_value - element.total_amount < 0
             }"
           >
             ({{
-              (element.total_return - element.total_amount_invested) /
-                element.total_amount_invested | percent : "1.2-2"
+              (element.total_value - element.total_amount) /
+                element.total_amount | percent : "1.2-2"
             }})
           </div>
-        </td>
-      </ng-container>
+        </div>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="current">
-        <th mat-header-cell *matHeaderCellDef>Current</th>
-        <td mat-cell *matCellDef="let element">
-          <div class="text-bolder text-lg">
-            {{ element.total_return | currency : "INR" }}
+    <ng-container matColumnDef="current">
+      <th mat-header-cell *matHeaderCellDef>Current</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="py-1">
+          <div class="py-2 text-lg">
+            {{ element.total_value | currency : "INR" }}
           </div>
-          <div>{{ element.total_amount_invested | currency : "INR" }}</div>
-        </td>
-      </ng-container>
+          <div class="py-2 text-sm">
+            {{ element.total_amount.toFixed(2) | currency : "INR" }}
+          </div>
+        </div>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="options">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
-          <mat-icon
-            [matMenuTriggerFor]="menu"
+    <ng-container matColumnDef="options">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+        <mat-menu #menu="matMenu">
+          <button
             *ngIf="element.type == 'sip'"
-            (click)="$event.stopPropagation()"
-            >more_vert</mat-icon
+            mat-menu-item
+            (click)="addInvestment(element)"
           >
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="addMoreInvestment(element)">
-              Add Investment
-            </button>
-          </mat-menu>
-        </td>
-      </ng-container>
+            Add Investment
+          </button>
+          <button mat-menu-item (click)="getTransaction(element)">
+            View Transaction
+          </button>
+          <button mat-menu-item (click)="deleteInvestment(element)">
+            Delete
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr
-        class="cursor-pointer hover:bg-red-300"
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        (click)="getDetail(row)"
-      ></tr>
-    </table>
-  </section>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr
+      class="py-4"
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+    ></tr>
+  </table>
 </div>

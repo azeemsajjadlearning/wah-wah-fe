@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { WeatherReport } from 'src/app/models/weather';
-import { WeatherService } from 'src/app/services/weather.service';
+import { Coverage, Match, Stage, State } from 'src/app/models/cricket';
+import { CricketService } from 'src/app/services/cricket.service';
 
 @Component({
   selector: 'selector-name',
@@ -8,50 +8,27 @@ import { WeatherService } from 'src/app/services/weather.service';
   styleUrls: ['dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  weatherReport: WeatherReport | any;
-
-  constructor(private weatherService: WeatherService) {}
+  listOfMatches: Match[];
+  constructor(private cricketService: CricketService) {}
 
   ngOnInit() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position: GeolocationPosition) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-
-          this.getCurrentWeather(latitude, longitude);
-        },
-        (error) => {
-          console.log(`Error: ${error.message}`);
-          this.weatherReport = null;
-        }
-      );
-    } else {
-      console.log('Geolocation is not supported by this browser.');
-      this.weatherReport = null;
-    }
+    this.getLiveScore();
+    setTimeout(() => {
+      this.getLiveScore();
+    }, 30000);
   }
 
-  private getCurrentWeather(latitude: number, longitude: number) {
-    this.weatherService
-      .getCurrentWeatherByLocation(latitude, longitude)
-      .subscribe((res) => {
-        this.weatherReport = res.result;
-        const label: any = [];
-        const data: any = [];
-
-        this.weatherReport?.forecast.forecastday[0].hour.forEach((ele: any) => {
-          label.push(
-            `${new Date(ele.time)
-              .getHours()
-              .toString()
-              .padStart(2, '0')}:${new Date(ele.time)
-              .getMinutes()
-              .toString()
-              .padStart(2, '0')}`
-          );
-          data.push(ele.temp_c);
-        });
-      });
+  private getLiveScore() {
+    this.cricketService.getLiveMatches().subscribe((res) => {
+      this.listOfMatches = res.result.matches
+        .filter(
+          (ele: Match) =>
+            ele.state === State.Live &&
+            ele.coverage == Coverage.Y &&
+            ele.stage == Stage.Running
+        )
+        .reverse();
+      console.log(this.listOfMatches);
+    });
   }
 }

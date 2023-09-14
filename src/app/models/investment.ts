@@ -1,24 +1,29 @@
-export interface CreateInvestment {
-  schema_id: string;
-  type: string;
-  date: Date;
-  amount: number;
-}
-
 export interface Investment {
   _id: string;
+  user_id: string;
+  schema_code: string;
+  schema_name: string;
+  type: string;
   active: boolean;
-  amount: number;
-  current_value?: number | null;
+  current_nav: number;
+  one_day_nav?: number;
+  total_amount?: number;
+  total_value?: number;
+  xirr?: number;
+  details: InvestmentDetail[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface InvestmentDetail {
+  _id: string;
+  investment_id: string;
   date: Date;
   nav: number;
-  current_nav: number | null;
-  redemption_amount: string | null;
-  redemption_date: string | null;
-  schema_id: string;
-  schema_name?: string;
-  type: string;
-  user_id: string;
-  total_amount_invested?: number;
-  total_return?: number;
+  amount: number;
+  current_value?: number;
+  redemption_date: null;
+  resumption: null;
+  createdAt: Date;
+  updatedAt: Date;
 }

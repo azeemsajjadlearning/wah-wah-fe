@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Investment } from 'src/app/models/investment';
 import { InvestmentService } from 'src/app/services/investment.service';
 import { AddInvestment } from './add-investment/add-investment';
 import { xirr, convertRate } from 'node-irr';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
 import { AllInvestment } from './all-investment/all-investment';
+import { Investment, InvestmentDetail } from 'src/app/models/investment';
+import { catchError, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-my-investment',
@@ -14,12 +15,12 @@ import { AllInvestment } from './all-investment/all-investment';
 })
 export class MyInvestmentComponent {
   investment: Investment[];
-  filteredInvestment: Investment[];
-  totalInvestment: number;
   totalReturn: number;
+  totalInvestment: number;
   totalXIRR: number;
+  cashflow: any;
 
-  displayedColumns = ['schema_name', 'return', 'current', 'options'];
+  displayedColumns = ['schema_name', 'day', 'return', 'current', 'options'];
 
   constructor(
     private investmentService: InvestmentService,
@@ -32,41 +33,83 @@ export class MyInvestmentComponent {
   }
 
   getInvestment() {
-    this.totalInvestment = 0;
+    this.investment = [];
     this.totalReturn = 0;
+    this.totalInvestment = 0;
+    this.totalXIRR = 0;
+    this.cashflow = [];
 
-    this.investmentService.getAllInvestment().subscribe((res) => {
-      this.investment = res.data;
+    this.investmentService
+      .getAllInvestment()
+      .pipe(
+        catchError((err) => {
+          this.confirmationService.open({
+            title: 'Error',
+            icon: {
+              color: 'warn',
+              name: 'error',
+              show: true,
+            },
+            message:
+              err.error?.err?.message ||
+              err.error?.error ||
+              'something went wrong!',
+            dismissible: false,
+            actions: {
+              confirm: {
+                label: 'Ok!',
+                color: 'warn',
+                show: true,
+              },
+              cancel: {
+                show: false,
+              },
+            },
+          });
 
-      this.filteredInvestment = this.calculateTotalInvestmentAndReturn(
-        res.data
-      );
+          throw new Error(err);
+        })
+      )
+      .subscribe((res) => {
+        this.investment = res.result.map((ele: Investment) => {
+          let totalAmount = 0;
+          let totalValue = 0;
 
-      this.filteredInvestment.forEach((ele) => {
-        // @ts-ignore
-        this.totalInvestment += ele.total_amount_invested;
-        // @ts-ignore
-        this.totalReturn += +ele.total_return;
+          ele.details.forEach((detail: InvestmentDetail) => {
+            detail['current_value'] =
+              (ele.current_nav * detail.amount) / detail.nav;
+            totalAmount += detail.amount;
+            totalValue += detail['current_value'];
+
+            this.cashflow.push({ date: detail.date, amount: detail.amount });
+          });
+
+          ele['total_amount'] = totalAmount;
+          ele['total_value'] = totalValue;
+
+          this.totalInvestment += ele['total_amount'];
+          this.totalReturn += ele['total_value'];
+
+          return ele;
+        });
+
+        this.totalXIRR = this.calculateXIRR(this.cashflow);
       });
-
-      this.totalXIRR = this.calculateXIRR(this.investment);
-    });
   }
 
-  addInvestment() {
-    const dialogRef = this.dialog.open(AddInvestment, {
+  createInvestment() {
+    const createDialogRef = this.dialog.open(AddInvestment, {
       width: '90%',
       maxWidth: '400px',
     });
 
-    dialogRef.afterClosed().subscribe((resp) => {
+    createDialogRef.afterClosed().subscribe((resp) => {
       if (resp.success) {
         this.getInvestment();
 
         this.confirmationService.open({
           title: 'Successful',
-          message:
-            'Wait for 5 min updating your data feel free to add more investment!',
+          message: 'Your data has been successfully added!!',
           icon: {
             name: 'done',
             color: 'success',
@@ -86,21 +129,20 @@ export class MyInvestmentComponent {
     });
   }
 
-  addMoreInvestment(investment: Investment) {
-    const dialogRef = this.dialog.open(AddInvestment, {
-      data: investment,
+  addInvestment(ele: Investment) {
+    const addDialogRef = this.dialog.open(AddInvestment, {
+      data: { detail: ele, type: 'Add' },
       width: '90%',
       maxWidth: '400px',
     });
 
-    dialogRef.afterClosed().subscribe((resp) => {
+    addDialogRef.afterClosed().subscribe((resp) => {
       if (resp.success) {
         this.getInvestment();
 
         this.confirmationService.open({
           title: 'Successful',
-          message:
-            'Wait for 5 min updating your data feel free to add more investment!',
+          message: 'Your data has been successfully added!!',
           icon: {
             name: 'done',
             color: 'success',
@@ -120,36 +162,71 @@ export class MyInvestmentComponent {
     });
   }
 
-  getDetail(investment: Investment) {
-    const detailInvestment = this.investment.filter(
-      (ele) => ele.schema_id === investment.schema_id
-    );
+  getTransaction(ele: Investment) {
+    const detailDialogRef = this.dialog.open(AllInvestment, {
+      data: ele,
+      width: '90%',
+    });
 
-    this.dialog.open(AllInvestment, { data: detailInvestment, width: '90%' });
+    detailDialogRef.afterClosed().subscribe(() => this.getInvestment());
   }
 
-  private calculateTotalInvestmentAndReturn(investments: Investment[]) {
-    const schemaIdMap = new Map();
+  deleteInvestment(ele: Investment) {
+    const deleteReq = this.confirmationService.open({
+      title: 'Confirmation!',
+      message: 'Are you sure to delete all the entry of ' + ele.schema_name,
+      icon: {
+        name: 'recommend',
+        color: 'basic',
+        show: true,
+      },
+      actions: {
+        confirm: {
+          label: 'Yes!',
+          color: 'warn',
+        },
+        cancel: {
+          label: 'Cancel',
+        },
+      },
+      dismissible: false,
+    });
 
-    for (const investment of investments) {
-      const { schema_id, amount, current_value, ...rest } = investment;
-
-      if (!schemaIdMap.has(schema_id)) {
-        schemaIdMap.set(schema_id, {
-          schema_id: schema_id,
-          total_amount_invested: 0,
-          total_return: 0,
-          ...rest,
-        });
+    deleteReq.afterClosed().subscribe((res) => {
+      if (res == 'confirmed') {
+        this.investmentService
+          .deleteAllInvestment(ele._id)
+          .pipe(
+            finalize(() => {
+              this.getInvestment();
+            })
+          )
+          .subscribe((res) => {
+            if (!res.success) {
+              this.confirmationService.open({
+                title: 'Error',
+                icon: {
+                  color: 'warn',
+                  name: 'error',
+                  show: true,
+                },
+                message: 'something went wrong!',
+                dismissible: false,
+                actions: {
+                  confirm: {
+                    label: 'Ok!',
+                    color: 'warn',
+                    show: true,
+                  },
+                  cancel: {
+                    show: false,
+                  },
+                },
+              });
+            }
+          });
       }
-
-      const schemaData = schemaIdMap.get(schema_id);
-      schemaData.total_amount_invested += amount;
-      // @ts-ignore
-      schemaData.total_return += parseFloat(current_value);
-    }
-
-    return Array.from(schemaIdMap.values());
+    });
   }
 
   private calculateXIRR(investmentData: any[]): any {

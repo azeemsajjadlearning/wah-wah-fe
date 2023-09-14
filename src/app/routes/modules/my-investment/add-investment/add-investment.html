@@ -1,13 +1,14 @@
-<h2 mat-dialog-title>Create Investment</h2>
+<h2 mat-dialog-title>{{data?.type||'Create'}} Investment</h2>
 <form class="flex flex-col m-3" [formGroup]="form" (ngSubmit)="onFormSubmit()">
   <mat-dialog-content>
+    <div class="pb-4">{{data?.schema_name}}</div>
     <mat-form-field *ngIf="!data" class="w-full">
       <mat-label>Mutual Fund</mat-label>
       <input
         type="text"
         placeholder="Search Fund"
         matInput
-        formControlName="schema_id"
+        formControlName="schema_code"
         [matAutocomplete]="schema"
       />
       <mat-autocomplete #schema="matAutocomplete">

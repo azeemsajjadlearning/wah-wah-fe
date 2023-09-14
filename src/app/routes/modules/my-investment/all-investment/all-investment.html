@@ -1,82 +1,112 @@
-<h2 mat-dialog-title>Transaction History</h2>
-<mat-dialog-content>
-  <div>
-    <div class="text-2xl">{{data[0].schema_name}}</div>
-    <div
-      class="m-2 p-2 border rounded-xl grid grid-cols-1 md:grid-cols-2 gap-2"
-    >
-      <div class="grid grid-cols-2">
-        <div>Current Amount</div>
-        <div>{{totalReturn.toFixed(2)}}</div>
-      </div>
-      <div class="grid grid-cols-2">
-        <div>Balanced Unit</div>
-        <div>{{totalUnit.toFixed(2)}}</div>
-      </div>
-      <div class="grid grid-cols-2">
-        <div>Invested Amount</div>
-        <div>{{totalInvestment.toFixed(2)}}</div>
-      </div>
-      <div class="grid grid-cols-2">
-        <div>Current NAV</div>
-        <div>{{data[0].current_nav}}</div>
-      </div>
-      <div class="grid grid-cols-2">
-        <div>Returns</div>
-        <div
-          [ngClass]="{
-      'text-green-600': totalReturn - totalInvestment > 0,
-      'text-red-600': totalReturn - totalInvestment < 0
-    }"
-        >
-          {{(totalReturn-totalInvestment).toFixed(2)}}
-          ({{((totalReturn-totalInvestment)/totalInvestment)|percent:'1.2-2'}})
+<h2 mat-dialog-title>{{data.schema_name}}</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="py-2">
+    <div class="border rounded-xl p-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
+        <div class="grid grid-cols-2 gap-2 items-center">
+          <div>Current Amount</div>
+          <div class="font-bold text-right lg:text-left">
+            {{data.total_value|currency:"INR"}}
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 items-center">
+          <div>Balanced Unit</div>
+          <div class="font-bold text-right lg:text-left">
+            {{balancedUnit|number:"1.2-2"}}
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 items-center">
+          <div>Invested Amount</div>
+          <div class="font-bold text-right lg:text-left">
+            {{data.total_amount|currency:"INR"}}
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 items-center">
+          <div>Current NAV</div>
+          <div class="font-bold text-right lg:text-left">
+            {{data.current_nav|number:"1.2-2"}}
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 items-center">
+          <div>Return</div>
+          <div
+            *ngIf="data.total_value && data.total_amount"
+            class="font-bold text-right lg:text-left"
+            [ngClass]="{'text-green-600':data.total_value-data.total_amount>0,'text-red-600':data.total_value-data.total_amount<0}"
+          >
+            <span>{{(data.total_value-data.total_amount)|currency:"INR"}}</span>
+            <span
+              >&nbsp;&nbsp;({{((data.total_value-data.total_amount)/data.total_amount)|percent:"1.2-2"}})</span
+            >
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 items-center">
+          <div>Average NAV</div>
+          <div class="font-bold text-right lg:text-left">
+            {{avgNav|number:"1.2-2"}}
+          </div>
         </div>
       </div>
-      <div class="grid grid-cols-2">
-        <div>Average NAV</div>
-        <div>{{(totalNav/data.length).toFixed(2)}}</div>
-      </div>
+    </div>
+
+    <div class="mt-4">
+      <table mat-table [dataSource]="data.details">
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.date|date }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="hidden lg:table-cell"
+          ></th>
+          <td mat-cell *matCellDef="let element" class="hidden lg:table-cell">
+            <div class="py-1 w-20 grid grid-cols-2 gap-3">
+              <div>Units</div>
+              <div>{{(element.amount/element.nav)|number:"1.2-2"}}</div>
+              <div>NAV</div>
+              <div>{{element.nav}}</div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            {{element.amount|currency:"INR"}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="option">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editInvestment(element)">
+                Edit
+              </button>
+              <button mat-menu-item (click)="deleteInvestment(element)">
+                Delete
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
+        <tr
+          class="py-4"
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+        ></tr>
+      </table>
     </div>
   </div>
-
-  <table mat-table [dataSource]="data">
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
-      <td mat-cell *matCellDef="let element">{{ element.date|date }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="value">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
-        <table>
-          <tr class="w-20 mb-2">
-            <td class="w-10">Units</td>
-            <td class="w-10">{{(element.amount/element.nav).toFixed(2)}}</td>
-          </tr>
-          <tr class="w-20">
-            <td class="w-10">NAV</td>
-            <td class="w-10">{{element.nav}}</td>
-          </tr>
-        </table>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef>Investment</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.amount |currency:"INR"}}
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr
-      class="cursor-pointer hover:bg-red-300"
-      mat-row
-      *matRowDef="let row; columns: displayedColumns"
-    ></tr>
-  </table>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button type="submit" color="primary" mat-dialog-close>Ok</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
 </mat-dialog-actions>
