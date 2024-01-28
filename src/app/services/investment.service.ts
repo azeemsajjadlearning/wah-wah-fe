@@ -7,6 +7,12 @@ import { environment } from '../environments/environment';
 export class InvestmentService {
   constructor(private http: HttpClient) {}
 
+  public searchMF(query: string): Observable<any> {
+    return this.http.get(
+      environment.api_prefix + 'investment/search-mf/' + query
+    );
+  }
+
   public getAllInvestment(schema_id?: string): Observable<any> {
     return this.http.get(
       environment.api_prefix + 'investment' + (schema_id ? '/' + schema_id : '')
@@ -17,7 +23,7 @@ export class InvestmentService {
     return this.http.post(
       environment.api_prefix + 'investment/create-investment',
       {
-        schema_code: createInvestment.schema_code,
+        scheme_code: createInvestment.scheme_code,
         type: createInvestment.type,
         date: createInvestment.date,
         amount: createInvestment.amount,
@@ -29,7 +35,7 @@ export class InvestmentService {
     return this.http.post(
       environment.api_prefix + 'investment/add-investment',
       {
-        schema_code: addInvestment.schema_code,
+        scheme_code: addInvestment.scheme_code,
         date: addInvestment.date,
         amount: addInvestment.amount,
       }

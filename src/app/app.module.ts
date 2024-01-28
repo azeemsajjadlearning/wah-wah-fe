@@ -67,6 +67,9 @@ import { InvestmentService } from './services/investment.service';
 import { AddInvestment } from './routes/modules/my-investment/add-investment/add-investment';
 import { CricketService } from './services/cricket.service';
 import { AllInvestment } from './routes/modules/my-investment/all-investment/all-investment';
+import { PhotosComponent } from './routes/modules/photos/photos.component';
+import { PhotosService } from './services/photos.service';
+import { PhotoComponent } from './routes/modules/photos/photo/photo.component';
 
 @NgModule({
   declarations: [
@@ -111,6 +114,8 @@ import { AllInvestment } from './routes/modules/my-investment/all-investment/all
     FundDetailsComponent,
     AddInvestment,
     AllInvestment,
+    PhotosComponent,
+    PhotoComponent,
   ],
   imports: [
     BrowserModule,
@@ -146,6 +151,7 @@ import { AllInvestment } from './routes/modules/my-investment/all-investment/all
     TrainService,
     InvestmentService,
     CricketService,
+    PhotosService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -155,6 +161,7 @@ import { AllInvestment } from './routes/modules/my-investment/all-investment/all
     SeatMapComponent,
     AddInvestment,
     AllInvestment,
+    PhotoComponent,
   ],
 })
 export class AppModule {}

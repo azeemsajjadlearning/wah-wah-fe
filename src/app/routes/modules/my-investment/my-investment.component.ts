@@ -7,6 +7,8 @@ import { ConfirmationService } from 'src/app/common/confirmation/confirmation.se
 import { AllInvestment } from './all-investment/all-investment';
 import { Investment, InvestmentDetail } from 'src/app/models/investment';
 import { catchError, finalize } from 'rxjs';
+import { StockService } from 'src/app/services/stock.service';
+import { ThirdPartyService } from 'src/app/services/third-party.service';
 
 @Component({
   selector: 'app-my-investment',
@@ -25,11 +27,16 @@ export class MyInvestmentComponent {
   constructor(
     private investmentService: InvestmentService,
     private dialog: MatDialog,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private ss: ThirdPartyService
   ) {}
 
   ngOnInit() {
     this.getInvestment();
+
+    this.ss.getMyInvestment().subscribe((res) => {
+      console.log(res);
+    });
   }
 
   getInvestment() {

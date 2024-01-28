@@ -6,19 +6,16 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { catchError, debounceTime, finalize, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, switchMap } from 'rxjs/operators';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
-import { Investment } from 'src/app/models/investment';
-import { Content } from 'src/app/models/stock';
 import { InvestmentService } from 'src/app/services/investment.service';
-import { StockService } from 'src/app/services/stock.service';
 
 @Component({
   templateUrl: 'add-investment.html',
 })
 export class AddInvestment implements OnInit {
   form: FormGroup;
-  mutualFundList: Content[];
+  mutualFundList: any[];
 
   today = new Date();
 
@@ -27,7 +24,6 @@ export class AddInvestment implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
     private investmentService: InvestmentService,
-    private stockService: StockService,
     private confirmationService: ConfirmationService
   ) {}
 
@@ -35,21 +31,21 @@ export class AddInvestment implements OnInit {
     this.initializeForm();
 
     this.form
-      .get('schema_code')
+      .get('scheme_code')
       ?.valueChanges.pipe(
         debounceTime(300),
-        switchMap((val) => this.stockService.searchMF(val))
+        switchMap((val) => this.investmentService.searchMF(val))
       )
       .subscribe((res) => {
-        this.mutualFundList = res.result.content.filter(
-          (ele: any) => ele.fund_name
-        );
+        console.log(res.result);
+
+        this.mutualFundList = res.result;
       });
   }
 
   private initializeForm() {
     const formData = {
-      schema_code: [null, Validators.required],
+      scheme_code: [null, Validators.required],
       type: [null, Validators.required],
       date: [null, Validators.required],
       amount: [null, [Validators.required, Validators.min(1)]],
@@ -58,7 +54,7 @@ export class AddInvestment implements OnInit {
     this.form = this.fb.group(formData);
 
     if (this.data) {
-      this.form.get('schema_code')?.setValue(this.data.detail.schema_code);
+      this.form.get('scheme_code')?.setValue(this.data.detail.scheme_code);
       this.form.get('type')?.setValue('sip');
 
       if (this.data.type == 'Edit') {
@@ -70,16 +66,17 @@ export class AddInvestment implements OnInit {
 
   onFormSubmit() {
     if (!this.data) {
-      this.form
-        .get('schema_code')
-        ?.setValue(
-          this.mutualFundList.find(
-            (ele) => ele.scheme_name == this.form.get('schema_code')?.value
-          )?.scheme_code
-        );
+      let obj = {
+        scheme_code: this.mutualFundList.find(
+          (ele) => ele.schemeName == this.form.get('scheme_code')?.value
+        )?.schemeCode,
+        type: this.form.get('type')?.value,
+        date: this.form.get('date')?.value,
+        amount: this.form.get('amount')?.value,
+      };
 
       this.investmentService
-        .createNewInvestment(this.form.value)
+        .createNewInvestment(obj)
         .pipe(
           catchError((err) => {
             const errorMessage =
@@ -103,8 +100,14 @@ export class AddInvestment implements OnInit {
         });
     } else {
       if (this.data.type == 'Add') {
+        let obj = {
+          scheme_code: this.form.get('scheme_code')?.value,
+          date: this.form.get('date')?.value,
+          amount: this.form.get('amount')?.value,
+        };
+
         this.investmentService
-          .addInvestment(this.form.value)
+          .addInvestment(obj)
           .pipe(
             catchError((err) => {
               const errorMessage =

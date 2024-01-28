@@ -1,0 +1,35 @@
+<div class="flex justify-end gap-4 mt-4">
+  <input
+    type="file"
+    (change)="onFilesSelected($event)"
+    accept="image/*"
+    multiple
+    class="hidden"
+    id="fileInput"
+  />
+  <button
+    mat-flat-button
+    class="py-2 px-4 bg-blue-500 text-white rounded-lg cursor-pointer"
+    (click)="triggerFileInput()"
+  >
+    <mat-icon>upload</mat-icon> Upload
+  </button>
+  <button
+    mat-flat-button
+    class="py-2 px-4 bg-green-500 text-white rounded-lg"
+    (click)="addAlbum()"
+  >
+    <mat-icon>library_add</mat-icon> Create Album
+  </button>
+</div>
+
+<div class="p-4 flex flex-wrap gap-2">
+  <div *ngFor="let item of photos" class="rounded-lg">
+    <img
+      [src]="item.thumbnail"
+      alt=""
+      class="h-60 w-auto cursor-pointer"
+      (click)="openImage(item)"
+    />
+  </div>
+</div>

@@ -28,6 +28,7 @@ import { AvailabilityComponent } from './routes/modules/train/availability/avail
 import { StockComponent } from './routes/modules/stock/stock.component';
 import { SearchListComponent } from './routes/modules/stock/search-list/search-list.component';
 import { FundDetailsComponent } from './routes/modules/stock/fund-details/fund-details.component';
+import { PhotosComponent } from './routes/modules/photos/photos.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -65,6 +66,7 @@ const routes: Routes = [
       { path: 'stock', component: StockComponent },
       { path: 'stock/list', component: SearchListComponent },
       { path: 'stock/fund-details', component: FundDetailsComponent },
+      { path: 'photos', component: PhotosComponent },
     ],
   },
 ];

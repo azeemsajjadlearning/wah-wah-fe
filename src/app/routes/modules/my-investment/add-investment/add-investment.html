@@ -8,15 +8,15 @@
         type="text"
         placeholder="Search Fund"
         matInput
-        formControlName="schema_code"
+        formControlName="scheme_code"
         [matAutocomplete]="schema"
       />
       <mat-autocomplete #schema="matAutocomplete">
         <mat-option
           *ngFor="let item of mutualFundList"
-          [value]="item.scheme_name"
+          [value]="item.schemeName"
         >
-          {{ item.scheme_name }}
+          {{ item.schemeName }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
