@@ -1,42 +1,103 @@
-<div class="relative h-screen flex items-center justify-center bg-black">
-  <div class="absolute top-0 right-0 p-4 flex gap-4">
-    <mat-icon
-      class="text-white cursor-pointer"
-      aria-hidden="false"
-      matTooltip="Edit Info"
-      (click)="comingSoon()"
-      >info</mat-icon
+<div class="flex h-screen">
+  <mat-sidenav-container class="w-full max-w-screen-xl">
+    <mat-sidenav
+      #sidenav
+      mode="over"
+      class="bg-black text-white"
+      [opened]="isSidenavOpen"
     >
-    <mat-icon
-      class="text-white cursor-pointer"
-      aria-hidden="false"
-      matTooltip="Make Favorite"
-      (click)="comingSoon()"
-      >star</mat-icon
-    >
-    <mat-icon
-      class="text-white cursor-pointer"
-      aria-hidden="false"
-      matTooltip="Delete"
-      (click)="deleteImage()"
-      >delete</mat-icon
-    >
-    <mat-icon
-      class="text-white cursor-pointer"
-      aria-hidden="false"
-      [matMenuTriggerFor]="menu"
-      >more_vert</mat-icon
-    >
-  </div>
+      <div class="bg-white w-96 h-full">
+        <form *ngIf="form" [formGroup]="form" class="p-4">
+          <mat-form-field class="w-full">
+            <mat-label>Title</mat-label>
+            <input matInput placeholder="Title" formControlName="title" />
+          </mat-form-field>
 
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="comingSoon()">
-      <mat-icon>download</mat-icon> Download
-    </button>
-    <button mat-menu-item (click)="comingSoon()">
-      <mat-icon>library_add</mat-icon> Add to Album
-    </button>
-  </mat-menu>
+          <mat-form-field class="w-full">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              placeholder="Description"
+              formControlName="description"
+            ></textarea>
+          </mat-form-field>
 
-  <img [src]="imageUrl" alt="" class="max-w-full max-h-full" />
+          <mat-form-field class="w-full">
+            <input
+              matInput
+              [matDatepicker]="picker"
+              placeholder="Date and Time"
+              formControlName="uploadDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </form>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="flex flex-col flex-grow overflow-hidden">
+      <div class="flex-grow overflow-auto">
+        <div
+          class="relative h-screen flex items-center justify-center bg-black"
+        >
+          <div class="absolute top-0 left-0 p-4">
+            <button mat-icon-button (click)="closeDialog()">
+              <mat-icon class="text-white">arrow_back</mat-icon>
+            </button>
+          </div>
+          <div class="absolute top-0 right-0 p-4 flex gap-2">
+            <button
+              mat-icon-button
+              matTooltip="Edit Info"
+              (click)="isSidenavOpen = !isSidenavOpen"
+            >
+              <mat-icon class="text-white">info</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              matTooltip="Make Favorite"
+              (click)="alterFavorite()"
+            >
+              <mat-icon
+                class="text-white"
+                [ngClass]="{
+                  'border border-white rounded': imageDetail?.is_favorite
+                }"
+                >star</mat-icon
+              >
+            </button>
+            <button
+              mat-icon-button
+              matTooltip="Edit Info"
+              (click)="deleteImage()"
+            >
+              <mat-icon class="text-white">delete</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              matTooltip="Edit Info"
+              [matMenuTriggerFor]="menu"
+            >
+              <mat-icon class="text-white">more_vert</mat-icon>
+            </button>
+          </div>
+
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="download()">
+              <mat-icon>download</mat-icon> Download
+            </button>
+            <button mat-menu-item (click)="comingSoon()">
+              <mat-icon>library_add</mat-icon> Add to Album
+            </button>
+          </mat-menu>
+
+          <img [src]="imageUrl" alt="" class="max-w-full max-h-full" />
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

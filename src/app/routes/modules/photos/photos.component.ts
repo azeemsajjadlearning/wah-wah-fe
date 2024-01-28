@@ -30,8 +30,16 @@ export class PhotosComponent implements OnInit {
   private getPhotos() {
     this.photosService.getAllImages().subscribe((res) => {
       this.photos = res.result;
-      console.log(this.photos);
     });
+  }
+
+  private formatDate(val: any) {
+    const date = new Date(val);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
   onFilesSelected(event: any): void {

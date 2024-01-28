@@ -11,6 +11,7 @@ export interface Metadata {
   description: null;
   image: Image;
   title: null;
+  is_favorite: BarProp;
   uploadDate: Date;
   user_id: string;
 }
