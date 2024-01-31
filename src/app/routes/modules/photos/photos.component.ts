@@ -15,6 +15,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class PhotosComponent implements OnInit {
   photos: PhotoList[];
   selectedFiles: File[] = [];
+  uniqueDates: Date[];
+  groupedPhotos: PhotoList[][] = [];
 
   constructor(
     private photosService: PhotosService,
@@ -30,16 +32,19 @@ export class PhotosComponent implements OnInit {
   private getPhotos() {
     this.photosService.getAllImages().subscribe((res) => {
       this.photos = res.result;
+      this.uniqueDates = this.getUniqueDates(this.photos);
+
+      this.uniqueDates.forEach((date) => {
+        const photosForDate = this.photos.filter((photo) => {
+          return (
+            new Date(this.formatDate(photo.metadata.uploadDate)).getTime() ===
+            date.getTime()
+          );
+        });
+
+        this.groupedPhotos.push(photosForDate);
+      });
     });
-  }
-
-  private formatDate(val: any) {
-    const date = new Date(val);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
   }
 
   onFilesSelected(event: any): void {
@@ -64,6 +69,8 @@ export class PhotosComponent implements OnInit {
         .uploadImages(formData)
         .pipe(
           catchError((error) => {
+            console.log(error);
+
             this.confirmationService.open({
               title: 'ERROR!!',
               icon: {
@@ -114,6 +121,40 @@ export class PhotosComponent implements OnInit {
     this._snackBar.open('Feature coming soon!', undefined, {
       duration: 1000,
     });
+  }
+
+  private getUniqueDates(photos: PhotoList[]): Date[] {
+    const uniqueDatesSet = new Set<Date>();
+
+    photos.forEach((ele) => {
+      const formattedDate = new Date(this.formatDate(ele.metadata.uploadDate));
+
+      if (!this.isDateInSet(uniqueDatesSet, formattedDate)) {
+        uniqueDatesSet.add(formattedDate);
+      }
+    });
+
+    const uniqueDatesArray = Array.from(uniqueDatesSet);
+
+    return uniqueDatesArray;
+  }
+
+  private formatDate(val: any) {
+    const date = new Date(val);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  private isDateInSet(dateSet: Set<Date>, date: Date): boolean {
+    for (const existingDate of dateSet) {
+      if (existingDate.getTime() === date.getTime()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   triggerFileInput(): void {

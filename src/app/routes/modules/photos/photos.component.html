@@ -24,12 +24,36 @@
 </div>
 
 <div class="p-4 flex flex-wrap gap-2">
-  <div *ngFor="let item of photos" class="rounded-lg">
-    <img
-      [src]="item.thumbnail"
-      alt=""
-      class="h-60 w-auto cursor-pointer"
-      (click)="openImage(item)"
-    />
+  <div *ngFor="let group of groupedPhotos">
+    <div class="text-2xl">{{ group[0].metadata.uploadDate | date }}</div>
+    <div class="p-4 flex flex-wrap gap-4">
+      <div
+        *ngFor="let photo of group"
+        class="relative overflow-hidden shadow-lg"
+      >
+        <img
+          [src]="photo.thumbnail"
+          alt=""
+          class="h-60 w-auto cursor-pointer transition-transform transform-gpu hover:scale-105"
+          (click)="openImage(photo)"
+        />
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- <div class="p-4 flex flex-wrap gap-2">
+  <div *ngFor="let item of groupedPhotos | keyvalue" class="rounded-lg">
+    <div class="text-xl">{{ item.key | date }}</div>
+    <div class="p-4 flex flex-wrap gap-2">
+      <div *ngFor="let photo of item.value">
+        <img
+          [src]="photo.thumbnail"
+          alt=""
+          class="h-60 w-auto cursor-pointer"
+          (click)="openImage(photo)"
+        />
+      </div>
+    </div>
+  </div>
+</div> -->

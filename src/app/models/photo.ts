@@ -2,6 +2,7 @@ export interface PhotoList {
   file_id: string;
   metadata: Metadata;
   thumbnail: string;
+  date?: any;
 }
 
 export interface Metadata {

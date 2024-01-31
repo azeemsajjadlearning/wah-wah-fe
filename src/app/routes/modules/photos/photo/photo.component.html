@@ -63,9 +63,10 @@
               (click)="alterFavorite()"
             >
               <mat-icon
+                *ngIf="imageDetail"
                 class="text-white"
                 [ngClass]="{
-                  'border border-white rounded': imageDetail?.is_favorite
+                  'border border-white rounded': imageDetail.is_favorite
                 }"
                 >star</mat-icon
               >
