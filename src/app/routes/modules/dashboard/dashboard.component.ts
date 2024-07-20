@@ -9,6 +9,8 @@ import { CricketService } from 'src/app/services/cricket.service';
 })
 export class DashboardComponent implements OnInit {
   listOfMatches: Match[];
+  summary: any;
+
   constructor(private cricketService: CricketService) {}
 
   ngOnInit() {
@@ -29,6 +31,13 @@ export class DashboardComponent implements OnInit {
         )
         .reverse();
       console.log(this.listOfMatches);
+    });
+  }
+
+  getScoreCard(match: Match) {
+    this.cricketService.getMatch(match.objectId).subscribe((resp) => {
+      this.summary = resp.result;
+      console.log(this.summary);
     });
   }
 }

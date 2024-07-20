@@ -3,6 +3,7 @@
     <div *ngFor="let item of listOfMatches">
       <div
         class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden"
+        (click)="getScoreCard(item)"
       >
         <div class="w-72 p-2">
           <div
@@ -86,4 +87,36 @@
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="summary">
+  {{ summary.header.competitions[0].liveAvailable }}
+  {{ summary.header.description }}
+  {{ summary.header.competitions[0].competitors[0].team.name }} vs
+  {{ summary.header.competitions[0].competitors[1].team.name }}
+
+  <table>
+    <thead>
+      <th>Player</th>
+      <th>run</th>
+      <th>ball</th>
+      <th>four</th>
+      <th>sixes</th>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of summary.matchcards[0].playerDetails">
+        <td>
+          {{ item.playerName }}
+          <span *ngIf="item.dismissal == 'not out'">*</span>
+        </td>
+        <td>{{ item.runs }}</td>
+        <td>{{ item.ballsFaced }}</td>
+        <td>{{ item.fours }}</td>
+        <td>{{ item.sixes }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div></div>
 </div>

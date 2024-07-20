@@ -11,9 +11,7 @@ export class CricketService {
     return this.http.get(environment.api_prefix + 'cricket/live-matches');
   }
 
-  public getMatch(seriesId: number, matchId: number): Observable<any> {
-    return this.http.get(
-      environment.api_prefix + 'cricket/match/' + seriesId + '/' + matchId
-    );
+  public getMatch(matchId: number): Observable<any> {
+    return this.http.get(environment.api_prefix + 'cricket/match/' + matchId);
   }
 }
