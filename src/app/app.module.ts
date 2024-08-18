@@ -70,10 +70,16 @@ import { AllInvestment } from './routes/modules/my-investment/all-investment/all
 import { PhotosComponent } from './routes/modules/photos/photos.component';
 import { PhotosService } from './services/photos.service';
 import { PhotoComponent } from './routes/modules/photos/photo/photo.component';
+import { CloudStorageComponent } from './routes/modules/cloud-storage/cloud-storage.component';
+import { CloudStorageService } from './services/cloud-storage.service';
+import { FileSizePipe } from './pipes/filesize.pipe';
+import { FileTypePipe } from './pipes/file-type.pipe';
 
 @NgModule({
   declarations: [
     DurationPipe,
+    FileSizePipe,
+    FileTypePipe,
     AppComponent,
     LayoutComponent,
     MenuComponent,
@@ -116,6 +122,7 @@ import { PhotoComponent } from './routes/modules/photos/photo/photo.component';
     AllInvestment,
     PhotosComponent,
     PhotoComponent,
+    CloudStorageComponent,
   ],
   imports: [
     BrowserModule,
@@ -152,6 +159,7 @@ import { PhotoComponent } from './routes/modules/photos/photo/photo.component';
     InvestmentService,
     CricketService,
     PhotosService,
+    CloudStorageService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [

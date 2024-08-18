@@ -18,6 +18,12 @@ export class DashboardComponent implements OnInit {
     setTimeout(() => {
       this.getLiveScore();
     }, 30000);
+
+    // this.cricketService
+    //   .getFile(
+    //     'BQACAgUAAxkDAAMDZrt22yRntnTrDdG5pNYss5jwHB8AAqYPAAL9ReBVpJenmaW2yxM1BA'
+    //   )
+    //   .subscribe((res) => console.log(res));
   }
 
   private getLiveScore() {

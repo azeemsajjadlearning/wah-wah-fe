@@ -14,4 +14,8 @@ export class CricketService {
   public getMatch(matchId: number): Observable<any> {
     return this.http.get(environment.api_prefix + 'cricket/match/' + matchId);
   }
+
+  public getFile(id: string): Observable<any> {
+    return this.http.get(environment.api_prefix + 'storage/getFile/' + id);
+  }
 }
