@@ -9,3 +9,12 @@ export interface FileList {
   updated_at: Date;
   user_id: string;
 }
+
+export interface FolderList {
+  _id: string;
+  created_at: Date;
+  name: string;
+  parent_folder_id: string | null;
+  updated_at: Date;
+  user_id: string;
+}

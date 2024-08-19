@@ -69,6 +69,7 @@ const routes: Routes = [
       { path: 'stock/fund-details', component: FundDetailsComponent },
       { path: 'photos', component: PhotosComponent },
       { path: 'cloud-storage', component: CloudStorageComponent },
+      { path: 'cloud-storage/:folder_id', component: CloudStorageComponent },
     ],
   },
 ];

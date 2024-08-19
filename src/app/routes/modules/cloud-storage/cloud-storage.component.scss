@@ -1,0 +1,12 @@
+/* Ensure icon fills the available space and positions correctly */
+.mat-icon.text-6xl {
+  font-size: 6rem;
+  width: 100%;
+  text-align: center;
+}
+
+button[mat-icon-button] {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}

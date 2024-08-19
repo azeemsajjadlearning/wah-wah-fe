@@ -1,32 +1,136 @@
-<table mat-table [dataSource]="fileList" class="mat-elevation-z8">
-  <!-- File Column -->
-  <ng-container matColumnDef="file_name">
-    <th mat-header-cell *matHeaderCellDef>File</th>
-    <td mat-cell *matCellDef="let item">{{ item.file_name }}</td>
-  </ng-container>
+<div class="h-screen flex flex-col">
+  <!-- Content Area -->
+  <div class="flex-grow bg-gray-100 p-6 overflow-y-auto">
+    <div class="flex justify-end items-center gap-4 mt-4 mr-4">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="openCreateFolderDialog()"
+      >
+        <mat-icon>add</mat-icon> Create Folder
+      </button>
 
-  <!-- Size Column -->
-  <ng-container matColumnDef="file_size">
-    <th mat-header-cell *matHeaderCellDef>Size</th>
-    <td mat-cell *matCellDef="let item">{{ item.file_size | filesize }}</td>
-  </ng-container>
+      <input #uploadFile type="file" (change)="upload($event)" class="hidden" />
 
-  <!-- Type Column -->
-  <ng-container matColumnDef="file_type">
-    <th mat-header-cell *matHeaderCellDef>Type</th>
-    <td mat-cell *matCellDef="let item">{{ item.mime_type | fileType }}</td>
-  </ng-container>
+      <button mat-raised-button color="primary" (click)="uploadFile.click()">
+        <mat-icon>upload_file</mat-icon> Upload File
+      </button>
+    </div>
 
-  <!-- Action Column -->
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let item">
-      <button mat-button (click)="download(item)">Download</button>
-    </td>
-  </ng-container>
+    <!-- Folders Grid -->
+    <ng-container *ngIf="folderList && folderList.length > 0">
+      <h3 class="text-lg font-semibold mb-4">Folders</h3>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6"
+      >
+        <div
+          *ngFor="let folder of folderList"
+          class="bg-white rounded-lg shadow p-4 relative cursor-pointer"
+          (click)="openFolder(folder)"
+        >
+          <!-- Folder Icon -->
+          <mat-icon
+            class="text-6xl text-blue-500 mb-2 block mx-auto"
+            style="height: 7rem !important"
+            >folder</mat-icon
+          >
+          <!-- Folder Name -->
+          <p class="text-center text-sm text-gray-700">{{ folder.name }}</p>
+          <!-- More Options Icon -->
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="folderMenu"
+            class="absolute top-2 right-2"
+            (click)="$event.stopPropagation()"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <!-- Folder Menu -->
+          <mat-menu #folderMenu="matMenu">
+            <button mat-menu-item (click)="alterFolder(folder, 'rename')">
+              <mat-icon>edit</mat-icon>
+              <span>Rename Folder</span>
+            </button>
+            <button mat-menu-item (click)="alterFolder(folder, 'delete')">
+              <mat-icon>delete</mat-icon>
+              <span>Delete Folder</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div></ng-container
+    >
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+    <!-- Files Table -->
+    <ng-container *ngIf="fileList && fileList.length > 0">
+      <h3 class="text-lg font-semibold mb-4">Files</h3>
+      <mat-table [dataSource]="fileList" class="mat-elevation-z8">
+        <!-- File Name Column -->
+        <ng-container matColumnDef="file_name">
+          <mat-header-cell *matHeaderCellDef> File Name </mat-header-cell>
+          <mat-cell
+            *matCellDef="let file"
+            class="truncate"
+            [matTooltip]="file.file_name"
+          >
+            {{ file.file_name }}
+          </mat-cell>
+        </ng-container>
 
-<input type="file" (change)="upload($event)" />
+        <!-- File Size Column -->
+        <ng-container matColumnDef="file_size">
+          <mat-header-cell *matHeaderCellDef> File Size </mat-header-cell>
+          <mat-cell *matCellDef="let file">
+            {{ file.file_size | filesize }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- File Type Column -->
+        <ng-container matColumnDef="file_type">
+          <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+          <mat-cell *matCellDef="let file">{{
+            file.mime_type | fileType
+          }}</mat-cell>
+        </ng-container>
+
+        <!-- File Actions Column -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+          <mat-cell *matCellDef="let file">
+            <button mat-button color="primary" (click)="download(file)">
+              Download
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Header and Row Declarations -->
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </mat-table>
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        folderList && folderList.length == 0 && fileList && fileList.length == 0
+      "
+    >
+      <div class="flex items-center justify-center h-full text-gray-500">
+        <p class="text-lg">Nothing Here</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #createFolderDialog>
+  <h1 mat-dialog-title>Create Folder</h1>
+  <div mat-dialog-content>
+    <mat-form-field appearance="outline" style="width: 100%">
+      <input matInput [formControl]="folderName" placeholder="Folder Name" />
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" (click)="createFolder()">
+      Create
+    </button>
+  </div>
+</ng-template>

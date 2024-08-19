@@ -7,17 +7,23 @@ import { environment } from '../environments/environment';
 export class CloudStorageService {
   constructor(private http: HttpClient) {}
 
-  public getFiles(): Observable<any> {
-    return this.http.get(environment.api_prefix + 'storage');
+  public getFiles(folderId: any = 0): Observable<any> {
+    return this.http.get(
+      environment.api_prefix + 'storage/get-files/' + folderId
+    );
   }
 
-  //   public getChunk(fileId: string): Observable<any> {
-  //     return this.http.get(environment.api_prefix + 'storage/' + fileId);
-  //   }
-
-  public uploadFile(file: any): Observable<any> {
+  public uploadFile(
+    file: any,
+    folderId: string | null = null
+  ): Observable<any> {
     const formData = new FormData();
     formData.append('file', file, file.name);
+
+    // Only append folderId if it's not null
+    if (folderId !== null) {
+      formData.append('folderId', folderId);
+    }
 
     const headers = new HttpHeaders();
     const request = new HttpRequest(
@@ -34,15 +40,13 @@ export class CloudStorageService {
   }
 
   public downloadFile(fileName: string, fileId: string): Observable<Blob> {
-    const getFileIdListUrl = `${environment.api_prefix}storage/${fileId}`;
+    const getFileIdListUrl = `${environment.api_prefix}storage/getChunk/${fileId}`;
     const downloadFileUrl = `${environment.api_prefix}storage/downloadFile`;
 
-    // Step 1: Get the list of fileIdList from the first API
     return this.http.get<{ fileIdList: string[] }>(getFileIdListUrl).pipe(
       switchMap((response: any) => {
         const fileIdList = response.result.chunk_file_ids;
 
-        // Step 2: Use fileIdList to get the download URL
         return this.http.post(
           downloadFileUrl,
           { fileIdList, originalname: fileName },
@@ -52,27 +56,27 @@ export class CloudStorageService {
     );
   }
 
-  //   public downloadFile(
-  //     fileIdList: string[],
-  //     originalname: string
-  //   ): Observable<Blob> {
-  //     const body = { fileIdList, originalname };
-  //     return this.http.post(
-  //       environment.api_prefix + 'storage/downloadFile',
-  //       body,
-  //       {
-  //         responseType: 'blob',
-  //       }
-  //     );
-  //   }
+  public createFolder(
+    name: string,
+    folderParentId: any = null
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'storage/create-folder', {
+      folder_name: name,
+      parent_folder_id: folderParentId,
+    });
+  }
 
-  //   public downloadFile(
-  //     fileIds: Array<any>,
-  //     originalname: string
-  //   ): Observable<any> {
-  //     return this.http.post(environment.api_prefix + 'storage/downloadFile', {
-  //       fileIdList: fileIds,
-  //       originalname,
-  //     });
-  //   }
+  public getFolders(parentFolderId: string | null): Observable<any> {
+    return this.http.get(
+      environment.api_prefix +
+        'storage/get-folder/' +
+        (parentFolderId == null ? 0 : parentFolderId)
+    );
+  }
+
+  public deleteFolder(folderId: string): Observable<any> {
+    return this.http.delete(
+      environment.api_prefix + 'storage/delete-folder/' + folderId
+    );
+  }
 }
