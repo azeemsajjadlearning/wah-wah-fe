@@ -1,6 +1,6 @@
 <div class="h-screen flex flex-col">
   <!-- Content Area -->
-  <div class="flex-grow bg-gray-100 p-6 overflow-y-auto">
+  <div class="flex-grow bg-gray-100 p-6">
     <div class="flex justify-end items-center gap-4 mt-4 mr-4">
       <button
         mat-raised-button
@@ -57,55 +57,67 @@
             </button>
           </mat-menu>
         </div>
-      </div></ng-container
-    >
+      </div>
+    </ng-container>
 
     <!-- Files Table -->
     <ng-container *ngIf="fileList && fileList.length > 0">
       <h3 class="text-lg font-semibold mb-4">Files</h3>
-      <mat-table [dataSource]="fileList" class="mat-elevation-z8">
-        <!-- File Name Column -->
-        <ng-container matColumnDef="file_name">
-          <mat-header-cell *matHeaderCellDef> File Name </mat-header-cell>
-          <mat-cell
-            *matCellDef="let file"
-            class="truncate"
-            [matTooltip]="file.file_name"
-          >
-            {{ file.file_name }}
-          </mat-cell>
-        </ng-container>
+      <div class="overflow-auto">
+        <mat-table [dataSource]="fileList">
+          <!-- File Name Column -->
+          <ng-container matColumnDef="file_name">
+            <mat-header-cell *matHeaderCellDef> File Name </mat-header-cell>
+            <mat-cell
+              *matCellDef="let file"
+              class="truncate"
+              [matTooltip]="file.file_name"
+            >
+              {{ file.file_name }}
+            </mat-cell>
+          </ng-container>
 
-        <!-- File Size Column -->
-        <ng-container matColumnDef="file_size">
-          <mat-header-cell *matHeaderCellDef> File Size </mat-header-cell>
-          <mat-cell *matCellDef="let file">
-            {{ file.file_size | filesize }}
-          </mat-cell>
-        </ng-container>
+          <!-- File Size Column -->
+          <ng-container matColumnDef="file_size">
+            <mat-header-cell *matHeaderCellDef> File Size </mat-header-cell>
+            <mat-cell *matCellDef="let file">
+              {{ file.file_size | filesize }}
+            </mat-cell>
+          </ng-container>
 
-        <!-- File Type Column -->
-        <ng-container matColumnDef="file_type">
-          <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
-          <mat-cell *matCellDef="let file">{{
-            file.mime_type | fileType
-          }}</mat-cell>
-        </ng-container>
+          <!-- File Type Column -->
+          <ng-container matColumnDef="file_type">
+            <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+            <mat-cell *matCellDef="let file">{{
+              file.mime_type | fileType
+            }}</mat-cell>
+          </ng-container>
 
-        <!-- File Actions Column -->
-        <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-          <mat-cell *matCellDef="let file">
-            <button mat-button color="primary" (click)="download(file)">
-              Download
-            </button>
-          </mat-cell>
-        </ng-container>
+          <!-- File Actions Column -->
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+            <mat-cell *matCellDef="let file">
+              <button mat-mini-fab color="primary" (click)="download(file)">
+                <mat-icon>download</mat-icon>
+              </button>
+              <button
+                mat-mini-fab
+                color="warn"
+                (click)="deleteFile(file)"
+                class="ml-4"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
 
-        <!-- Header and Row Declarations -->
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-      </mat-table>
+          <!-- Header and Row Declarations -->
+          <mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+        </mat-table>
+      </div>
     </ng-container>
 
     <ng-container

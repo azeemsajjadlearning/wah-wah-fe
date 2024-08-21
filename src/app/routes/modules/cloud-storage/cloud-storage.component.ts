@@ -16,6 +16,7 @@ export class CloudStorageComponent implements OnInit {
   folderList: FolderList[] = [];
   fileList: FileList[] = [];
   folderName: FormControl = new FormControl(null);
+  viewMode: string = 'tiles';
 
   createDialogRef: MatDialogRef<any> | undefined;
 
@@ -128,6 +129,14 @@ export class CloudStorageComponent implements OnInit {
         (blob) => this.handleFileDownload(blob, file.file_name),
         (error) => console.error('Download error:', error)
       );
+  }
+
+  deleteFile(file: FileList): void {
+    this.cloudStorageService.deleteFile(file.file_id).subscribe((res) => {
+      if (res.success) {
+        this.getFilesFolder(this.folderId);
+      }
+    });
   }
 
   private handleFileDownload(blob: Blob, fileName: string): void {

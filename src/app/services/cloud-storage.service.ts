@@ -79,4 +79,10 @@ export class CloudStorageService {
       environment.api_prefix + 'storage/delete-folder/' + folderId
     );
   }
+
+  public deleteFile(fileId: string): Observable<any> {
+    return this.http.delete(
+      environment.api_prefix + 'storage/delete-file/' + fileId
+    );
+  }
 }
