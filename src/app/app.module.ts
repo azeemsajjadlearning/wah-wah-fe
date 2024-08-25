@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -127,6 +128,7 @@ import { FileTypePipe } from './pipes/file-type.pipe';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    DragDropModule,
     ConfirmationModule,
     LoadingBarModule,
     CommonModule,

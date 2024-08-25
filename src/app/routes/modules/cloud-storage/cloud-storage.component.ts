@@ -1,3 +1,4 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -102,9 +103,10 @@ export class CloudStorageComponent implements OnInit {
   }
 
   upload(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.cloudStorageService.uploadFile(file, this.folderId).subscribe(
+    const files: File[] = Array.from(event.target.files);
+
+    if (files && files.length > 0) {
+      this.cloudStorageService.uploadFile(files, this.folderId).subscribe(
         (event) => this.handleUploadProgress(event),
         (error) => console.error('Upload failed:', error)
       );
@@ -147,5 +149,25 @@ export class CloudStorageComponent implements OnInit {
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  moveFiles(): void {
+    let filesIds = ['1724479668378.9565'];
+    let folderId = '66c978b9a4cc7bdf55ccd049';
+
+    this.cloudStorageService.moveFiles(filesIds, folderId).subscribe((res) => {
+      console.log(res);
+    });
+  }
+
+  moveFolder(): void {
+    let folderId = '66c97cecb5477b7d8a544b1d';
+    let destinationFolderId = '66c3f1555230714ee587af1e';
+
+    this.cloudStorageService
+      .moveFolder(folderId, destinationFolderId)
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }

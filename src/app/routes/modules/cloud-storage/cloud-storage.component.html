@@ -10,10 +10,16 @@
         <mat-icon>add</mat-icon> Create Folder
       </button>
 
-      <input #uploadFile type="file" (change)="upload($event)" class="hidden" />
+      <input
+        #uploadFile
+        type="file"
+        (change)="upload($event)"
+        class="hidden"
+        multiple
+      />
 
       <button mat-raised-button color="primary" (click)="uploadFile.click()">
-        <mat-icon>upload_file</mat-icon> Upload File
+        <mat-icon>upload_file</mat-icon> Upload Files
       </button>
     </div>
 

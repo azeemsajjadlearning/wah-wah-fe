@@ -1,4 +1,9 @@
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpParams,
+  HttpRequest,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, switchMap } from 'rxjs';
 import { environment } from '../environments/environment';
@@ -14,13 +19,15 @@ export class CloudStorageService {
   }
 
   public uploadFile(
-    file: any,
+    files: File[],
     folderId: string | null = null
   ): Observable<any> {
     const formData = new FormData();
-    formData.append('file', file, file.name);
 
-    // Only append folderId if it's not null
+    files.forEach((file) => {
+      formData.append('files', file, file.name);
+    });
+
     if (folderId !== null) {
       formData.append('folderId', folderId);
     }
@@ -84,5 +91,30 @@ export class CloudStorageService {
     return this.http.delete(
       environment.api_prefix + 'storage/delete-file/' + fileId
     );
+  }
+
+  public moveFiles(
+    fileIds: string[],
+    destinationFolderId: string
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'storage/files/move', {
+      fileIds,
+      destinationFolderId,
+    });
+  }
+
+  public moveFolder(
+    folderId: string,
+    destinationFolderId: string
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'storage/folder/move', {
+      folderId,
+      destinationFolderId,
+    });
+  }
+
+  public search(query: string): Observable<any> {
+    const params = new HttpParams().set('query', query);
+    return this.http.get(environment.api_prefix + 'storage/search', { params });
   }
 }
