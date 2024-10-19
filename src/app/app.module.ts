@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent, MY_DATE_FORMAT } from './app.component';
 import { MaterialModule } from './material.module';
 import { SignUpComponent } from './routes/auth/signup/signup.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -75,12 +75,18 @@ import { CloudStorageComponent } from './routes/modules/cloud-storage/cloud-stor
 import { CloudStorageService } from './services/cloud-storage.service';
 import { FileSizePipe } from './pipes/filesize.pipe';
 import { FileTypePipe } from './pipes/file-type.pipe';
+import { SalaryComponent } from './routes/modules/salary/salary.component';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { SalaryService } from './services/salary.service';
+import { IndCurrencyPipe } from './pipes/currency.pipe';
+import { LoanComponent } from './routes/modules/loan/loan.component';
 
 @NgModule({
   declarations: [
     DurationPipe,
     FileSizePipe,
     FileTypePipe,
+    IndCurrencyPipe,
     AppComponent,
     LayoutComponent,
     MenuComponent,
@@ -124,6 +130,8 @@ import { FileTypePipe } from './pipes/file-type.pipe';
     PhotosComponent,
     PhotoComponent,
     CloudStorageComponent,
+    SalaryComponent,
+    LoanComponent,
   ],
   imports: [
     BrowserModule,
@@ -146,6 +154,8 @@ import { FileTypePipe } from './pipes/file-type.pipe';
       useClass: RequestInterceptor,
       multi: true,
     },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
     ConfirmationService,
     LoadingBarService,
     TaskService,
@@ -162,6 +172,7 @@ import { FileTypePipe } from './pipes/file-type.pipe';
     CricketService,
     PhotosService,
     CloudStorageService,
+    SalaryService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [

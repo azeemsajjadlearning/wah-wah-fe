@@ -1,0 +1,391 @@
+<div class="container mx-auto p-6">
+  <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="w-full"><h2 class="text-2xl font-bold mb-4">Salary</h2></div>
+    <div class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-select placeholder="Select Year" [formControl]="selectedYear">
+          <mat-option *ngFor="let item of yearList" [value]="item">
+            {{ item }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-select placeholder="Metro City" [formControl]="metroCity">
+          <mat-option [value]="true"> Metro City </mat-option>
+          <mat-option [value]="false"> Non Metro City </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="w-full">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-select placeholder="Select Regime" [formControl]="regime">
+          <mat-option [value]="false"> Old Tax Regime </mat-option>
+          <mat-option [value]="true"> New Tax Regime </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="w-full mb-4 text-right">
+      <button
+        type="button"
+        (click)="addSalaryBreakup()"
+        class="px-4 py-2 bg-green-500 text-white rounded-md"
+      >
+        Add Salary
+      </button>
+    </div>
+  </div>
+
+  <form [formGroup]="salaryForm">
+    <div formArrayName="salaryBreakups" class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="py-2 px-4 border-b" style="min-width: 10rem">Month</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">Date</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">Basic</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">HRA</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">LTA</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">SA</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">PT</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">TDS</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">EPF</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">Bonus</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">
+              Rent Paid
+            </th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">
+              Interest Paid
+            </th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">Gross</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">In-Hand</th>
+            <th class="py-2 px-4 border-b" style="min-width: 6rem">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            *ngFor="let salary of salaryBreakups.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <td class="border-b">
+              <mat-select
+                formControlName="month"
+                (selectionChange)="onMonthChange($event, i)"
+              >
+                <mat-option *ngFor="let item of monthList" [value]="item">
+                  {{ item }}
+                </mat-option>
+              </mat-select>
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                matInput
+                [matDatepicker]="datepicker"
+                id="date-{{ i }}"
+                formControlName="date"
+                [min]="minDate"
+                [max]="maxDate"
+                (click)="datepicker.open()"
+              />
+              <mat-datepicker #datepicker></mat-datepicker>
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="basic-{{ i }}"
+                formControlName="basic"
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="hra-{{ i }}"
+                formControlName="hra"
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="lta-{{ i }}"
+                formControlName="lta"
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="sa-{{ i }}"
+                formControlName="sa"
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="pt-{{ i }}"
+                formControlName="pt"
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="tds-{{ i }}"
+                formControlName="tds"
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="epf-{{ i }}"
+                formControlName="epf"
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="bonus-{{ i }}"
+                formControlName="bonus"
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="rentPaid-{{ i }}"
+                formControlName="rentPaid"
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                type="number"
+                id="interestPaid-{{ i }}"
+                formControlName="interestPaid"
+              />
+            </td>
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2"
+                type="text"
+                readonly
+                [value]="
+                  (salary.get('basic')?.value ?? 0) +
+                  (salary.get('hra')?.value ?? 0) +
+                  (salary.get('lta')?.value ?? 0) +
+                  (salary.get('sa')?.value ?? 0) +
+                  (salary.get('bonus')?.value ?? 0)
+                "
+              />
+            </td>
+
+            <td class="border-b">
+              <input
+                class="w-full border border-gray-300 p-2"
+                type="text"
+                readonly
+                [value]="
+                  (salary.get('basic')?.value ?? 0) +
+                  (salary.get('hra')?.value ?? 0) +
+                  (salary.get('lta')?.value ?? 0) +
+                  (salary.get('sa')?.value ?? 0) +
+                  (salary.get('bonus')?.value ?? 0) -
+                  (salary.get('pt')?.value ?? 0) -
+                  (salary.get('tds')?.value ?? 0) -
+                  (salary.get('epf')?.value ?? 0)
+                "
+              />
+            </td>
+
+            <td class="text-center">
+              <button mat-mini-fab color="warn">
+                <mat-icon>remove_circle</mat-icon>
+              </button>
+            </td>
+          </tr>
+
+          <tr class="font-bold">
+            <td class="border-b">Total</td>
+            <td class="border-b"></td>
+            <!-- Empty cell for Date -->
+            <td class="border-b">
+              {{ calculateTotal("basic") }}
+            </td>
+            <td class="border-b">
+              {{ calculateTotal("hra") }}
+            </td>
+            <td class="border-b">
+              {{ calculateTotal("lta") }}
+            </td>
+            <td class="border-b">
+              {{ calculateTotal("sa") }}
+            </td>
+            <td class="border-b">
+              {{ calculateTotal("pt") }}
+            </td>
+            <td class="border-b">
+              {{ calculateTotal("tds") }}
+            </td>
+            <td class="border-b">
+              {{ calculateTotal("epf") }}
+            </td>
+            <td class="border-b">
+              {{ calculateTotal("bonus") }}
+            </td>
+            <td class="border-b">
+              {{ calculateTotal("rentPaid") }}
+            </td>
+            <td class="border-b">
+              {{ calculateTotal("interestPaid") }}
+            </td>
+            <td class="border-b">
+              {{
+                calculateTotal("basic") +
+                  calculateTotal("hra") +
+                  calculateTotal("lta") +
+                  calculateTotal("sa") +
+                  calculateTotal("bonus")
+              }}
+            </td>
+            <td class="border-b">
+              {{
+                calculateTotal("basic") +
+                  calculateTotal("hra") +
+                  calculateTotal("lta") +
+                  calculateTotal("sa") +
+                  calculateTotal("bonus") -
+                  calculateTotal("pt") -
+                  calculateTotal("tds") -
+                  calculateTotal("epf")
+              }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <div class="flex flex-col md:flex-row items-center justify-around">
+    <div>
+      <form [formGroup]="deductionForm">
+        <table class="min-w-1/2 bg-white border border-gray-200 mt-4">
+          <thead>
+            <tr class="bg-gray-100 text-left">
+              <th class="px-4 py-2 text-gray-600 font-semibold">
+                Exemptions/Deductions:
+              </th>
+              <th class="px-4 py-2 text-gray-600 font-semibold">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b hover:bg-gray-50">
+              <th class="px-4 py-2 text-left">HRA Exemptions:</th>
+              <td class="px-4 py-2">{{ calculateHRA() | indCurrency }}</td>
+            </tr>
+            <tr class="border-b hover:bg-gray-50">
+              <th class="px-4 py-2 text-left">Standard Deduction:</th>
+              <td class="px-4 py-2">{{ sd | indCurrency }}</td>
+            </tr>
+            <tr class="border-b hover:bg-gray-50">
+              <th class="px-4 py-2 text-left">80C:</th>
+              <td>
+                <input
+                  class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                  type="number"
+                  formControlName="elss"
+                />
+              </td>
+            </tr>
+            <tr class="border-b hover:bg-gray-50">
+              <th class="px-4 py-2 text-left">80CCD:</th>
+              <td>
+                <input
+                  class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                  type="number"
+                  formControlName="nps"
+                />
+              </td>
+            </tr>
+            <tr class="border-b hover:bg-gray-50">
+              <th class="px-4 py-2 text-left">80D:</th>
+              <td>
+                <input
+                  class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                  type="number"
+                  formControlName="mi"
+                />
+              </td>
+            </tr>
+            <tr class="border-b hover:bg-gray-50">
+              <th class="px-4 py-2 text-left">LTA:</th>
+              <td>
+                <input
+                  class="w-full border border-gray-300 p-2 focus:outline-none focus:ring focus:ring-blue-500"
+                  type="number"
+                  formControlName="lta"
+                />
+              </td>
+            </tr>
+            <tr class="border-b hover:bg-gray-50">
+              <th class="px-4 py-2 text-left">Total Interest:</th>
+              <td class="px-4 py-2">
+                {{ calculateTotal("interestPaid") | indCurrency }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+
+    <div>
+      <table class="min-w-1/2 bg-white border border-gray-200 mt-4">
+        <tbody>
+          <tr class="border-b hover:bg-gray-50">
+            <th class="px-4 py-2 text-left">Income Tax:</th>
+            <td class="px-4 py-2">{{ calculateIncomeTax() | indCurrency }}</td>
+          </tr>
+          <tr class="border-b hover:bg-gray-50">
+            <th class="px-4 py-2 text-left">Tax Paid:</th>
+            <td class="px-4 py-2">{{ calculateTotal("tds") | indCurrency }}</td>
+          </tr>
+          <tr class="border-b hover:bg-gray-50">
+            <th class="px-4 py-2 text-left">Tax to be Paid:</th>
+            <td class="px-4 py-2">
+              {{ calculateIncomeTax() - calculateTotal("tds") | indCurrency }}
+            </td>
+          </tr>
+          <tr class="border-b hover:bg-gray-50">
+            <th class="px-4 py-2 text-left">Download Sheet:</th>
+            <td class="px-4 py-2">
+              <button
+                disabled
+                class="px-4 py-2 bg-gray-600 rounded-md text-white"
+              >
+                Get Sheet
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

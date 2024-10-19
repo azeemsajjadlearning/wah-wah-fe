@@ -1,0 +1,174 @@
+<div class="container flex mx-auto gap-4 p-4">
+  <!-- Loan Entry Form -->
+  <div class="flex-1">
+    <form [formGroup]="loanForm" (ngSubmit)="onSubmit()">
+      <mat-label class="font-bold">Loan Amount</mat-label>
+      <mat-form-field
+        appearance="outline"
+        class="fuse-mat-textarea fuse-mat-no-subscript w-full"
+        [floatLabel]="'always'"
+      >
+        <input matInput type="number" formControlName="loanAmount" />
+      </mat-form-field>
+
+      <!-- Tenure Field with Unit Selection -->
+      <div class="flex gap-2">
+        <div class="flex-2">
+          <mat-label class="font-bold">Tenure</mat-label>
+          <mat-form-field
+            appearance="outline"
+            class="fuse-mat-textarea fuse-mat-no-subscript w-full"
+            [floatLabel]="'always'"
+          >
+            <input matInput type="number" formControlName="tenure" />
+          </mat-form-field>
+        </div>
+
+        <div class="flex-1">
+          <mat-label class="font-bold">Tenure Unit</mat-label>
+          <mat-form-field
+            appearance="outline"
+            class="fuse-mat-textarea fuse-mat-no-subscript w-full"
+            [floatLabel]="'always'"
+          >
+            <mat-select formControlName="tenureUnit">
+              <mat-option value="years">Years</mat-option>
+              <mat-option value="months">Months</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-label class="font-bold">Interest Rate (%)</mat-label>
+      <mat-form-field
+        appearance="outline"
+        class="fuse-mat-textarea fuse-mat-no-subscript w-full"
+        [floatLabel]="'always'"
+      >
+        <input matInput type="number" formControlName="rate" />
+      </mat-form-field>
+
+      <mat-label class="font-bold">First Payment Date</mat-label>
+      <mat-form-field
+        appearance="outline"
+        class="fuse-mat-textarea fuse-mat-no-subscript w-full"
+        [floatLabel]="'always'"
+      >
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="firstPaymentDate"
+          (click)="picker.open()"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit">
+        Generate Table
+      </button>
+    </form>
+  </div>
+
+  <!-- Prepayment Form -->
+  <div class="flex-1">
+    <h2 class="text-lg font-semibold">Pre-payment</h2>
+    <form [formGroup]="prepaymentForm" (ngSubmit)="applyPrepayment()">
+      <mat-label class="font-bold">Prepayment Date</mat-label>
+      <mat-form-field
+        appearance="outline"
+        class="fuse-mat-textarea fuse-mat-no-subscript w-full"
+        [floatLabel]="'always'"
+      >
+        <input
+          matInput
+          [matDatepicker]="picker1"
+          formControlName="prepaymentDate"
+          (click)="picker1.open()"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker1"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+
+      <mat-label class="font-bold">Prepayment Amount</mat-label>
+      <mat-form-field
+        appearance="outline"
+        class="fuse-mat-textarea fuse-mat-no-subscript w-full"
+        [floatLabel]="'always'"
+      >
+        <input
+          matInput
+          type="number"
+          formControlName="prepaymentAmount"
+          required
+        />
+      </mat-form-field>
+
+      <button mat-raised-button color="accent" type="submit">
+        Apply Pre-payment
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Amortization Table -->
+<div class="container mx-auto p-4" *ngIf="amortizationTable?.length">
+  <table
+    mat-table
+    [dataSource]="amortizationTable"
+    class="mat-elevation-z8 w-full"
+  >
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>S.No.</th>
+      <td mat-cell *matCellDef="let row; let i = index">
+        {{ i + 1 }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.date | date : "MMMM d, y" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="rate">
+      <th mat-header-cell *matHeaderCellDef>Rate (%)</th>
+      <td mat-cell *matCellDef="let row">{{ row.rate }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="emi">
+      <th mat-header-cell *matHeaderCellDef>EMI</th>
+      <td mat-cell *matCellDef="let row">{{ row.emi | indCurrency }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="interest">
+      <th mat-header-cell *matHeaderCellDef>Interest</th>
+      <td mat-cell *matCellDef="let row">{{ row.interest | indCurrency }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="principal">
+      <th mat-header-cell *matHeaderCellDef>Principal</th>
+      <td mat-cell *matCellDef="let row">{{ row.principal | indCurrency }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="repayment">
+      <th mat-header-cell *matHeaderCellDef>Repayment</th>
+      <td mat-cell *matCellDef="let row">{{ row.repayment | indCurrency }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="balance">
+      <th mat-header-cell *matHeaderCellDef>Balance</th>
+      <td mat-cell *matCellDef="let row">{{ row.balance | indCurrency }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

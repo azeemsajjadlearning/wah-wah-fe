@@ -30,6 +30,8 @@ import { SearchListComponent } from './routes/modules/stock/search-list/search-l
 import { FundDetailsComponent } from './routes/modules/stock/fund-details/fund-details.component';
 import { PhotosComponent } from './routes/modules/photos/photos.component';
 import { CloudStorageComponent } from './routes/modules/cloud-storage/cloud-storage.component';
+import { SalaryComponent } from './routes/modules/salary/salary.component';
+import { LoanComponent } from './routes/modules/loan/loan.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -70,6 +72,8 @@ const routes: Routes = [
       { path: 'photos', component: PhotosComponent },
       { path: 'cloud-storage', component: CloudStorageComponent },
       { path: 'cloud-storage/:folder_id', component: CloudStorageComponent },
+      { path: 'salary', component: SalaryComponent },
+      { path: 'loan', component: LoanComponent },
     ],
   },
 ];
