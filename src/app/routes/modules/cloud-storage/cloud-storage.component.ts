@@ -125,8 +125,15 @@ export class CloudStorageComponent implements OnInit {
   }
 
   download(file: FileList): void {
+    // this.cloudStorageService
+    //   .downloadFile(file.file_name, file.file_id)
+    //   .subscribe(
+    //     (blob) => this.handleFileDownload(blob, file.file_name),
+    //     (error) => console.error('Download error:', error)
+    //   );
+
     this.cloudStorageService
-      .downloadFile(file.file_name, file.file_id)
+      .testDownload(file.file_name, file.file_id)
       .subscribe(
         (blob) => this.handleFileDownload(blob, file.file_name),
         (error) => console.error('Download error:', error)

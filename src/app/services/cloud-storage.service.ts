@@ -5,7 +5,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, switchMap } from 'rxjs';
+import { catchError, map, Observable, switchMap } from 'rxjs';
 import { environment } from '../environments/environment';
 
 @Injectable()
@@ -116,5 +116,15 @@ export class CloudStorageService {
   public search(query: string): Observable<any> {
     const params = new HttpParams().set('query', query);
     return this.http.get(environment.api_prefix + 'storage/search', { params });
+  }
+
+  public testDownload(fileName: string, fileId: string): Observable<Blob> {
+    const downloadFileUrl = `${environment.api_prefix}storage/donwloadFile`;
+
+    return this.http.post(
+      downloadFileUrl,
+      { file_id: fileId, originalname: fileName },
+      { responseType: 'blob' }
+    );
   }
 }
