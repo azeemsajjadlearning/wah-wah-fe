@@ -1,10 +1,10 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NavigationEnd, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 import { FileList, FolderList } from 'src/app/models/cloud-storage';
 import { CloudStorageService } from 'src/app/services/cloud-storage.service';
 
@@ -18,6 +18,8 @@ export class CloudStorageComponent implements OnInit {
   fileList: FileList[] = [];
   folderName: FormControl = new FormControl(null);
   viewMode: string = 'tiles';
+  loading = false;
+  loadingValue = 0;
 
   createDialogRef: MatDialogRef<any> | undefined;
 
@@ -33,33 +35,49 @@ export class CloudStorageComponent implements OnInit {
   constructor(
     private cloudStorageService: CloudStorageService,
     private router: Router,
-    public dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit() {
-    this.initializeUrlHandling();
+  ngOnInit(): void {
+    this.initializeRouterEvents();
+    this.subscribeToProgress();
+    this.updateFolderState();
   }
 
-  private initializeUrlHandling(): void {
+  private initializeRouterEvents(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.updateFolderIdFromUrl(event.urlAfterRedirects);
-        this.getFilesFolder(this.folderId);
+        this.updateFolderState(event.urlAfterRedirects);
       }
     });
-
-    this.updateFolderIdFromUrl(this.router.url);
-    this.getFilesFolder(this.folderId);
   }
 
-  private updateFolderIdFromUrl(url: string): void {
-    this.folderId = url.startsWith('/cloud-storage/')
+  private subscribeToProgress(): void {
+    this.cloudStorageService.progress$.subscribe((progress) => {
+      if (progress != 100) {
+        this.loadingValue = progress;
+      } else {
+        this.loading = false;
+        this.loadingValue = 0;
+        this.snackBar.open('Download Complete!', 'X');
+      }
+    });
+  }
+
+  private updateFolderState(url: string = this.router.url): void {
+    this.folderId = this.extractFolderIdFromUrl(url);
+    this.fetchFilesAndFolders();
+  }
+
+  private extractFolderIdFromUrl(url: string): string | null {
+    return url.startsWith('/cloud-storage/')
       ? url.replace('/cloud-storage/', '') || null
       : null;
   }
 
   openCreateFolderDialog(): void {
-    this.folderName.setValue(null);
+    this.folderName.reset();
     this.createDialogRef = this.dialog.open(this.createFolderDialog, {
       width: '300px',
       disableClose: true,
@@ -67,114 +85,88 @@ export class CloudStorageComponent implements OnInit {
   }
 
   createFolder(): void {
-    if (this.folderName.value) {
+    const folderName = this.folderName.value;
+    if (folderName) {
       this.cloudStorageService
-        .createFolder(this.folderName.value, this.folderId)
+        .createFolder(folderName, this.folderId)
         .subscribe((resp) => {
           if (resp.success) {
             this.createDialogRef?.close();
-            this.getFilesFolder(this.folderId);
+            this.fetchFilesAndFolders();
           }
         });
     }
   }
 
-  alterFolder(folder: FolderList, type: 'rename' | 'delete'): void {
-    if (type === 'delete') {
+  alterFolder(folder: FolderList, action: 'rename' | 'delete'): void {
+    if (action === 'delete') {
       this.cloudStorageService.deleteFolder(folder._id).subscribe((resp) => {
-        if (resp.success) this.getFilesFolder(this.folderId);
+        if (resp.success) this.fetchFilesAndFolders();
       });
     }
-    // Handle 'rename' logic if needed
+    // Additional 'rename' logic can be implemented here
   }
 
   openFolder(folder: FolderList): void {
     this.router.navigateByUrl(`/cloud-storage/${folder._id}`);
   }
 
-  private getFilesFolder(folderId: string | null): void {
+  private fetchFilesAndFolders(): void {
     forkJoin([
-      this.cloudStorageService.getFolders(folderId),
-      this.cloudStorageService.getFiles(folderId || 0),
+      this.cloudStorageService.getFolders(this.folderId),
+      this.cloudStorageService.getFiles(this.folderId || 0),
     ]).subscribe(([foldersResp, filesResp]) => {
       this.folderList = foldersResp.result;
       this.fileList = filesResp.result;
     });
   }
 
-  upload(event: any): void {
-    const files: File[] = Array.from(event.target.files);
+  upload(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files ? Array.from(input.files) : [];
 
-    if (files && files.length > 0) {
-      this.cloudStorageService.uploadFile(files, this.folderId).subscribe(
-        (event) => this.handleUploadProgress(event),
-        (error) => console.error('Upload failed:', error)
-      );
-    }
-  }
-
-  private handleUploadProgress(event: any): void {
-    if (event.type === HttpEventType.UploadProgress) {
-      if (event.total) {
-        const percent = Math.round((100 * event.loaded) / event.total);
-        console.log(`Upload is ${percent}% done.`);
-      }
-    } else if (event.type === HttpEventType.Response) {
-      this.getFilesFolder(this.folderId);
+    if (files.length > 0) {
+      this.loading = true;
+      files.forEach((file) => {
+        this.cloudStorageService
+          .upload(file, this.folderId)
+          .pipe(finalize(() => this.fetchFilesAndFolders()))
+          .subscribe(
+            (event) => this.handleUploadProgress(event),
+            (error) => console.error('Upload failed:', error)
+          );
+      });
     }
   }
 
   download(file: FileList): void {
-    // this.cloudStorageService
-    //   .downloadFile(file.file_name, file.file_id)
-    //   .subscribe(
-    //     (blob) => this.handleFileDownload(blob, file.file_name),
-    //     (error) => console.error('Download error:', error)
-    //   );
-
-    this.cloudStorageService
-      .testDownload(file.file_name, file.file_id)
-      .subscribe(
-        (blob) => this.handleFileDownload(blob, file.file_name),
-        (error) => console.error('Download error:', error)
-      );
+    this.loading = true;
+    this.cloudStorageService.downloadFile(
+      file.file_id,
+      file.file_name,
+      file.mime_type
+    );
   }
 
   deleteFile(file: FileList): void {
     this.cloudStorageService.deleteFile(file.file_id).subscribe((res) => {
-      if (res.success) {
-        this.getFilesFolder(this.folderId);
+      if (res.success) this.fetchFilesAndFolders();
+    });
+  }
+
+  private handleUploadProgress(event: any): void {
+    if (event.type === HttpEventType.UploadProgress && event.total) {
+      const progress = Math.round((100 * event.loaded) / event.total);
+      console.log(`Upload progress: ${progress}%`);
+    } else if (event.type === HttpEventType.Response) {
+      const uploadResp = event.body;
+      if (uploadResp.uploadProgress === 100) {
+        this.snackBar.open('Upload Complete!', 'X');
+        this.loading = false;
+        this.loadingValue = 0;
+      } else {
+        this.loadingValue = uploadResp.uploadProgress;
       }
-    });
-  }
-
-  private handleFileDownload(blob: Blob, fileName: string): void {
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-  }
-
-  moveFiles(): void {
-    let filesIds = ['1724479668378.9565'];
-    let folderId = '66c978b9a4cc7bdf55ccd049';
-
-    this.cloudStorageService.moveFiles(filesIds, folderId).subscribe((res) => {
-      console.log(res);
-    });
-  }
-
-  moveFolder(): void {
-    let folderId = '66c97cecb5477b7d8a544b1d';
-    let destinationFolderId = '66c3f1555230714ee587af1e';
-
-    this.cloudStorageService
-      .moveFolder(folderId, destinationFolderId)
-      .subscribe((res) => {
-        console.log(res);
-      });
+    }
   }
 }

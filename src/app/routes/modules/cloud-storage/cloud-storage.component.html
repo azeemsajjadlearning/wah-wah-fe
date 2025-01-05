@@ -152,3 +152,22 @@
     </button>
   </div>
 </ng-template>
+
+<div
+  *ngIf="loading"
+  class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="relative">
+    <mat-progress-spinner
+      class="example-margin"
+      color="primary"
+      mode="determinate"
+      [value]="loadingValue"
+    ></mat-progress-spinner>
+    <div
+      class="absolute inset-0 flex items-center justify-center text-white text-lg font-bold"
+    >
+      {{ loadingValue }}%
+    </div>
+  </div>
+</div>
