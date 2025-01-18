@@ -80,6 +80,7 @@ import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { SalaryService } from './services/salary.service';
 import { IndCurrencyPipe } from './pipes/currency.pipe';
 import { LoanComponent } from './routes/modules/loan/loan.component';
+import { CreateFolderComponent } from './routes/modules/cloud-storage/create-folder/create-folder.component';
 
 @NgModule({
   declarations: [
@@ -132,6 +133,7 @@ import { LoanComponent } from './routes/modules/loan/loan.component';
     CloudStorageComponent,
     SalaryComponent,
     LoanComponent,
+    CreateFolderComponent,
   ],
   imports: [
     BrowserModule,
@@ -183,6 +185,7 @@ import { LoanComponent } from './routes/modules/loan/loan.component';
     AddInvestment,
     AllInvestment,
     PhotoComponent,
+    CreateFolderComponent,
   ],
 })
 export class AppModule {}

@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Create Folder</h1>
+<form [formGroup]="form" (ngSubmit)="formSubmit()">
+  <div mat-dialog-content>
+    <mat-form-field class="w-full">
+      <mat-label>Folder Name</mat-label>
+      <input matInput formControlName="folderName" cdkFocusInitial />
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button type="reset">Cancel</button>
+    <button mat-button type="submit" mat-dialog-close>Ok</button>
+  </div>
+</form>
