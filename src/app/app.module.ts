@@ -81,6 +81,7 @@ import { SalaryService } from './services/salary.service';
 import { IndCurrencyPipe } from './pipes/currency.pipe';
 import { LoanComponent } from './routes/modules/loan/loan.component';
 import { CreateFolderComponent } from './routes/modules/cloud-storage/create-folder/create-folder.component';
+import { ProgressBarComponent } from './common/progress-bar/progress-bar.component';
 
 @NgModule({
   declarations: [
@@ -134,6 +135,7 @@ import { CreateFolderComponent } from './routes/modules/cloud-storage/create-fol
     SalaryComponent,
     LoanComponent,
     CreateFolderComponent,
+    ProgressBarComponent,
   ],
   imports: [
     BrowserModule,

@@ -15,7 +15,7 @@ export class CreateFolderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.form = this.fb.group({ folderName: null });
+    this.form = this.fb.group({ folderName: this.data?.folderName || null });
   }
 
   formSubmit() {

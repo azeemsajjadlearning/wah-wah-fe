@@ -8,7 +8,7 @@
 
 <div
   *ngIf="folderPath && folderPath.length > 1"
-  class="flex items-center space-x-2"
+  class="flex items-center space-x-2 overflow-x-auto whitespace-nowrap"
 >
   <ng-container *ngFor="let folder of folderPath; let last = last">
     <span *ngIf="last" class="text-gray-500 font-medium">
@@ -38,15 +38,12 @@
       class="bg-white rounded-lg shadow p-4 relative cursor-pointer"
       (click)="openFolder(folder)"
     >
-      <!-- Folder Icon -->
       <mat-icon
         class="text-6xl text-blue-500 mb-2 block mx-auto"
         style="height: 7rem !important"
         >folder</mat-icon
       >
-      <!-- Folder Name -->
       <p class="text-center text-sm text-gray-700">{{ folder.folder_name }}</p>
-      <!-- More Options Icon -->
       <button
         mat-icon-button
         [matMenuTriggerFor]="folderMenu"
@@ -55,13 +52,12 @@
       >
         <mat-icon>more_vert</mat-icon>
       </button>
-      <!-- Folder Menu -->
       <mat-menu #folderMenu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="alterFolder(folder, 'rename')">
           <mat-icon>edit</mat-icon>
           <span>Rename Folder</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="alterFolder(folder, 'delete')">
           <mat-icon>delete</mat-icon>
           <span>Delete Folder</span>
         </button>
@@ -71,10 +67,12 @@
 </ng-container>
 
 <div *ngIf="fileList && fileList.length > 0">
-  <table mat-table [dataSource]="fileList" class="mat-elevation-z8">
+  <table mat-table [dataSource]="fileList" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="file_name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.file_name }}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.file_name }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="size">
@@ -92,20 +90,21 @@
     </ng-container>
 
     <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let element">
-        <button mat-mini-fab color="primary" (click)="download(element)">
-          <mat-icon>download</mat-icon>
-        </button>
-
-        <button
-          mat-mini-fab
-          color="warn"
-          class="ml-4"
-          (click)="delete(element)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
+      <th mat-header-cell *matHeaderCellDef class="w-40">Actions</th>
+      <td mat-cell *matCellDef="let element" class="w-40">
+        <div class="flex">
+          <button mat-mini-fab color="primary" (click)="download(element)">
+            <mat-icon>download</mat-icon>
+          </button>
+          <button
+            mat-mini-fab
+            color="warn"
+            class="ml-4"
+            (click)="delete(element)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </td>
     </ng-container>
 
@@ -119,7 +118,11 @@
     <mat-icon>add</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-button (click)="createFolder()">Create Folder</button>
-    <button mat-button (click)="uploadFile.click()">Upload File</button>
+    <button mat-menu-item (click)="createFolder()">
+      <mat-icon>folder</mat-icon><span>Create Folder</span>
+    </button>
+    <button mat-menu-item (click)="uploadFile.click()">
+      <mat-icon>upload_file</mat-icon><span>Upload Files</span>
+    </button>
   </mat-menu>
 </div>

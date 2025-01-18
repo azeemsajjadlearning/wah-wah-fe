@@ -58,8 +58,6 @@ export class WebScrapingComponent {
           this.productPrice = parseFloat(
             this.productDetails.price.replace(/[^0-9.-]+/g, '')
           );
-
-          console.log(this.productPrice);
         } else {
           this.confirmationService.open({
             title: 'Error',

@@ -36,14 +36,12 @@ export class DashboardComponent implements OnInit {
             ele.stage == Stage.Running
         )
         .reverse();
-      console.log(this.listOfMatches);
     });
   }
 
   getScoreCard(match: Match) {
     this.cricketService.getMatch(match.objectId).subscribe((resp) => {
       this.summary = resp.result;
-      console.log(this.summary);
     });
   }
 }

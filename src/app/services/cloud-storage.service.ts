@@ -5,7 +5,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { concatMap, from, map, Observable } from 'rxjs';
+import { BehaviorSubject, concatMap, from, map, Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 const { v4: uuidv4 } = require('uuid');
 
@@ -78,7 +78,6 @@ export class CloudStorageService {
       concatMap((chunkRequest) => chunkRequest),
       map((result: any) => {
         if (result.success) {
-          console.log('All chunks uploaded successfully!');
           return { success: true, message: 'File uploaded successfully' };
         }
         return result;
@@ -117,5 +116,49 @@ export class CloudStorageService {
       folder_name: folderName,
       parent_folder_id: parentFolderId,
     });
+  }
+
+  public renameFolder(folderId: string, folderName: string): Observable<any> {
+    return this.http.put(
+      environment.api_prefix + 'storage/rename-folder/' + folderId,
+      { folder_name: folderName }
+    );
+  }
+
+  public deleteFolder(folder_id: string): Observable<any> {
+    return this.http.delete(
+      environment.api_prefix + 'storage/delete-folder/' + folder_id
+    );
+  }
+
+  private progressSubject = new BehaviorSubject<number>(0);
+  private showSubject = new BehaviorSubject<boolean>(false);
+  private operationSubject = new BehaviorSubject<string>('');
+
+  setProgress(progress: number) {
+    this.progressSubject.next(progress);
+  }
+
+  // Show or hide the progress bar
+  showProgress(show: boolean) {
+    this.showSubject.next(show);
+  }
+
+  // Set the current operation (upload or download)
+  setOperation(operation: string) {
+    this.operationSubject.next(operation);
+  }
+
+  // Observables for components to subscribe to
+  get progress$() {
+    return this.progressSubject.asObservable();
+  }
+
+  get show$() {
+    return this.showSubject.asObservable();
+  }
+
+  get operation$() {
+    return this.operationSubject.asObservable();
   }
 }

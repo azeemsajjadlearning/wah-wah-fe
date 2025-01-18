@@ -126,7 +126,6 @@ export class CoachComponent implements OnInit {
           (ele1: VacantBerth, ele2: VacantBerth) =>
             ele1.berthNumber - ele2.berthNumber
         );
-        console.log(this.vacantBerth);
       });
   }
 

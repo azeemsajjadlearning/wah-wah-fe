@@ -40,8 +40,6 @@ export class StockComponent implements OnInit, OnDestroy {
         this.popularMF = popularMFResponse.result;
         this.liveStatus = liveStatusResponse.result;
         this.allIndices = allIndices.result;
-
-        console.log(this.allIndices);
       });
   }
 

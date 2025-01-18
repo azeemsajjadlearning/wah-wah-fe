@@ -290,9 +290,7 @@ export class SalaryComponent implements OnInit {
   removeSalaryBreakup(index: number, ele: any): void {
     if (this.salaryBreakups.length > 1) {
       this.salaryBreakups.removeAt(index);
-      this.salaryService
-        .deleteSalary(ele.value.id)
-        .subscribe((resp) => console.log(resp));
+      this.salaryService.deleteSalary(ele.value.id).subscribe();
     }
   }
 

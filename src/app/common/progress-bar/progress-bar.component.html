@@ -1,0 +1,9 @@
+<div *ngIf="show$ | async" class="progress-bar-container">
+  <div class="progress-bar">
+    <div class="progress" [style.width]="(progress$ | async) + '%'"></div>
+  </div>
+  <div class="progress-info">
+    <span>{{ operation$ | async }} Progress<span>&nbsp;</span></span>
+    <span>{{ progress$ | async }} %</span>
+  </div>
+</div>

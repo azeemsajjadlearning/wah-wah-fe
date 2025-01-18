@@ -52,9 +52,7 @@ export class FundDetailsComponent {
 
       this.stockService
         .getMFDetails(this.fundDetail.isin, this.fundDetail.scheme_type)
-        .subscribe((resp) => {
-          console.log(resp.result);
-        });
+        .subscribe((resp) => {});
     });
   }
 

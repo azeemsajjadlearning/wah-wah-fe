@@ -60,7 +60,6 @@ export class AllInvestment implements OnInit {
         this.data.details = this.data.details.filter(
           (item) => item._id !== ele._id
         );
-        console.log(this.data);
         this.investmentService.deleteInvestment(ele._id).subscribe((res) => {
           if (!res.success) {
             const confirm = this.confirmationService.open({

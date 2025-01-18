@@ -34,9 +34,7 @@ export class MyInvestmentComponent {
   ngOnInit() {
     this.getInvestment();
 
-    this.ss.getMyInvestment().subscribe((res) => {
-      console.log(res);
-    });
+    this.ss.getMyInvestment().subscribe();
   }
 
   getInvestment() {
