@@ -10,3 +10,8 @@ button[mat-icon-button] {
   top: 8px;
   right: 8px;
 }
+
+#menuContainer {
+  position: fixed;
+  pointer-events: none;
+}

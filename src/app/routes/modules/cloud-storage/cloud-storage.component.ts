@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { catchError, finalize, Observable, switchMap, tap } from 'rxjs';
 import { FileList, FolderList, FolderPath } from 'src/app/models/cloud-storage';
@@ -7,6 +13,7 @@ import { CreateFolderComponent } from './create-folder/create-folder.component';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   templateUrl: 'cloud-storage.component.html',
@@ -254,5 +261,32 @@ export class CloudStorageComponent implements OnInit {
     a.click();
 
     URL.revokeObjectURL(downloadUrl);
+  }
+
+  @ViewChild(MatMenuTrigger, { static: true }) menuTrigger!: MatMenuTrigger;
+  @ViewChild('menuContainer', { static: true }) menuContainer!: ElementRef;
+
+  @HostListener('contextmenu', ['$event'])
+  onRightClick(event: MouseEvent): void {
+    event.preventDefault();
+
+    const menuElement = this.menuContainer.nativeElement;
+
+    menuElement.style.position = 'absolute';
+    menuElement.style.left = `${
+      event.clientX - (window.screen.width > 768 ? 287 : 0)
+    }px`;
+    menuElement.style.top = `${event.clientY}px`;
+
+    this.menuTrigger.openMenu();
+  }
+
+  onFolderRightClick(event: MouseEvent, folder: any): void {
+    event.preventDefault();
+    console.log('hello');
+
+    // this.isFolderContext = true;
+    // this.selectedItem = folder;
+    // this.openContextMenu(event);
   }
 }

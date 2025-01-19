@@ -1,128 +1,161 @@
-<input
-  #uploadFile
-  type="file"
-  (change)="upload($event)"
-  class="hidden"
-  multiple
-/>
+<div class="min-h-screen">
+  <input
+    #uploadFile
+    type="file"
+    (change)="upload($event)"
+    class="hidden"
+    multiple
+  />
 
-<div
-  *ngIf="folderPath && folderPath.length > 1"
-  class="flex items-center space-x-2 overflow-x-auto whitespace-nowrap"
->
-  <ng-container *ngFor="let folder of folderPath; let last = last">
-    <span *ngIf="last" class="text-gray-500 font-medium">
-      {{ folder.folder_name }}
-    </span>
-
-    <ng-container *ngIf="!last">
-      <button
-        mat-button
-        class="hover:underline text-blue-500"
-        (click)="goPath(folder)"
-      >
-        {{ folder.folder_name }}
-      </button>
-    </ng-container>
-
-    <mat-icon *ngIf="!last" class="text-gray-500">chevron_right</mat-icon>
-  </ng-container>
-</div>
-
-<ng-container *ngIf="folderList && folderList.length > 0">
   <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 m-6"
+    *ngIf="folderPath && folderPath.length > 1"
+    class="flex items-center space-x-2 overflow-x-auto whitespace-nowrap"
   >
-    <div
-      *ngFor="let folder of folderList"
-      class="bg-white rounded-lg shadow p-4 relative cursor-pointer"
-      (click)="openFolder(folder)"
-    >
-      <mat-icon
-        class="text-6xl text-blue-500 mb-2 block mx-auto"
-        style="height: 7rem !important"
-        >folder</mat-icon
-      >
-      <p class="text-center text-sm text-gray-700">{{ folder.folder_name }}</p>
-      <button
-        mat-icon-button
-        [matMenuTriggerFor]="folderMenu"
-        class="absolute top-2 right-2"
-        (click)="$event.stopPropagation()"
-      >
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #folderMenu="matMenu">
-        <button mat-menu-item (click)="alterFolder(folder, 'rename')">
-          <mat-icon>edit</mat-icon>
-          <span>Rename Folder</span>
+    <ng-container *ngFor="let folder of folderPath; let last = last">
+      <span *ngIf="last" class="text-gray-500 font-medium">
+        {{ folder.folder_name }}
+      </span>
+
+      <ng-container *ngIf="!last">
+        <button
+          mat-button
+          class="hover:underline text-blue-500"
+          (click)="goPath(folder)"
+        >
+          {{ folder.folder_name }}
         </button>
-        <button mat-menu-item (click)="alterFolder(folder, 'delete')">
-          <mat-icon>delete</mat-icon>
-          <span>Delete Folder</span>
-        </button>
-      </mat-menu>
+      </ng-container>
+
+      <mat-icon *ngIf="!last" class="text-gray-500">chevron_right</mat-icon>
+    </ng-container>
+  </div>
+
+  <div class="p-6">
+    <div *ngIf="folderList && folderList.length > 0" class="mb-8">
+      <h2 class="text-lg font-semibold mb-4">Folders</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <div
+          *ngFor="let folder of folderList"
+          class="relative bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
+          (click)="openFolder(folder)"
+        >
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="folderMenu"
+            class="absolute top-2 right-2"
+            (click)="$event.stopPropagation()"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #folderMenu="matMenu">
+            <button mat-menu-item (click)="alterFolder(folder, 'rename')">
+              <mat-icon>edit</mat-icon>
+              <span>Rename Folder</span>
+            </button>
+            <button mat-menu-item (click)="alterFolder(folder, 'delete')">
+              <mat-icon>delete</mat-icon>
+              <span>Delete Folder</span>
+            </button>
+          </mat-menu>
+
+          <div class="flex justify-center">
+            <mat-icon
+              class="text-6xl text-gray-500 mb-4"
+              style="height: 6rem !important"
+              >folder</mat-icon
+            >
+          </div>
+          <p class="text-center font-medium text-gray-800">
+            {{ folder.folder_name }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="fileList && fileList.length > 0">
+      <h2 class="text-lg font-semibold mb-4">Files</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <div
+          *ngFor="let file of fileList"
+          class="relative bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
+        >
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="fileMenu"
+            class="absolute top-2 right-2"
+            (click)="$event.stopPropagation()"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #fileMenu="matMenu">
+            <button mat-menu-item (click)="download(file)">
+              <mat-icon>download</mat-icon>
+              <span>Download File</span>
+            </button>
+            <button mat-menu-item (click)="delete(file)">
+              <mat-icon>delete</mat-icon>
+              <span>Delete File</span>
+            </button>
+          </mat-menu>
+
+          <div class="flex justify-center">
+            <ng-container [ngSwitch]="file.mime_type">
+              <mat-icon
+                *ngSwitchCase="'application/pdf'"
+                class="text-6xl text-red-500 mb-4"
+                style="height: 6rem !important"
+                >picture_as_pdf</mat-icon
+              >
+              <mat-icon
+                *ngSwitchCase="'image/jpeg'"
+                class="text-6xl text-orange-500 mb-4"
+                style="height: 6rem !important"
+                >image</mat-icon
+              >
+              <mat-icon
+                *ngSwitchCase="'text/plain'"
+                class="text-6xl text-gray-500 mb-4"
+                style="height: 6rem !important"
+                >description</mat-icon
+              >
+              <mat-icon
+                *ngSwitchCase="'application/vnd.ms-excel'"
+                class="text-6xl text-green-500 mb-4"
+                style="height: 6rem !important"
+                >grid_on</mat-icon
+              >
+              <mat-icon
+                *ngSwitchDefault
+                class="text-6xl text-blue-500 mb-4"
+                style="height: 6rem !important"
+                >insert_drive_file</mat-icon
+              >
+            </ng-container>
+          </div>
+          <p class="text-center font-medium text-gray-800 truncate">
+            {{ file.file_name }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
-</ng-container>
 
-<div *ngIf="fileList && fileList.length > 0">
-  <table mat-table [dataSource]="fileList" matSort class="mat-elevation-z8">
-    <ng-container matColumnDef="file_name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.file_name }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="size">
-      <th mat-header-cell *matHeaderCellDef>Size</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.file_size | filesize }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef>Type</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.mime_type | fileType }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef class="w-40">Actions</th>
-      <td mat-cell *matCellDef="let element" class="w-40">
-        <div class="flex">
-          <button mat-mini-fab color="primary" (click)="download(element)">
-            <mat-icon>download</mat-icon>
-          </button>
-          <button
-            mat-mini-fab
-            color="warn"
-            class="ml-4"
-            (click)="delete(element)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</div>
-
-<div class="fixed bottom-4 right-4 z-50">
-  <button mat-fab color="primary" class="relative" [matMenuTriggerFor]="menu">
-    <mat-icon>add</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="createFolder()">
-      <mat-icon>folder</mat-icon><span>Create Folder</span>
+  <div (contextmenu)="onRightClick($event)" #menuContainer>
+    <button
+      [matMenuTriggerFor]="menu"
+      #menuTrigger="matMenuTrigger"
+      style="opacity: 0 !important; width: 0; height: 0"
+    >
+      <mat-icon>add</mat-icon>
     </button>
-    <button mat-menu-item (click)="uploadFile.click()">
-      <mat-icon>upload_file</mat-icon><span>Upload Files</span>
-    </button>
-  </mat-menu>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="createFolder()">
+        <mat-icon>folder</mat-icon><span>Create Folder</span>
+      </button>
+      <button mat-menu-item (click)="uploadFile.click()">
+        <mat-icon>upload_file</mat-icon><span>Upload Files</span>
+      </button>
+    </mat-menu>
+  </div>
 </div>

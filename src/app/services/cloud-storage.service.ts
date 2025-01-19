@@ -13,6 +13,10 @@ const { v4: uuidv4 } = require('uuid');
 export class CloudStorageService {
   private readonly CHUNK_SIZE = 5 * 1024 * 1024;
 
+  private progressSubject = new BehaviorSubject<number>(0);
+  private showSubject = new BehaviorSubject<boolean>(false);
+  private operationSubject = new BehaviorSubject<string>('');
+
   constructor(private http: HttpClient) {}
 
   public uploadFile(
@@ -131,25 +135,18 @@ export class CloudStorageService {
     );
   }
 
-  private progressSubject = new BehaviorSubject<number>(0);
-  private showSubject = new BehaviorSubject<boolean>(false);
-  private operationSubject = new BehaviorSubject<string>('');
-
   setProgress(progress: number) {
     this.progressSubject.next(progress);
   }
 
-  // Show or hide the progress bar
   showProgress(show: boolean) {
     this.showSubject.next(show);
   }
 
-  // Set the current operation (upload or download)
   setOperation(operation: string) {
     this.operationSubject.next(operation);
   }
 
-  // Observables for components to subscribe to
   get progress$() {
     return this.progressSubject.asObservable();
   }
