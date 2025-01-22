@@ -71,7 +71,7 @@ export class CloudStorageComponent implements OnInit {
       const chunkUrls: string[] = [];
 
       res.result.forEach((element: any) => {
-        chunkUrls.push(element.metadata.url);
+        chunkUrls.push(element.message_id);
       });
 
       const chunkBlobs: Blob[] = [];

@@ -91,7 +91,11 @@ export class CloudStorageService {
 
   public downloadChunk(chunkURL: string): Observable<Blob> {
     const url = environment.api_prefix + 'storage/download-chunk';
-    return this.http.post(url, { url: chunkURL }, { responseType: 'blob' });
+    return this.http.post(
+      url,
+      { message_id: chunkURL },
+      { responseType: 'blob' }
+    );
   }
 
   public getChunks(file_id: string): Observable<any> {
