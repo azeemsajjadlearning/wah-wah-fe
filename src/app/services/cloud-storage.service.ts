@@ -11,7 +11,7 @@ const { v4: uuidv4 } = require('uuid');
 
 @Injectable()
 export class CloudStorageService {
-  private readonly CHUNK_SIZE = 5 * 1024 * 1024;
+  private readonly CHUNK_SIZE = 3 * 1024 * 1024;
 
   private progressSubject = new BehaviorSubject<number>(0);
   private showSubject = new BehaviorSubject<boolean>(false);
