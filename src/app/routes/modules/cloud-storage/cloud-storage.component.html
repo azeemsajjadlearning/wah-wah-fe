@@ -31,11 +31,11 @@
   </div>
 
   <div class="p-6">
-    <div *ngIf="folderList && folderList.length > 0" class="mb-8">
+    <div *ngIf="sortedFolderList && sortedFolderList.length > 0" class="mb-8">
       <h2 class="text-lg font-semibold mb-4">Folders</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
         <div
-          *ngFor="let folder of folderList"
+          *ngFor="let folder of sortedFolderList"
           class="relative bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
           (click)="openFolder(folder)"
         >
@@ -72,11 +72,11 @@
       </div>
     </div>
 
-    <div *ngIf="fileList && fileList.length > 0">
+    <div *ngIf="sortedFileList && sortedFileList.length > 0">
       <h2 class="text-lg font-semibold mb-4">Files</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
         <div
-          *ngFor="let file of fileList"
+          *ngFor="let file of sortedFileList"
           class="relative bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
         >
           <button
@@ -106,24 +106,77 @@
                 style="height: 6rem !important"
                 >picture_as_pdf</mat-icon
               >
+
               <mat-icon
                 *ngSwitchCase="'image/jpeg'"
                 class="text-6xl text-orange-500 mb-4"
                 style="height: 6rem !important"
                 >image</mat-icon
               >
+
               <mat-icon
                 *ngSwitchCase="'text/plain'"
                 class="text-6xl text-gray-500 mb-4"
                 style="height: 6rem !important"
                 >description</mat-icon
               >
+
               <mat-icon
                 *ngSwitchCase="'application/vnd.ms-excel'"
                 class="text-6xl text-green-500 mb-4"
                 style="height: 6rem !important"
                 >grid_on</mat-icon
               >
+
+              <mat-icon
+                *ngSwitchCase="'application/msword'"
+                class="text-6xl text-blue-500 mb-4"
+                style="height: 6rem !important"
+                >description</mat-icon
+              >
+
+              <mat-icon
+                *ngSwitchCase="'application/vnd.ms-powerpoint'"
+                class="text-6xl text-red-500 mb-4"
+                style="height: 6rem !important"
+                >present_to_all</mat-icon
+              >
+
+              <mat-icon
+                *ngSwitchCase="'image/png'"
+                class="text-6xl text-teal-500 mb-4"
+                style="height: 6rem !important"
+                >image</mat-icon
+              >
+
+              <mat-icon
+                *ngSwitchCase="'audio/mpeg'"
+                class="text-6xl text-purple-500 mb-4"
+                style="height: 6rem !important"
+                >audiotrack</mat-icon
+              >
+
+              <mat-icon
+                *ngSwitchCase="'video/mp4'"
+                class="text-6xl text-yellow-500 mb-4"
+                style="height: 6rem !important"
+                >videocam</mat-icon
+              >
+
+              <mat-icon
+                *ngSwitchCase="'video/x-matroska'"
+                class="text-6xl text-yellow-500 mb-4"
+                style="height: 6rem !important"
+                >videocam</mat-icon
+              >
+
+              <mat-icon
+                *ngSwitchCase="'application/zip'"
+                class="text-6xl text-indigo-500 mb-4"
+                style="height: 6rem !important"
+                >archive</mat-icon
+              >
+
               <mat-icon
                 *ngSwitchDefault
                 class="text-6xl text-blue-500 mb-4"
@@ -156,6 +209,18 @@
       <button mat-menu-item (click)="uploadFile.click()">
         <mat-icon>upload_file</mat-icon><span>Upload Files</span>
       </button>
+      <button mat-menu-item [matMenuTriggerFor]="sortBy">
+        <mat-icon>sort</mat-icon><span>Sort By</span>
+      </button>
+
+      <mat-menu #sortBy="matMenu">
+        <button mat-menu-item (click)="sort('date')">
+          <mat-icon>schedule</mat-icon><span>Uploaded Date</span>
+        </button>
+        <button mat-menu-item (click)="sort('name')">
+          <mat-icon>sort_by_alpha</mat-icon><span>Name</span>
+        </button>
+      </mat-menu>
     </mat-menu>
   </div>
 </div>

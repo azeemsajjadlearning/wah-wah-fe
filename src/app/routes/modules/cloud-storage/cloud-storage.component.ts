@@ -22,7 +22,9 @@ import { MatMenuTrigger } from '@angular/material/menu';
 export class CloudStorageComponent implements OnInit {
   folderId: any = null;
   fileList: FileList[];
+  sortedFileList: FileList[];
   folderList: FolderList[];
+  sortedFolderList: FolderList[];
   folderPath: FolderPath[];
 
   displayedColumns: string[] = ['file_name', 'size', 'type', 'action'];
@@ -47,7 +49,9 @@ export class CloudStorageComponent implements OnInit {
   private getFilesAndfolders(folderId: string) {
     this.cloudStorageService.getFiles(folderId).subscribe((resp) => {
       this.fileList = resp.result.files;
+      this.sortedFileList = this.fileList;
       this.folderList = resp.result.folders;
+      this.sortedFolderList = this.folderList;
       this.folderPath = resp.result.folderPath;
 
       this.folderPath.unshift({ folder_id: '', folder_name: 'Home' });
@@ -208,6 +212,34 @@ export class CloudStorageComponent implements OnInit {
 
   goPath(folder: FolderPath): void {
     this.router.navigateByUrl(`/cloud-storage/${folder.folder_id}`);
+  }
+
+  sort(type: 'date' | 'name') {
+    if (type === 'name') {
+      this.sortedFileList = this.fileList.sort(
+        (ele1: FileList, ele2: FileList) => {
+          return ele1.file_name.localeCompare(ele2.file_name);
+        }
+      );
+
+      this.sortedFolderList = this.folderList.sort(
+        (ele1: FolderList, ele2: FolderList) => {
+          return ele1.folder_name.localeCompare(ele2.folder_name);
+        }
+      );
+    } else if (type === 'date') {
+      this.sortedFileList = this.fileList.sort(
+        (ele1: FileList, ele2: FileList) => {
+          return ele2.updated_at.getTime() - ele1.updated_at.getTime();
+        }
+      );
+
+      this.sortedFolderList = this.folderList.sort(
+        (ele1: FolderList, ele2: FolderList) => {
+          return ele2.updated_at.getTime() - ele1.updated_at.getTime();
+        }
+      );
+    }
   }
 
   private uploadFileSequentially(
