@@ -3,10 +3,12 @@ export interface FileList {
   _id: string;
   created_at: Date;
   file_id: string;
+  origin_file_id: string;
   file_name: string;
   file_size: number;
   folder_id: null | string;
   mime_type: string;
+  status: 'uploaded' | 'shared' | 'shortcut';
   updated_at: Date;
   user_id: string;
 }

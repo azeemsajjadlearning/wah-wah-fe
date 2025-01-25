@@ -139,6 +139,27 @@ export class CloudStorageService {
     );
   }
 
+  public moveFile(
+    file_id: string,
+    target_folder_id: string | null
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'storage/move-file', {
+      file_id: file_id,
+      target_folder: target_folder_id,
+    });
+  }
+
+  public copyFile(
+    file_id: string,
+    target_folder_id: string | null
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'storage/copy-file', {
+      file_id: file_id,
+      target_folder: target_folder_id,
+      new_file_id: uuidv4(),
+    });
+  }
+
   setProgress(progress: number) {
     this.progressSubject.next(progress);
   }

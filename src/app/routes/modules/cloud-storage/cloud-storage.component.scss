@@ -15,3 +15,20 @@ button[mat-icon-button] {
   position: fixed;
   pointer-events: none;
 }
+
+.shortcut-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: black;
+  font-size: 12px;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.badge {
+  color: black;
+  font-size: 12px;
+  padding: 5px;
+  border-radius: 50%;
+}

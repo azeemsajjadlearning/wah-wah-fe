@@ -92,6 +92,14 @@
               <mat-icon>download</mat-icon>
               <span>Download File</span>
             </button>
+            <button mat-menu-item (click)="moveFile(file)">
+              <mat-icon>content_cut</mat-icon>
+              <span>Cut</span>
+            </button>
+            <button mat-menu-item (click)="copyFile(file)">
+              <mat-icon>content_copy</mat-icon>
+              <span>Copy</span>
+            </button>
             <button mat-menu-item (click)="delete(file)">
               <mat-icon>delete</mat-icon>
               <span>Delete File</span>
@@ -99,90 +107,108 @@
           </mat-menu>
 
           <div class="flex justify-center">
+            <ng-container *ngIf="file.status === 'shortcut'">
+              <div class="shortcut-label">
+                <span class="badge"><mat-icon>shortcut</mat-icon></span>
+              </div>
+            </ng-container>
+
             <ng-container [ngSwitch]="file.mime_type">
               <mat-icon
                 *ngSwitchCase="'application/pdf'"
                 class="text-6xl text-red-500 mb-4"
                 style="height: 6rem !important"
-                >picture_as_pdf</mat-icon
               >
+                picture_as_pdf
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'image/jpeg'"
                 class="text-6xl text-orange-500 mb-4"
                 style="height: 6rem !important"
-                >image</mat-icon
               >
+                image
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'text/plain'"
                 class="text-6xl text-gray-500 mb-4"
                 style="height: 6rem !important"
-                >description</mat-icon
               >
+                description
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'application/vnd.ms-excel'"
                 class="text-6xl text-green-500 mb-4"
                 style="height: 6rem !important"
-                >grid_on</mat-icon
               >
+                grid_on
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'application/msword'"
                 class="text-6xl text-blue-500 mb-4"
                 style="height: 6rem !important"
-                >description</mat-icon
               >
+                description
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'application/vnd.ms-powerpoint'"
                 class="text-6xl text-red-500 mb-4"
                 style="height: 6rem !important"
-                >present_to_all</mat-icon
               >
+                present_to_all
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'image/png'"
                 class="text-6xl text-teal-500 mb-4"
                 style="height: 6rem !important"
-                >image</mat-icon
               >
+                image
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'audio/mpeg'"
                 class="text-6xl text-purple-500 mb-4"
                 style="height: 6rem !important"
-                >audiotrack</mat-icon
               >
+                audiotrack
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'video/mp4'"
                 class="text-6xl text-yellow-500 mb-4"
                 style="height: 6rem !important"
-                >videocam</mat-icon
               >
+                videocam
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'video/x-matroska'"
                 class="text-6xl text-yellow-500 mb-4"
                 style="height: 6rem !important"
-                >videocam</mat-icon
               >
+                videocam
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchCase="'application/zip'"
                 class="text-6xl text-indigo-500 mb-4"
                 style="height: 6rem !important"
-                >archive</mat-icon
               >
+                archive
+              </mat-icon>
 
               <mat-icon
                 *ngSwitchDefault
                 class="text-6xl text-blue-500 mb-4"
                 style="height: 6rem !important"
-                >insert_drive_file</mat-icon
               >
+                insert_drive_file
+              </mat-icon>
             </ng-container>
           </div>
           <p class="text-center font-medium text-gray-800 truncate">
@@ -208,6 +234,9 @@
       </button>
       <button mat-menu-item (click)="uploadFile.click()">
         <mat-icon>upload_file</mat-icon><span>Upload Files</span>
+      </button>
+      <button *ngIf="fileInSession" mat-menu-item (click)="pasteFile()">
+        <mat-icon>upload_file</mat-icon><span>Paste</span>
       </button>
       <button mat-menu-item [matMenuTriggerFor]="sortBy">
         <mat-icon>sort</mat-icon><span>Sort By</span>

@@ -26,6 +26,7 @@ export class CloudStorageComponent implements OnInit {
   folderList: FolderList[];
   sortedFolderList: FolderList[];
   folderPath: FolderPath[];
+  fileInSession: boolean = false;
 
   displayedColumns: string[] = ['file_name', 'size', 'type', 'action'];
 
@@ -71,45 +72,85 @@ export class CloudStorageComponent implements OnInit {
   }
 
   download(file: FileList): void {
-    this.cloudStorageService.getChunks(file.file_id).subscribe((res) => {
-      const chunkUrls: string[] = [];
+    this.cloudStorageService
+      .getChunks(file.origin_file_id ? file.origin_file_id : file.file_id)
+      .subscribe((res) => {
+        if (res.result.length > 0) {
+          const chunkUrls: string[] = [];
 
-      res.result[0].message_ids.forEach((element: any) => {
-        chunkUrls.push(element);
-      });
-
-      const chunkBlobs: Blob[] = [];
-
-      this.cloudStorageService.setOperation('Download');
-      this.cloudStorageService.showProgress(true);
-      this.cloudStorageService.setProgress(0);
-
-      const downloadAllChunks = (index: number): Observable<Blob> => {
-        if (index >= chunkUrls.length) {
-          const combinedBlob = new Blob(chunkBlobs, {
-            type: res.file[0].mime_type,
+          res.result[0].message_ids.forEach((element: any) => {
+            chunkUrls.push(element);
           });
 
-          this.triggerDownload(combinedBlob, res.file[0].file_name);
-          this.cloudStorageService.setProgress(100);
-          this.cloudStorageService.showProgress(false);
-          return new Observable();
+          const chunkBlobs: Blob[] = [];
+
+          this.cloudStorageService.setOperation('Download');
+          this.cloudStorageService.showProgress(true);
+          this.cloudStorageService.setProgress(0);
+
+          const downloadAllChunks = (index: number): Observable<Blob> => {
+            if (index >= chunkUrls.length) {
+              const combinedBlob = new Blob(chunkBlobs, {
+                type: res.file[0].mime_type,
+              });
+
+              this.triggerDownload(combinedBlob, res.file[0].file_name);
+              this.cloudStorageService.setProgress(100);
+              this.cloudStorageService.showProgress(false);
+              return new Observable();
+            }
+
+            return this.cloudStorageService
+              .downloadChunk(chunkUrls[index])
+              .pipe(
+                tap((chunkBlob: Blob) => {
+                  chunkBlobs.push(chunkBlob);
+
+                  this.cloudStorageService.setProgress(
+                    +(((index + 1) / chunkUrls.length) * 100).toFixed(2)
+                  );
+                }),
+                switchMap(() => downloadAllChunks(index + 1))
+              );
+          };
+
+          downloadAllChunks(0).subscribe();
+        } else {
+          const dialog = this.confirmationService.open({
+            title: 'Error !',
+            message:
+              'The source of this file has been deleted would you like to delete the shortcut also?',
+            dismissible: true,
+            icon: {
+              color: 'warn',
+              name: 'delete',
+              show: true,
+            },
+            actions: {
+              confirm: {
+                label: 'Yes!',
+                color: 'primary',
+                show: true,
+              },
+              cancel: {
+                show: true,
+              },
+            },
+          });
+
+          dialog.afterClosed().subscribe((val) => {
+            if (val) {
+              this.cloudStorageService
+                .deleteFile(file.file_id)
+                .pipe(finalize(() => this.getFilesAndfolders(this.folderId)))
+                .subscribe((resp) => {
+                  if (resp.success)
+                    this.snackBar.open('Deleted!', 'X', { duration: 3000 });
+                });
+            }
+          });
         }
-
-        return this.cloudStorageService.downloadChunk(chunkUrls[index]).pipe(
-          tap((chunkBlob: Blob) => {
-            chunkBlobs.push(chunkBlob);
-
-            this.cloudStorageService.setProgress(
-              +(((index + 1) / chunkUrls.length) * 100).toFixed(2)
-            );
-          }),
-          switchMap(() => downloadAllChunks(index + 1))
-        );
-      };
-
-      downloadAllChunks(0).subscribe();
-    });
+      });
   }
 
   delete(file: FileList) {
@@ -212,6 +253,60 @@ export class CloudStorageComponent implements OnInit {
 
   goPath(folder: FolderPath): void {
     this.router.navigateByUrl(`/cloud-storage/${folder.folder_id}`);
+  }
+
+  moveFile(file: FileList) {
+    if (sessionStorage.getItem('copy_file_id'))
+      sessionStorage.removeItem('copy_file_id');
+    sessionStorage.setItem('move_file_id', file.file_id);
+    this.fileInSession = true;
+  }
+
+  pasteFile() {
+    let file_id: any;
+
+    if (sessionStorage.getItem('move_file_id')) {
+      file_id = sessionStorage.getItem('move_file_id');
+
+      this.cloudStorageService
+        .moveFile(file_id, this.folderId == 0 ? null : this.folderId)
+        .pipe(
+          finalize(() => {
+            this.fileInSession = false;
+            sessionStorage.removeItem('move_file_id');
+            this.getFilesAndfolders(this.folderId);
+          })
+        )
+        .subscribe((resp) => {
+          if (resp.success) {
+            this.snackBar.open(resp.message, 'x', { duration: 3000 });
+          }
+        });
+    } else if (sessionStorage.getItem('copy_file_id')) {
+      file_id = sessionStorage.getItem('copy_file_id');
+
+      this.cloudStorageService
+        .copyFile(file_id, this.folderId == 0 ? null : this.folderId)
+        .pipe(
+          finalize(() => {
+            this.fileInSession = false;
+            sessionStorage.removeItem('copy_file_id');
+            this.getFilesAndfolders(this.folderId);
+          })
+        )
+        .subscribe((resp) => {
+          if (resp.success) {
+            this.snackBar.open(resp.message, 'x', { duration: 3000 });
+          }
+        });
+    }
+  }
+
+  copyFile(file: FileList) {
+    if (sessionStorage.getItem('move_file_id'))
+      sessionStorage.removeItem('move_file_id');
+    sessionStorage.setItem('copy_file_id', file.file_id);
+    this.fileInSession = true;
   }
 
   sort(type: 'date' | 'name') {
