@@ -324,15 +324,13 @@ export class CloudStorageComponent implements OnInit {
       );
     } else if (type === 'date') {
       this.sortedFileList = this.fileList.sort(
-        (ele1: FileList, ele2: FileList) => {
-          return ele2.updated_at.getTime() - ele1.updated_at.getTime();
-        }
+        // @ts-ignore
+        (ele1, ele2) => new Date(ele1.created_at) - new Date(ele2.created_at)
       );
 
       this.sortedFolderList = this.folderList.sort(
-        (ele1: FolderList, ele2: FolderList) => {
-          return ele2.updated_at.getTime() - ele1.updated_at.getTime();
-        }
+        // @ts-ignore
+        (ele1, ele2) => new Date(ele1.created_at) - new Date(ele2.created_at)
       );
     }
   }
