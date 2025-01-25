@@ -71,7 +71,7 @@ export class SignUpComponent implements OnInit {
               show: true,
             },
             message:
-              'User Created! A confirmation mail with instructions has been sent to your email address. Follow those instructions to confirm your email address and activate your account.',
+              'User Created! Please contact the admin to activate you account!',
             dismissible: false,
             actions: {
               confirm: {
