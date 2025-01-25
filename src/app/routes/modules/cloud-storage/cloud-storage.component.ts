@@ -160,7 +160,6 @@ export class CloudStorageComponent implements OnInit {
   }
 
   onEnter(event: any) {
-    console.log(this.sortedFileList);
     let val = (event.target as HTMLInputElement).value;
     this.cloudStorageService.search(val).subscribe((resp) => {
       this.sortedFileList = resp.result.files;
