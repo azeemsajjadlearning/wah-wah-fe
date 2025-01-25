@@ -7,27 +7,33 @@
     multiple
   />
 
-  <div
-    *ngIf="folderPath && folderPath.length > 1"
-    class="flex items-center space-x-2 overflow-x-auto whitespace-nowrap"
-  >
-    <ng-container *ngFor="let folder of folderPath; let last = last">
-      <span *ngIf="last" class="text-gray-500 font-medium">
-        {{ folder.folder_name }}
-      </span>
+  <div *ngIf="folderPath && folderPath.length > 1" class="overflow-y-auto">
+    <div
+      class="inline-flex items-center space-x-2 overflow-x-auto whitespace-nowrap sm:space-x-3 lg:space-x-4 p-2"
+    >
+      <ng-container *ngFor="let folder of folderPath; let last = last">
+        <ng-container *ngIf="last; else nonLastFolder">
+          <span
+            class="text-gray-600 font-medium text-sm sm:text-base lg:text-lg"
+          >
+            {{ folder.folder_name }}
+          </span>
+        </ng-container>
 
-      <ng-container *ngIf="!last">
-        <button
-          mat-button
-          class="hover:underline text-blue-500"
-          (click)="goPath(folder)"
-        >
-          {{ folder.folder_name }}
-        </button>
+        <ng-template #nonLastFolder>
+          <button
+            mat-button
+            class="hover:underline text-blue-500 text-sm sm:text-base lg:text-lg transition-all duration-300 ease-in-out"
+            (click)="goPath(folder)"
+          >
+            {{ folder.folder_name }}
+          </button>
+          <mat-icon class="text-gray-500 sm:text-sm lg:text-base">
+            chevron_right
+          </mat-icon>
+        </ng-template>
       </ng-container>
-
-      <mat-icon *ngIf="!last" class="text-gray-500">chevron_right</mat-icon>
-    </ng-container>
+    </div>
   </div>
 
   <div class="p-6">
