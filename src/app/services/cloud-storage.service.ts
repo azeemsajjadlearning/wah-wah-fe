@@ -104,6 +104,10 @@ export class CloudStorageService {
     );
   }
 
+  public search(query: string): Observable<any> {
+    return this.http.get(environment.api_prefix + 'storage/search/' + query);
+  }
+
   public deleteFile(file_id: string): Observable<any> {
     return this.http.delete(
       environment.api_prefix + 'storage/delete/' + file_id
@@ -113,6 +117,13 @@ export class CloudStorageService {
   public getFiles(folderId: string = '0'): Observable<any> {
     return this.http.get(
       environment.api_prefix + 'storage/get-files/' + folderId
+    );
+  }
+
+  public renameFile(file_id: string, file_name: string): Observable<any> {
+    return this.http.put(
+      environment.api_prefix + 'storage/rename-file/' + file_id,
+      { file_name }
     );
   }
 

@@ -71,7 +71,11 @@ import { AllInvestment } from './routes/modules/my-investment/all-investment/all
 import { PhotosComponent } from './routes/modules/photos/photos.component';
 import { PhotosService } from './services/photos.service';
 import { PhotoComponent } from './routes/modules/photos/photo/photo.component';
-import { CloudStorageComponent } from './routes/modules/cloud-storage/cloud-storage.component';
+import {
+  CloudStorageComponent,
+  FileDetailDialog,
+  RenameFileDialog,
+} from './routes/modules/cloud-storage/cloud-storage.component';
 import { CloudStorageService } from './services/cloud-storage.service';
 import { FileSizePipe } from './pipes/filesize.pipe';
 import { FileTypePipe } from './pipes/file-type.pipe';
@@ -136,6 +140,8 @@ import { ProgressBarComponent } from './common/progress-bar/progress-bar.compone
     LoanComponent,
     CreateFolderComponent,
     ProgressBarComponent,
+    RenameFileDialog,
+    FileDetailDialog,
   ],
   imports: [
     BrowserModule,
@@ -188,6 +194,8 @@ import { ProgressBarComponent } from './common/progress-bar/progress-bar.compone
     AllInvestment,
     PhotoComponent,
     CreateFolderComponent,
+    RenameFileDialog,
+    FileDetailDialog,
   ],
 })
 export class AppModule {}

@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Rename File</h1>
+<form [formGroup]="form" (ngSubmit)="formSubmit()">
+  <div mat-dialog-content>
+    <mat-form-field class="w-full">
+      <mat-label>File Name</mat-label>
+      <input matInput formControlName="fileName" cdkFocusInitial />
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button type="reset" mat-dialog-close>Cancel</button>
+    <button mat-button type="submit" mat-dialog-close>Ok</button>
+  </div>
+</form>

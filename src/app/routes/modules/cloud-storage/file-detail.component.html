@@ -1,0 +1,36 @@
+<mat-card class="w-full max-w-md mx-auto shadow-lg rounded-lg bg-white">
+  <mat-card-header class="p-4">
+    <mat-card-title class="text-xl font-semibold text-gray-800">
+      {{ file.file_name }}
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content class="p-4">
+    <div class="mb-4">
+      <span class="text-gray-700 font-medium">File Size:</span>
+      <span>{{ file.file_size | filesize }} </span>
+    </div>
+    <div class="mb-4">
+      <span class="text-gray-700 font-medium">Mime Type:</span>
+      <span>{{ file.mime_type }}</span>
+    </div>
+    <div class="mb-4">
+      <span class="text-gray-700 font-medium">Status:</span>
+      <span
+        [ngClass]="{
+          'text-green-500': file.status === 'uploaded',
+          'text-red-500': file.status !== 'uploaded'
+        }"
+        >{{ file.status | titlecase }}</span
+      >
+    </div>
+    <div class="mb-4">
+      <span class="text-gray-700 font-medium">Created At:</span>
+      <span>{{ file.created_at | date : "medium" }}</span>
+    </div>
+    <div class="mb-4">
+      <span class="text-gray-700 font-medium">Updated At:</span>
+      <span>{{ file.updated_at | date : "medium" }}</span>
+    </div>
+  </mat-card-content>
+</mat-card>

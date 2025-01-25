@@ -1,4 +1,50 @@
-<div class="min-h-screen">
+<div
+  *ngIf="folderPath && folderPath.length > 1; else search"
+  class="overflow-y-auto fixed z-20"
+>
+  <div
+    class="inline-flex items-center space-x-2 overflow-x-auto whitespace-nowrap sm:space-x-3 lg:space-x-4 p-2"
+  >
+    <ng-container *ngFor="let folder of folderPath; let last = last">
+      <ng-container *ngIf="last; else nonLastFolder">
+        <span class="text-gray-600 font-medium text-sm sm:text-base lg:text-lg">
+          {{ folder.folder_name }}
+        </span>
+      </ng-container>
+
+      <ng-template #nonLastFolder>
+        <button
+          mat-button
+          class="hover:underline text-blue-500 text-sm sm:text-base lg:text-lg transition-all duration-300 ease-in-out"
+          (click)="goPath(folder)"
+        >
+          {{ folder.folder_name }}
+        </button>
+        <mat-icon class="text-gray-500 sm:text-sm lg:text-base">
+          chevron_right
+        </mat-icon>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #search>
+  <div class="w-full">
+    <mat-form-field class="w-full">
+      <mat-label>search...</mat-label>
+      <input matInput (keydown.enter)="onEnter($event)" />
+    </mat-form-field>
+  </div>
+</ng-template>
+
+<div
+  class="overflow-x-auto"
+  [ngStyle]="
+    folderPath && folderPath.length == 1
+      ? {}
+      : { height: 'calc(100vh - 52px)', 'margin-top': '48px' }
+  "
+>
   <input
     #uploadFile
     type="file"
@@ -6,35 +52,6 @@
     class="hidden"
     multiple
   />
-
-  <div *ngIf="folderPath && folderPath.length > 1" class="overflow-y-auto">
-    <div
-      class="inline-flex items-center space-x-2 overflow-x-auto whitespace-nowrap sm:space-x-3 lg:space-x-4 p-2"
-    >
-      <ng-container *ngFor="let folder of folderPath; let last = last">
-        <ng-container *ngIf="last; else nonLastFolder">
-          <span
-            class="text-gray-600 font-medium text-sm sm:text-base lg:text-lg"
-          >
-            {{ folder.folder_name }}
-          </span>
-        </ng-container>
-
-        <ng-template #nonLastFolder>
-          <button
-            mat-button
-            class="hover:underline text-blue-500 text-sm sm:text-base lg:text-lg transition-all duration-300 ease-in-out"
-            (click)="goPath(folder)"
-          >
-            {{ folder.folder_name }}
-          </button>
-          <mat-icon class="text-gray-500 sm:text-sm lg:text-base">
-            chevron_right
-          </mat-icon>
-        </ng-template>
-      </ng-container>
-    </div>
-  </div>
 
   <div class="p-6">
     <div *ngIf="sortedFolderList && sortedFolderList.length > 0" class="mb-8">
@@ -94,6 +111,10 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #fileMenu="matMenu">
+            <button mat-menu-item (click)="renameFile(file)">
+              <mat-icon>edit</mat-icon>
+              <span>Rename File</span>
+            </button>
             <button mat-menu-item (click)="download(file)">
               <mat-icon>download</mat-icon>
               <span>Download File</span>
@@ -109,6 +130,10 @@
             <button mat-menu-item (click)="delete(file)">
               <mat-icon>delete</mat-icon>
               <span>Delete File</span>
+            </button>
+            <button mat-menu-item (click)="getDetails(file)">
+              <mat-icon>info</mat-icon>
+              <span>Details</span>
             </button>
           </mat-menu>
 

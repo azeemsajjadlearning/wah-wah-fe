@@ -2,10 +2,15 @@ import {
   Component,
   ElementRef,
   HostListener,
+  Inject,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { catchError, finalize, Observable, switchMap, tap } from 'rxjs';
 import { FileList, FolderList, FolderPath } from 'src/app/models/cloud-storage';
 import { CloudStorageService } from 'src/app/services/cloud-storage.service';
@@ -14,6 +19,7 @@ import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   templateUrl: 'cloud-storage.component.html',
@@ -153,6 +159,15 @@ export class CloudStorageComponent implements OnInit {
       });
   }
 
+  onEnter(event: any) {
+    console.log(this.sortedFileList);
+    let val = (event.target as HTMLInputElement).value;
+    this.cloudStorageService.search(val).subscribe((resp) => {
+      this.sortedFileList = resp.result.files;
+      this.sortedFolderList = resp.result.folders;
+    });
+  }
+
   delete(file: FileList) {
     const dialog = this.confirmationService.open({
       title: 'Confirmation !',
@@ -245,6 +260,29 @@ export class CloudStorageComponent implements OnInit {
             this.snackBar.open('Deleted!', 'X', { duration: 3000 });
         });
     }
+  }
+
+  renameFile(file: FileList) {
+    const renameDialog = this.dialog.open(RenameFileDialog, {
+      width: '300px',
+      data: { fileName: file.file_name },
+    });
+
+    renameDialog.afterClosed().subscribe((val) => {
+      if (val) {
+        this.cloudStorageService
+          .renameFile(file.file_id, val)
+          .pipe(finalize(() => this.getFilesAndfolders(this.folderId)))
+          .subscribe((resp) => {
+            if (resp.success)
+              this.snackBar.open('Successful!', 'X', { duration: 3000 });
+          });
+      }
+    });
+  }
+
+  getDetails(file: FileList) {
+    this.dialog.open(FileDetailDialog, { minWidth: '300px', data: { file } });
   }
 
   openFolder(folder: FolderList): void {
@@ -414,4 +452,37 @@ export class CloudStorageComponent implements OnInit {
     // this.selectedItem = folder;
     // this.openContextMenu(event);
   }
+}
+
+@Component({
+  templateUrl: 'rename-file.component.html',
+})
+export class RenameFileDialog {
+  constructor(
+    public dialogRef: MatDialogRef<RenameFileDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder
+  ) {
+    this.form = this.fb.group({ fileName: this.data?.fileName || null });
+  }
+
+  form: FormGroup;
+
+  formSubmit() {
+    this.dialogRef.close(this.form.get('fileName')?.value);
+  }
+}
+
+@Component({
+  templateUrl: 'file-detail.component.html',
+})
+export class FileDetailDialog {
+  constructor(
+    public dialogRef: MatDialogRef<FileDetailDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.file = data.file;
+  }
+
+  file: any;
 }
