@@ -103,6 +103,9 @@ export class CloudStorageComponent implements OnInit {
               this.triggerDownload(combinedBlob, res.file[0].file_name);
               this.cloudStorageService.setProgress(100);
               this.cloudStorageService.showProgress(false);
+              this.snackBar.open('Download Completed!', 'X', {
+                duration: 3000,
+              });
               return new Observable();
             }
 
@@ -403,12 +406,13 @@ export class CloudStorageComponent implements OnInit {
               });
               this.cloudStorageService.setProgress(100);
               this.cloudStorageService.showProgress(false);
-              resolve(); // Resolve the promise when the upload is successful
+              resolve();
             }
           },
           error: (err) => {
+            console.log(file);
             console.error('Upload failed', err);
-            reject(err); // Reject the promise if an error occurs
+            reject(err);
           },
         });
     });

@@ -1,6 +1,14 @@
+<input
+  #uploadFile
+  type="file"
+  (change)="upload($event)"
+  class="hidden"
+  multiple
+/>
+
 <div
-  *ngIf="folderPath && folderPath.length > 1; else search"
-  class="overflow-y-auto fixed z-20"
+  *ngIf="folderPath && folderPath.length > 1"
+  class="overflow-y-auto fixed z-20 w-full bg-slate-400"
 >
   <div
     class="inline-flex items-center space-x-2 overflow-x-auto whitespace-nowrap sm:space-x-3 lg:space-x-4 p-2"
@@ -28,31 +36,16 @@
   </div>
 </div>
 
-<ng-template #search>
+<div *ngIf="folderPath && folderPath.length == 1" class="fixed w-full">
   <div class="w-full">
     <mat-form-field class="w-full">
       <mat-label>search...</mat-label>
       <input matInput (keydown.enter)="onEnter($event)" />
     </mat-form-field>
   </div>
-</ng-template>
+</div>
 
-<div
-  class="overflow-x-auto"
-  [ngStyle]="
-    folderPath && folderPath.length == 1
-      ? {}
-      : { height: 'calc(100vh - 52px)', 'margin-top': '48px' }
-  "
->
-  <input
-    #uploadFile
-    type="file"
-    (change)="upload($event)"
-    class="hidden"
-    multiple
-  />
-
+<div style="margin-top: 48px; height: calc(100vh - 52px)">
   <div class="p-6">
     <div *ngIf="sortedFolderList && sortedFolderList.length > 0" class="mb-8">
       <h2 class="text-lg font-semibold mb-4">Folders</h2>
