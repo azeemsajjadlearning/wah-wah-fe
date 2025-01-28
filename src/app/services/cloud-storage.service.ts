@@ -5,7 +5,16 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, concatMap, from, map, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  concatMap,
+  from,
+  map,
+  Observable,
+  of,
+  retry,
+} from 'rxjs';
 import { environment } from '../environments/environment';
 const { v4: uuidv4 } = require('uuid');
 
@@ -50,32 +59,41 @@ export class CloudStorageService {
         }
       );
 
-      chunkRequests.push(
-        this.http.request(request).pipe(
-          map((event: any) => {
-            switch (event.type) {
-              case HttpEventType.UploadProgress:
-                if (event.total) {
-                  const currentProgress = Math.round(
-                    (100 * event.loaded) / event.total
-                  );
-                  progress =
-                    ((uploadedChunks + currentProgress / 100) / totalChunks) *
-                    100;
-                  return { progress };
-                }
-                break;
-              case HttpEventType.Response:
-                uploadedChunks++;
-                if (uploadedChunks === totalChunks) {
-                  return { progress: 100, success: true };
-                }
-                break;
-            }
-            return { progress };
-          })
-        )
+      const chunkRequest = this.http.request(request).pipe(
+        retry(3), // Retry 3 times on failure
+        map((event: any) => {
+          switch (event.type) {
+            case HttpEventType.UploadProgress:
+              if (event.total) {
+                const currentProgress = Math.round(
+                  (100 * event.loaded) / event.total
+                );
+                progress =
+                  ((uploadedChunks + currentProgress / 100) / totalChunks) *
+                  100;
+                return { progress };
+              }
+              break;
+            case HttpEventType.Response:
+              uploadedChunks++;
+              if (uploadedChunks === totalChunks) {
+                return { progress: 100, success: true };
+              }
+              break;
+          }
+          return { progress };
+        }),
+        catchError((error) => {
+          console.error('Chunk upload failed', error);
+          return of({
+            progress,
+            success: false,
+            message: 'Upload failed, retrying...',
+          });
+        })
       );
+
+      chunkRequests.push(chunkRequest);
     }
 
     return from(chunkRequests).pipe(
