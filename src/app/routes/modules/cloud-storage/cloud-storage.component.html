@@ -137,7 +137,23 @@
               </div>
             </ng-container>
 
-            <ng-container [ngSwitch]="file.mime_type">
+            <ng-container [ngSwitch]="file.mime_type"
+              ><mat-icon
+                *ngSwitchCase="'application/vnd.android.package-archive'"
+                class="text-6xl text-green-500 mb-4"
+                style="height: 6rem !important"
+              >
+                android
+              </mat-icon>
+
+              <mat-icon
+                *ngSwitchCase="'application/x-subrip'"
+                class="text-6xl text-blue-500 mb-4"
+                style="height: 6rem !important"
+              >
+                subtitles
+              </mat-icon>
+
               <mat-icon
                 *ngSwitchCase="'application/pdf'"
                 class="text-6xl text-red-500 mb-4"
