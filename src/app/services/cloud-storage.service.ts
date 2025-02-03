@@ -60,7 +60,7 @@ export class CloudStorageService {
       );
 
       const chunkRequest = this.http.request(request).pipe(
-        retry(3), // Retry 3 times on failure
+        retry(3),
         map((event: any) => {
           switch (event.type) {
             case HttpEventType.UploadProgress:
@@ -84,7 +84,8 @@ export class CloudStorageService {
           return { progress };
         }),
         catchError((error) => {
-          console.error('Chunk upload failed', error);
+          console.error('Chunk upload failed for file:', selectedFile);
+          console.error('Error:', error);
           return of({
             progress,
             success: false,
