@@ -48,7 +48,9 @@
 <div style="margin-top: 48px; height: calc(100vh - 52px)">
   <div class="p-6">
     <div *ngIf="sortedFolderList && sortedFolderList.length > 0" class="mb-8">
-      <h2 class="text-lg font-semibold mb-4">Folders</h2>
+      <h2 class="text-lg font-semibold mb-4">
+        Folders ({{ sortedFolderList.length }})
+      </h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
         <div
           *ngFor="let folder of sortedFolderList"
@@ -89,7 +91,9 @@
     </div>
 
     <div *ngIf="sortedFileList && sortedFileList.length > 0">
-      <h2 class="text-lg font-semibold mb-4">Files</h2>
+      <h2 class="text-lg font-semibold mb-4">
+        Files ({{ sortedFileList.length }})
+      </h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
         <div
           *ngFor="let file of sortedFileList"
