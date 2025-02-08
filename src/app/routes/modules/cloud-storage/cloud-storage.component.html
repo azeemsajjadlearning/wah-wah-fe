@@ -74,6 +74,10 @@
               <mat-icon>delete</mat-icon>
               <span>Delete Folder</span>
             </button>
+            <button mat-menu-item (click)="alterFolder(folder, 'cut')">
+              <mat-icon>content_cut</mat-icon>
+              <span>Cut Folder</span>
+            </button>
           </mat-menu>
 
           <div class="flex justify-center">
@@ -279,7 +283,11 @@
       <button mat-menu-item (click)="uploadFile.click()">
         <mat-icon>upload_file</mat-icon><span>Upload Files</span>
       </button>
-      <button *ngIf="fileInSession" mat-menu-item (click)="pasteFile()">
+      <button
+        *ngIf="fileInSession || folderInSession"
+        mat-menu-item
+        (click)="pasteFile()"
+      >
         <mat-icon>content_paste</mat-icon><span>Paste</span>
       </button>
       <button mat-menu-item [matMenuTriggerFor]="sortBy">

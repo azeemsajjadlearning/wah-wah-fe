@@ -33,6 +33,7 @@ export class CloudStorageComponent implements OnInit {
   sortedFolderList: FolderList[];
   folderPath: FolderPath[];
   fileInSession: boolean = false;
+  folderInSession: boolean = false;
 
   displayedColumns: string[] = ['file_name', 'size', 'type', 'action'];
 
@@ -261,6 +262,11 @@ export class CloudStorageComponent implements OnInit {
           if (resp.success)
             this.snackBar.open('Deleted!', 'X', { duration: 3000 });
         });
+    } else if (type == 'cut') {
+      if (sessionStorage.getItem('copy_file_id'))
+        sessionStorage.removeItem('copy_file_id');
+      sessionStorage.setItem('move_file_id', folder.folder_id);
+      this.folderInSession = true;
     }
   }
 
@@ -303,42 +309,65 @@ export class CloudStorageComponent implements OnInit {
   }
 
   pasteFile() {
-    let file_id: any;
+    if (this.fileInSession) {
+      let file_id: any;
 
-    if (sessionStorage.getItem('move_file_id')) {
-      file_id = sessionStorage.getItem('move_file_id');
+      if (sessionStorage.getItem('move_file_id')) {
+        file_id = sessionStorage.getItem('move_file_id');
 
-      this.cloudStorageService
-        .moveFile(file_id, this.folderId == 0 ? null : this.folderId)
-        .pipe(
-          finalize(() => {
-            this.fileInSession = false;
-            sessionStorage.removeItem('move_file_id');
-            this.getFilesAndfolders(this.folderId);
-          })
-        )
-        .subscribe((resp) => {
-          if (resp.success) {
-            this.snackBar.open(resp.message, 'x', { duration: 3000 });
-          }
-        });
-    } else if (sessionStorage.getItem('copy_file_id')) {
-      file_id = sessionStorage.getItem('copy_file_id');
+        this.cloudStorageService
+          .moveFile(file_id, this.folderId == 0 ? null : this.folderId)
+          .pipe(
+            finalize(() => {
+              this.fileInSession = false;
+              sessionStorage.removeItem('move_file_id');
+              this.getFilesAndfolders(this.folderId);
+            })
+          )
+          .subscribe((resp) => {
+            if (resp.success) {
+              this.snackBar.open(resp.message, 'x', { duration: 3000 });
+            }
+          });
+      } else if (sessionStorage.getItem('copy_file_id')) {
+        file_id = sessionStorage.getItem('copy_file_id');
 
-      this.cloudStorageService
-        .copyFile(file_id, this.folderId == 0 ? null : this.folderId)
-        .pipe(
-          finalize(() => {
-            this.fileInSession = false;
-            sessionStorage.removeItem('copy_file_id');
-            this.getFilesAndfolders(this.folderId);
-          })
-        )
-        .subscribe((resp) => {
-          if (resp.success) {
-            this.snackBar.open(resp.message, 'x', { duration: 3000 });
-          }
-        });
+        this.cloudStorageService
+          .copyFile(file_id, this.folderId == 0 ? null : this.folderId)
+          .pipe(
+            finalize(() => {
+              this.fileInSession = false;
+              sessionStorage.removeItem('copy_file_id');
+              this.getFilesAndfolders(this.folderId);
+            })
+          )
+          .subscribe((resp) => {
+            if (resp.success) {
+              this.snackBar.open(resp.message, 'x', { duration: 3000 });
+            }
+          });
+      }
+    } else if (this.folderInSession) {
+      let folderId: any;
+
+      if (sessionStorage.getItem('move_file_id')) {
+        folderId = sessionStorage.getItem('move_file_id');
+
+        this.cloudStorageService
+          .moveFolder(folderId, this.folderId == 0 ? null : this.folderId)
+          .pipe(
+            finalize(() => {
+              this.folderInSession = false;
+              sessionStorage.removeItem('copy_file_id');
+              this.getFilesAndfolders(this.folderId);
+            })
+          )
+          .subscribe((resp) => {
+            if (resp.success) {
+              this.snackBar.open(resp.message, 'x', { duration: 3000 });
+            }
+          });
+      }
     }
   }
 

@@ -190,6 +190,16 @@ export class CloudStorageService {
     });
   }
 
+  public moveFolder(
+    folder_id: string,
+    target_folder_id: string | null
+  ): Observable<any> {
+    return this.http.post(environment.api_prefix + 'storage/move-folder', {
+      folder_id: folder_id,
+      target_folder: target_folder_id,
+    });
+  }
+
   setProgress(progress: number) {
     this.progressSubject.next(progress);
   }
