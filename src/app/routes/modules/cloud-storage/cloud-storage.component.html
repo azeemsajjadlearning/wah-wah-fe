@@ -51,10 +51,10 @@
       <h2 class="text-lg font-semibold mb-4">
         Folders ({{ sortedFolderList.length }})
       </h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+      <div class="grid grid-cols-[repeat(auto-fit,_minmax(210px,_1fr))] gap-6">
         <div
           *ngFor="let folder of sortedFolderList"
-          class="relative bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
+          class="relative w-full max-w-xs justify-self-center bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
           (click)="openFolder(folder)"
         >
           <button
@@ -98,10 +98,10 @@
       <h2 class="text-lg font-semibold mb-4">
         Files ({{ sortedFileList.length }})
       </h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+      <div class="grid grid-cols-[repeat(auto-fit,_minmax(210px,_1fr))] gap-6">
         <div
           *ngFor="let file of sortedFileList"
-          class="relative bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
+          class="relative w-full max-w-xs justify-self-center bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
         >
           <button
             mat-icon-button
