@@ -51,7 +51,13 @@
       <h2 class="text-lg font-semibold mb-4">
         Folders ({{ sortedFolderList.length }})
       </h2>
-      <div class="grid grid-cols-[repeat(auto-fit,_minmax(210px,_1fr))] gap-6">
+      <div
+        [ngClass]="
+          sortedFolderList.length > 6
+            ? 'grid grid-cols-[repeat(auto-fit,_minmax(155px,_1fr))] gap-6'
+            : 'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6'
+        "
+      >
         <div
           *ngFor="let folder of sortedFolderList"
           class="relative w-full max-w-xs justify-self-center bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
@@ -98,7 +104,13 @@
       <h2 class="text-lg font-semibold mb-4">
         Files ({{ sortedFileList.length }})
       </h2>
-      <div class="grid grid-cols-[repeat(auto-fit,_minmax(210px,_1fr))] gap-6">
+      <div
+        [ngClass]="
+          sortedFileList.length > 6
+            ? 'grid grid-cols-[repeat(auto-fit,_minmax(155px,_1fr))] gap-6'
+            : 'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6'
+        "
+      >
         <div
           *ngFor="let file of sortedFileList"
           class="relative w-full max-w-xs justify-self-center bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
