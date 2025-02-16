@@ -45,13 +45,12 @@
   </div>
 </div>
 
-<div style="margin-top: 48px; height: calc(100vh - 52px)">
+<div class="bg-gray-100" style="margin-top: 48px; height: calc(100vh - 52px)">
   <div class="p-6">
     <div *ngIf="sortedFolderList && sortedFolderList.length > 0" class="mb-8">
-      <h2 class="text-lg font-semibold mb-4">
-        Folders ({{ sortedFolderList.length }})
-      </h2>
+      <div class="font-medium">Folders ({{ sortedFolderList.length }})</div>
       <div
+        class="-m-2 mt-2"
         [ngClass]="
           sortedFolderList.length > 6
             ? 'grid grid-cols-[repeat(auto-fit,_minmax(155px,_1fr))] gap-6'
@@ -93,36 +92,33 @@
               >folder</mat-icon
             >
           </div>
-          <p class="text-center font-medium text-gray-800">
+          <div
+            class="truncate text-center"
+            matTooltip="{{ folder.folder_name }}"
+          >
             {{ folder.folder_name }}
-          </p>
+          </div>
         </div>
       </div>
     </div>
 
     <div *ngIf="sortedFileList && sortedFileList.length > 0">
-      <h2 class="text-lg font-semibold mb-4">
-        Files ({{ sortedFileList.length }})
-      </h2>
-      <div
-        [ngClass]="
-          sortedFileList.length > 6
-            ? 'grid grid-cols-[repeat(auto-fit,_minmax(155px,_1fr))] gap-6'
-            : 'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6'
-        "
-      >
+      <div class="font-medium">Files ({{ sortedFileList.length }})</div>
+
+      <div class="-m-2 mt-2 flex flex-wrap">
         <div
           *ngFor="let file of sortedFileList"
-          class="relative w-full max-w-xs justify-self-center bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
+          class="bg-white m-2 flex h-40 w-40 cursor-pointer flex-col rounded-2xl p-4 shadow relative"
         >
           <button
             mat-icon-button
             [matMenuTriggerFor]="fileMenu"
-            class="absolute top-2 right-2"
+            class="absolute top-2 right-2 z-10"
             (click)="$event.stopPropagation()"
           >
             <mat-icon>more_vert</mat-icon>
           </button>
+
           <mat-menu #fileMenu="matMenu">
             <button mat-menu-item (click)="renameFile(file)">
               <mat-icon>edit</mat-icon>
@@ -150,130 +146,55 @@
             </button>
           </mat-menu>
 
-          <div class="flex justify-center">
-            <ng-container *ngIf="file.status === 'shortcut'">
-              <div class="shortcut-label">
-                <span class="badge"><mat-icon>shortcut</mat-icon></span>
+          <div class="flex h-full items-center justify-center">
+            <div class="relative inline-flex flex-col items-center">
+              <mat-icon
+                role="img"
+                class="mat-icon notranslate text-hint opacity-50 icon-size-14 mat-icon-no-color"
+                aria-hidden="true"
+                data-mat-icon-type="svg"
+                data-mat-icon-name="document"
+                data-mat-icon-namespace="heroicons_solid"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  height="56"
+                  width="56"
+                  preserveAspectRatio="xMidYMid meet"
+                  focusable="false"
+                >
+                  <path
+                    d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625z"
+                  />
+                  <path
+                    d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z"
+                  />
+                </svg>
+              </mat-icon>
+
+              <div
+                class="absolute -bottom-3 left-4 -translate-x-1/2 rounded px-1.5 text-sm font-semibold leading-5 uppercase text-white"
+                [ngClass]="getFileExtensionClass(file.file_name)"
+              >
+                {{
+                  file.file_name.split(".")[
+                    file.file_name.split(".").length - 1
+                  ]
+                }}
               </div>
-            </ng-container>
-
-            <ng-container [ngSwitch]="file.mime_type"
-              ><mat-icon
-                *ngSwitchCase="'application/vnd.android.package-archive'"
-                class="text-6xl text-green-500 mb-4"
-                style="height: 6rem !important"
-              >
-                android
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'application/x-subrip'"
-                class="text-6xl text-blue-500 mb-4"
-                style="height: 6rem !important"
-              >
-                subtitles
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'application/pdf'"
-                class="text-6xl text-red-500 mb-4"
-                style="height: 6rem !important"
-              >
-                picture_as_pdf
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'image/jpeg'"
-                class="text-6xl text-orange-500 mb-4"
-                style="height: 6rem !important"
-              >
-                image
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'text/plain'"
-                class="text-6xl text-gray-500 mb-4"
-                style="height: 6rem !important"
-              >
-                description
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'application/vnd.ms-excel'"
-                class="text-6xl text-green-500 mb-4"
-                style="height: 6rem !important"
-              >
-                grid_on
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'application/msword'"
-                class="text-6xl text-blue-500 mb-4"
-                style="height: 6rem !important"
-              >
-                description
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'application/vnd.ms-powerpoint'"
-                class="text-6xl text-red-500 mb-4"
-                style="height: 6rem !important"
-              >
-                present_to_all
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'image/png'"
-                class="text-6xl text-teal-500 mb-4"
-                style="height: 6rem !important"
-              >
-                image
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'audio/mpeg'"
-                class="text-6xl text-purple-500 mb-4"
-                style="height: 6rem !important"
-              >
-                audiotrack
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'video/mp4'"
-                class="text-6xl text-yellow-500 mb-4"
-                style="height: 6rem !important"
-              >
-                videocam
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'video/x-matroska'"
-                class="text-6xl text-yellow-500 mb-4"
-                style="height: 6rem !important"
-              >
-                videocam
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchCase="'application/zip'"
-                class="text-6xl text-indigo-500 mb-4"
-                style="height: 6rem !important"
-              >
-                archive
-              </mat-icon>
-
-              <mat-icon
-                *ngSwitchDefault
-                class="text-6xl text-blue-500 mb-4"
-                style="height: 6rem !important"
-              >
-                insert_drive_file
-              </mat-icon>
-            </ng-container>
+            </div>
           </div>
-          <p class="text-center font-medium text-gray-800 truncate">
-            {{ file.file_name }}
-          </p>
+
+          <div
+            class="flex flex-auto flex-col justify-center text-center text-sm font-medium"
+          >
+            <div class="truncate" matTooltip="{{ file.file_name }}">
+              {{ file.file_name }}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -404,6 +404,35 @@ export class CloudStorageComponent implements OnInit {
     }
   }
 
+  getFileExtensionClass(fileName: string): string {
+    const extension = fileName.split('.').pop()?.toLowerCase();
+
+    switch (extension) {
+      case 'pdf':
+        return 'bg-red-600';
+      case 'doc':
+      case 'docx':
+        return 'bg-blue-600';
+      case 'xls':
+      case 'xlsx':
+        return 'bg-green-600';
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+        return 'bg-purple-600';
+      case 'txt':
+        return 'bg-gray-600';
+      case 'mp4':
+      case 'avi':
+      case 'mov':
+      case 'mkv':
+      case 'wmv':
+        return 'bg-teal-600';
+      default:
+        return 'bg-amber-600';
+    }
+  }
+
   private uploadFileSequentially(
     file: any,
     index: number,
