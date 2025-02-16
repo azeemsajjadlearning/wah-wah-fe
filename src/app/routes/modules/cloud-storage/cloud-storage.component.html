@@ -36,7 +36,7 @@
   </div>
 </div>
 
-<div *ngIf="folderPath && folderPath.length == 1" class="fixed w-full">
+<div *ngIf="folderPath && folderPath.length == 1" class="fixed w-full z-20">
   <div class="w-full">
     <mat-form-field class="w-full">
       <mat-label>search...</mat-label>
@@ -45,7 +45,7 @@
   </div>
 </div>
 
-<div class="bg-gray-100" style="margin-top: 48px; height: calc(100vh - 52px)">
+<div class="bg-gray-100" style="margin-top: 48px; height: calc(100vh - 120px)">
   <div class="p-6">
     <div *ngIf="sortedFolderList && sortedFolderList.length > 0" class="mb-8">
       <div class="font-medium">Folders ({{ sortedFolderList.length }})</div>
