@@ -185,17 +185,5 @@ import { ProgressBarComponent } from './common/progress-bar/progress-bar.compone
     SalaryService,
   ],
   bootstrap: [AppComponent],
-  entryComponents: [
-    ReviewsComponent,
-    TranslateComponent,
-    ScheduleDialogComponent,
-    SeatMapComponent,
-    AddInvestment,
-    AllInvestment,
-    PhotoComponent,
-    CreateFolderComponent,
-    RenameFileDialog,
-    FileDetailDialog,
-  ],
 })
 export class AppModule {}
