@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { environment } from './environments/environment';
 
 @Injectable()
-export class AuthGaurd implements CanActivate {
+export class AuthGaurd  {
   constructor(private router: Router) {}
   canActivate(): boolean {
     if (localStorage.getItem(environment.token)) {
