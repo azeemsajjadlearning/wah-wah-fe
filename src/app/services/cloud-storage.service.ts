@@ -1,9 +1,4 @@
-import {
-  HttpClient,
-  HttpEventType,
-  HttpHeaders,
-  HttpRequest,
-} from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
