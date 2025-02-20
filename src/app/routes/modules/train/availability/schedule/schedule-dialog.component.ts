@@ -4,7 +4,8 @@ import { TrainSchedule } from 'src/app/models/train';
 import { TrainService } from 'src/app/services/train.service';
 
 @Component({
-  templateUrl: 'schedule-dialog.component.html',
+    templateUrl: 'schedule-dialog.component.html',
+    standalone: false
 })
 export class ScheduleDialogComponent {
   constructor(

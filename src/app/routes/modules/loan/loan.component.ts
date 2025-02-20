@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  templateUrl: 'loan.component.html',
+    templateUrl: 'loan.component.html',
+    standalone: false
 })
 export class LoanComponent implements OnInit {
   loanForm: FormGroup;

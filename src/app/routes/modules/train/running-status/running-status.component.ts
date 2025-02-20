@@ -5,9 +5,10 @@ import { LiveStatus, Rake, Station } from 'src/app/models/train';
 import { TrainService } from 'src/app/services/train.service';
 
 @Component({
-  selector: 'app-running-status',
-  templateUrl: './running-status.component.html',
-  styleUrls: ['./running-status.component.scss'],
+    selector: 'app-running-status',
+    templateUrl: './running-status.component.html',
+    styleUrls: ['./running-status.component.scss'],
+    standalone: false
 })
 export class RunningStatusComponent {
   form: FormGroup;

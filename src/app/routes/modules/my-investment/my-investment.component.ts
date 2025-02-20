@@ -11,9 +11,10 @@ import { StockService } from 'src/app/services/stock.service';
 import { ThirdPartyService } from 'src/app/services/third-party.service';
 
 @Component({
-  selector: 'app-my-investment',
-  templateUrl: './my-investment.component.html',
-  styleUrls: ['./my-investment.component.scss'],
+    selector: 'app-my-investment',
+    templateUrl: './my-investment.component.html',
+    styleUrls: ['./my-investment.component.scss'],
+    standalone: false
 })
 export class MyInvestmentComponent {
   investment: Investment[];

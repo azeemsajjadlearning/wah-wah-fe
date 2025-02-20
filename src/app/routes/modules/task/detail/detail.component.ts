@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import * as moment from 'moment';
+import moment from 'moment';
 import { finalize } from 'rxjs';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
 import { Task } from 'src/app/models/task';
@@ -17,6 +17,7 @@ import { TaskService } from 'src/app/services/task.service';
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss'],
+  standalone: false,
 })
 export class DetailComponent implements OnInit, OnChanges {
   taskForm: FormGroup;

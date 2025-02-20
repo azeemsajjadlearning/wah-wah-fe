@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Bdd, Coach } from 'src/app/models/train';
 
 @Component({
-  selector: 'app-seat-map',
-  templateUrl: './seat-map.component.html',
-  styleUrls: ['./seat-map.component.scss'],
+    selector: 'app-seat-map',
+    templateUrl: './seat-map.component.html',
+    styleUrls: ['./seat-map.component.scss'],
+    standalone: false
 })
 export class SeatMapComponent implements OnInit {
   cls: string;

@@ -11,9 +11,10 @@ import { StockService } from 'src/app/services/stock.service';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-stock',
-  templateUrl: './stock.component.html',
-  styleUrls: ['./stock.component.scss'],
+    selector: 'app-stock',
+    templateUrl: './stock.component.html',
+    styleUrls: ['./stock.component.scss'],
+    standalone: false
 })
 export class StockComponent implements OnInit, OnDestroy {
   search: FormControl = new FormControl(null);

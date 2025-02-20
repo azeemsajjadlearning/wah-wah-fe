@@ -8,9 +8,10 @@ import { PhotoComponent } from './photo/photo.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-photos',
-  templateUrl: './photos.component.html',
-  styleUrls: ['./photos.component.scss'],
+    selector: 'app-photos',
+    templateUrl: './photos.component.html',
+    styleUrls: ['./photos.component.scss'],
+    standalone: false
 })
 export class PhotosComponent implements OnInit {
   photos: PhotoList[];

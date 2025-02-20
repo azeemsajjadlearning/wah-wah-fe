@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  templateUrl: 'create-folder.component.html',
+    templateUrl: 'create-folder.component.html',
+    standalone: false
 })
 export class CreateFolderComponent implements OnInit {
   form: FormGroup;

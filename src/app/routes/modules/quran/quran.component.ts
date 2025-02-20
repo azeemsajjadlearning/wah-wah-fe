@@ -6,9 +6,10 @@ import { Chapter, QuranInfo } from 'src/app/models/quran';
 import { QuranService } from 'src/app/services/quran.service';
 
 @Component({
-  selector: 'app-quran',
-  templateUrl: './quran.component.html',
-  styleUrls: ['./quran.component.scss'],
+    selector: 'app-quran',
+    templateUrl: './quran.component.html',
+    styleUrls: ['./quran.component.scss'],
+    standalone: false
 })
 export class QuranComponent {
   quranInfo: QuranInfo;

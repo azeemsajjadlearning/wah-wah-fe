@@ -22,9 +22,10 @@ import { ReviewsComponent } from '../reviews/reviews.component';
 import { CastCrewComponent } from '../cast-crew/cast-crew.component';
 
 @Component({
-  selector: 'app-movie',
-  templateUrl: './movie.component.html',
-  styleUrls: ['./movie.component.scss'],
+    selector: 'app-movie',
+    templateUrl: './movie.component.html',
+    styleUrls: ['./movie.component.scss'],
+    standalone: false
 })
 export class MovieComponent {
   id: number;

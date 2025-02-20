@@ -9,9 +9,10 @@ import { QuranService } from 'src/app/services/quran.service';
 import { TranslateComponent } from '../translate/translate.component';
 
 @Component({
-  selector: 'app-chapter',
-  templateUrl: './chapter.component.html',
-  styleUrls: ['./chapter.component.scss'],
+    selector: 'app-chapter',
+    templateUrl: './chapter.component.html',
+    styleUrls: ['./chapter.component.scss'],
+    standalone: false
 })
 export class ChapterComponent {
   chapterId: number;

@@ -1,4 +1,9 @@
-import { HttpClient, HttpEventType, HttpHeaders, HttpRequest } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpEventType,
+  HttpHeaders,
+  HttpRequest,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
@@ -11,7 +16,7 @@ import {
   retry,
 } from 'rxjs';
 import { environment } from '../environments/environment';
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CloudStorageService {

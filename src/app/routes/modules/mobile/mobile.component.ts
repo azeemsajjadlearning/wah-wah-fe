@@ -6,9 +6,10 @@ import { Brand, Popular } from 'src/app/models/mobile';
 import { MobileService } from 'src/app/services/mobile.service';
 
 @Component({
-  selector: 'app-mobile',
-  templateUrl: './mobile.component.html',
-  styleUrls: ['./mobile.component.scss'],
+    selector: 'app-mobile',
+    templateUrl: './mobile.component.html',
+    styleUrls: ['./mobile.component.scss'],
+    standalone: false
 })
 export class MobileComponent {
   popularBrands: string[] = [

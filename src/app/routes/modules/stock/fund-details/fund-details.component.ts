@@ -6,9 +6,10 @@ import { Chart } from 'chart.js';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-fund-details',
-  templateUrl: './fund-details.component.html',
-  styleUrls: ['./fund-details.component.scss'],
+    selector: 'app-fund-details',
+    templateUrl: './fund-details.component.html',
+    styleUrls: ['./fund-details.component.scss'],
+    standalone: false
 })
 export class FundDetailsComponent {
   searchId: string;

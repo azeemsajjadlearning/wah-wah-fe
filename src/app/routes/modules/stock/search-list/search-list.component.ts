@@ -8,9 +8,10 @@ import {
 import { StockService } from 'src/app/services/stock.service';
 
 @Component({
-  selector: 'app-search-list',
-  templateUrl: './search-list.component.html',
-  styleUrls: ['./search-list.component.scss'],
+    selector: 'app-search-list',
+    templateUrl: './search-list.component.html',
+    styleUrls: ['./search-list.component.scss'],
+    standalone: false
 })
 export class SearchListComponent {
   type: string;

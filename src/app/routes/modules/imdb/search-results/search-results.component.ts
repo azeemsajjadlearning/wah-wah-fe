@@ -6,9 +6,10 @@ import { GeneralService } from 'src/app/services/general.service';
 import { IMDbService } from 'src/app/services/imdb.service';
 
 @Component({
-  selector: 'app-search-results',
-  templateUrl: './search-results.component.html',
-  styleUrls: ['./search-results.component.scss'],
+    selector: 'app-search-results',
+    templateUrl: './search-results.component.html',
+    styleUrls: ['./search-results.component.scss'],
+    standalone: false
 })
 export class SearchResultsComponent {
   query: string;

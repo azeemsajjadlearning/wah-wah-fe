@@ -7,9 +7,10 @@ import { environment } from 'src/app/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'selector-name',
-  templateUrl: 'signin.component.html',
-  styleUrls: ['signin.component.scss'],
+    selector: 'selector-name',
+    templateUrl: 'signin.component.html',
+    styleUrls: ['signin.component.scss'],
+    standalone: false
 })
 export class SignInComponent implements OnInit {
   constructor(

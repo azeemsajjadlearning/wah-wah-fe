@@ -7,9 +7,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
-  selector: 'app-permission',
-  templateUrl: './permission.component.html',
-  styleUrls: ['./permission.component.scss'],
+    selector: 'app-permission',
+    templateUrl: './permission.component.html',
+    styleUrls: ['./permission.component.scss'],
+    standalone: false
 })
 export class PermissionComponent {
   users: User[];

@@ -4,8 +4,9 @@ import { DeviceDetail } from 'src/app/models/mobile';
 import { MobileService } from 'src/app/services/mobile.service';
 
 @Component({
-  templateUrl: './detail.component.html',
-  styleUrls: ['./detail.component.scss'],
+    templateUrl: './detail.component.html',
+    styleUrls: ['./detail.component.scss'],
+    standalone: false
 })
 export class MobileDetailComponent {
   deviceId: string;

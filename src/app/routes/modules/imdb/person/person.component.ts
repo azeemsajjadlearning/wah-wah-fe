@@ -7,9 +7,10 @@ import { GeneralService } from 'src/app/services/general.service';
 import { IMDbService } from 'src/app/services/imdb.service';
 
 @Component({
-  selector: 'app-person',
-  templateUrl: './person.component.html',
-  styleUrls: ['./person.component.scss'],
+    selector: 'app-person',
+    templateUrl: './person.component.html',
+    styleUrls: ['./person.component.scss'],
+    standalone: false
 })
 export class PersonComponent {
   id: number;

@@ -8,9 +8,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ThirdPartyService } from 'src/app/services/third-party.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss'],
+    standalone: false
 })
 export class ProfileComponent {
   currentUser: User;

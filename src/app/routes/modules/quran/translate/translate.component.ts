@@ -5,9 +5,10 @@ import { map, Observable, startWith } from 'rxjs';
 import { LanguageList } from 'src/app/models/quran';
 
 @Component({
-  selector: 'app-translate',
-  templateUrl: './translate.component.html',
-  styleUrls: ['./translate.component.scss'],
+    selector: 'app-translate',
+    templateUrl: './translate.component.html',
+    styleUrls: ['./translate.component.scss'],
+    standalone: false
 })
 export class TranslateComponent {
   languageCtrl = new FormControl(null);

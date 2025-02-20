@@ -12,9 +12,10 @@ import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
-  selector: 'selector-name',
-  templateUrl: 'task.component.html',
-  styleUrls: ['task.component.scss'],
+    selector: 'selector-name',
+    templateUrl: 'task.component.html',
+    styleUrls: ['task.component.scss'],
+    standalone: false
 })
 export class TaskComponent implements OnInit {
   @ViewChild(MatDrawer) drawer!: MatDrawer;

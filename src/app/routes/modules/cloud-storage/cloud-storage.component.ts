@@ -22,8 +22,9 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  templateUrl: 'cloud-storage.component.html',
-  styleUrls: ['cloud-storage.component.scss'],
+    templateUrl: 'cloud-storage.component.html',
+    styleUrls: ['cloud-storage.component.scss'],
+    standalone: false
 })
 export class CloudStorageComponent implements OnInit {
   folderId: any = null;
@@ -516,7 +517,8 @@ export class CloudStorageComponent implements OnInit {
 }
 
 @Component({
-  templateUrl: 'rename-file.component.html',
+    templateUrl: 'rename-file.component.html',
+    standalone: false
 })
 export class RenameFileDialog {
   constructor(
@@ -535,7 +537,8 @@ export class RenameFileDialog {
 }
 
 @Component({
-  templateUrl: 'file-detail.component.html',
+    templateUrl: 'file-detail.component.html',
+    standalone: false
 })
 export class FileDetailDialog {
   constructor(

@@ -4,9 +4,10 @@ import { PNRStatus } from 'src/app/models/train';
 import { TrainService } from 'src/app/services/train.service';
 
 @Component({
-  selector: 'app-pnr',
-  templateUrl: './pnr.component.html',
-  styleUrls: ['./pnr.component.scss'],
+    selector: 'app-pnr',
+    templateUrl: './pnr.component.html',
+    styleUrls: ['./pnr.component.scss'],
+    standalone: false
 })
 export class PNRComponent {
   form: FormGroup;

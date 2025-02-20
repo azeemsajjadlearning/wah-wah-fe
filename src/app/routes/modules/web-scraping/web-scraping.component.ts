@@ -6,9 +6,10 @@ import { ProductDetails } from 'src/app/models/scraping';
 import { WebScrapingService } from 'src/app/services/web-scarping.service';
 
 @Component({
-  selector: 'app-web-scraping',
-  templateUrl: './web-scraping.component.html',
-  styleUrls: ['./web-scraping.component.scss'],
+    selector: 'app-web-scraping',
+    templateUrl: './web-scraping.component.html',
+    styleUrls: ['./web-scraping.component.scss'],
+    standalone: false
 })
 export class WebScrapingComponent {
   url: FormControl = new FormControl(null);

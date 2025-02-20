@@ -7,8 +7,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
-  templateUrl: 'signup.component.html',
-  styleUrls: ['signup.component.scss'],
+    templateUrl: 'signup.component.html',
+    styleUrls: ['signup.component.scss'],
+    standalone: false
 })
 export class SignUpComponent implements OnInit {
   constructor(

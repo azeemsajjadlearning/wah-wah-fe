@@ -10,8 +10,9 @@ import { catchError, debounceTime } from 'rxjs';
 import { SalaryService } from 'src/app/services/salary.service';
 
 @Component({
-  selector: 'app-salary',
-  templateUrl: './salary.component.html',
+    selector: 'app-salary',
+    templateUrl: './salary.component.html',
+    standalone: false
 })
 export class SalaryComponent implements OnInit {
   salaryForm: FormGroup;

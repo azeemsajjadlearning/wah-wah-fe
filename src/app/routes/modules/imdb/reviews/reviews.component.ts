@@ -4,9 +4,10 @@ import { environment } from 'src/app/environments/environment';
 import { MovieReview } from 'src/app/models/imdb';
 
 @Component({
-  selector: 'app-reviews',
-  templateUrl: './reviews.component.html',
-  styleUrls: ['./reviews.component.scss'],
+    selector: 'app-reviews',
+    templateUrl: './reviews.component.html',
+    styleUrls: ['./reviews.component.scss'],
+    standalone: false
 })
 export class ReviewsComponent {
   imageUrlPrefix: string = environment.imdb_image_prefix;

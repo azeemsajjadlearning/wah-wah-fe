@@ -22,9 +22,10 @@ interface ClassInfo {
 }
 
 @Component({
-  selector: 'app-coach',
-  templateUrl: './coach.component.html',
-  styleUrls: ['./coach.component.scss'],
+    selector: 'app-coach',
+    templateUrl: './coach.component.html',
+    styleUrls: ['./coach.component.scss'],
+    standalone: false
 })
 export class CoachComponent implements OnInit {
   query: CompositionQuery;

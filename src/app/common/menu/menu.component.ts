@@ -4,9 +4,10 @@ import { MenuItem } from 'src/app/models/menu';
 import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
+    selector: 'app-menu',
+    templateUrl: './menu.component.html',
+    styleUrls: ['./menu.component.scss'],
+    standalone: false
 })
 export class MenuComponent {
   @Output() navbtn = new EventEmitter<any>();

@@ -4,9 +4,10 @@ import { BrandDevice } from 'src/app/models/mobile';
 import { MobileService } from 'src/app/services/mobile.service';
 
 @Component({
-  selector: 'app-brands',
-  templateUrl: './brands.component.html',
-  styleUrls: ['./brands.component.scss'],
+    selector: 'app-brands',
+    templateUrl: './brands.component.html',
+    styleUrls: ['./brands.component.scss'],
+    standalone: false
 })
 export class BrandsComponent {
   brandId: string;

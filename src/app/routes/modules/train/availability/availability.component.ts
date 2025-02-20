@@ -8,9 +8,10 @@ import { TrainService } from 'src/app/services/train.service';
 import { ScheduleDialogComponent } from './schedule/schedule-dialog.component';
 
 @Component({
-  selector: 'app-availability',
-  templateUrl: './availability.component.html',
-  styleUrls: ['./availability.component.scss'],
+    selector: 'app-availability',
+    templateUrl: './availability.component.html',
+    styleUrls: ['./availability.component.scss'],
+    standalone: false
 })
 export class AvailabilityComponent {
   allStation: string[];

@@ -10,7 +10,8 @@ import { InvestmentService } from 'src/app/services/investment.service';
 import { AddInvestment } from '../add-investment/add-investment';
 
 @Component({
-  templateUrl: 'all-investment.html',
+    templateUrl: 'all-investment.html',
+    standalone: false
 })
 export class AllInvestment implements OnInit {
   avgNav: number = 0;

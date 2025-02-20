@@ -6,9 +6,10 @@ import { environment } from 'src/app/environments/environment';
 import { IMDbService } from 'src/app/services/imdb.service';
 
 @Component({
-  selector: 'selector-name',
-  templateUrl: 'imdb.component.html',
-  styleUrls: ['imdb.component.scss'],
+    selector: 'selector-name',
+    templateUrl: 'imdb.component.html',
+    styleUrls: ['imdb.component.scss'],
+    standalone: false
 })
 export class IMDbComponent implements OnInit {
   constructor(private imdbService: IMDbService, private router: Router) {}

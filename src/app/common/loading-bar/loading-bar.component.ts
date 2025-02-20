@@ -13,10 +13,11 @@ import { Subject } from 'rxjs';
 import { LoadingBarService } from './loading-bar.service';
 
 @Component({
-  selector: 'loading-bar',
-  templateUrl: './loading-bar.component.html',
-  styleUrls: ['./loading-bar.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'loading-bar',
+    templateUrl: './loading-bar.component.html',
+    styleUrls: ['./loading-bar.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class LoadingBarComponent implements OnChanges, OnInit, OnDestroy {
   @Input() autoMode: boolean = true;

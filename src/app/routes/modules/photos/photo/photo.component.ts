@@ -8,9 +8,10 @@ import { Metadata, PhotoList } from 'src/app/models/photo';
 import { PhotosService } from 'src/app/services/photos.service';
 
 @Component({
-  selector: 'app-photo',
-  templateUrl: './photo.component.html',
-  styleUrls: ['./photo.component.scss'],
+    selector: 'app-photo',
+    templateUrl: './photo.component.html',
+    styleUrls: ['./photo.component.scss'],
+    standalone: false
 })
 export class PhotoComponent implements OnInit {
   imageUrl: string;

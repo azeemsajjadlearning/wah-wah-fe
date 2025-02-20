@@ -11,9 +11,10 @@ import { CastCrewComponent } from '../cast-crew/cast-crew.component';
 import { ReviewsComponent } from '../reviews/reviews.component';
 
 @Component({
-  selector: 'app-tv',
-  templateUrl: './tv.component.html',
-  styleUrls: ['./tv.component.scss'],
+    selector: 'app-tv',
+    templateUrl: './tv.component.html',
+    styleUrls: ['./tv.component.scss'],
+    standalone: false
 })
 export class TvComponent {
   tvDetails: TvDetail;

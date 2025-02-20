@@ -11,7 +11,8 @@ import { ConfirmationService } from 'src/app/common/confirmation/confirmation.se
 import { InvestmentService } from 'src/app/services/investment.service';
 
 @Component({
-  templateUrl: 'add-investment.html',
+    templateUrl: 'add-investment.html',
+    standalone: false
 })
 export class AddInvestment implements OnInit {
   form: FormGroup;
