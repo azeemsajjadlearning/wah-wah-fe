@@ -13,6 +13,12 @@ import { ConfirmationService } from 'src/app/common/confirmation/confirmation.se
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
+import isBefore from 'dayjs/esm';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(isBefore);
+dayjs.extend(utc);
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
