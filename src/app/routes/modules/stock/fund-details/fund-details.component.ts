@@ -6,10 +6,10 @@ import { Chart } from 'chart.js';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-    selector: 'app-fund-details',
-    templateUrl: './fund-details.component.html',
-    styleUrls: ['./fund-details.component.scss'],
-    standalone: false
+  selector: 'app-fund-details',
+  templateUrl: './fund-details.component.html',
+  styleUrls: ['./fund-details.component.scss'],
+  standalone: false,
 })
 export class FundDetailsComponent {
   searchId: string;
@@ -74,48 +74,49 @@ export class FundDetailsComponent {
 
         this.returnChart?.destroy();
 
-        this.returnChart = new Chart('canvas', {
-          type: 'line',
-          data: {
-            labels: dates,
-            datasets: [
-              {
-                data: nav,
-                fill: false,
-                borderColor: nav[0] < nav[nav.length - 1] ? 'green' : 'red',
-                radius: 0,
-              },
-            ],
-          },
-          options: {
-            legend: {
-              display: false,
-            },
-            aspectRatio: 2.5,
-            scales: {
-              xAxes: [
-                {
-                  gridLines: {
-                    display: false,
-                  },
-                  display: false,
-                },
-              ],
-              yAxes: [
-                {
-                  gridLines: {
-                    display: false,
-                  },
-                  display: false,
-                },
-              ],
-            },
-            tooltips: {
-              mode: 'index',
-              intersect: false,
-            },
-          },
-        });
+        // this.returnChart = new Chart('canvas', {
+        //   type: 'line',
+        //   data: {
+        //     labels: dates,
+        //     datasets: [
+        //       {
+        //         data: nav,
+        //         fill: false,
+        //         borderColor: nav[0] < nav[nav.length - 1] ? 'green' : 'red',
+        //         pointRadius: 0, // Replaces `radius`
+        //       },
+        //     ],
+        //   },
+        //   options: {
+        //     plugins: {
+        //       legend: {
+        //         display: false,
+        //       },
+        //       tooltip: {
+        //         // `tooltips` is now `tooltip`
+        //         mode: 'index',
+        //         intersect: false,
+        //       },
+        //     },
+        //     aspectRatio: 2.5,
+        //     scales: {
+        //       x: {
+        //         // `xAxes` is now `x`
+        //         grid: {
+        //           display: false,
+        //         },
+        //         display: false,
+        //       },
+        //       y: {
+        //         // `yAxes` is now `y`
+        //         grid: {
+        //           display: false,
+        //         },
+        //         display: false,
+        //       },
+        //     },
+        //   },
+        // });
       });
   }
 
@@ -148,25 +149,30 @@ export class FundDetailsComponent {
       }
     });
 
-    this.equityShareChart = new Chart('canvasEquity', {
-      type: 'doughnut',
-      data: {
-        labels: Object.keys(this.equityShare),
-        datasets: [
-          {
-            data: Object.values(this.equityShare) as number[],
-            backgroundColor: this.generateDistinctColors(
-              Object.keys(this.equityShare).length
-            ),
-          },
-        ],
-      },
-      options: {
-        legend: {
-          display: false,
-        },
-      },
-    });
+    // this.equityShareChart = new Chart('canvasEquity', {
+    //   type: 'doughnut',
+    //   data: {
+    //     labels: Object.keys(this.equityShare),
+    //     datasets: [
+    //       {
+    //         data: Object.values(this.equityShare) as number[],
+    //         backgroundColor: this.generateDistinctColors(
+    //           Object.keys(this.equityShare).length
+    //         ),
+    //       },
+    //     ],
+    //   },
+    //   options: {
+    //     plugins: {
+    //       legend: {
+    //         display: false, // Moved under `plugins`
+    //       },
+    //       tooltip: {
+    //         enabled: true, // Ensures tooltips work
+    //       },
+    //     },
+    //   },
+    // });
   }
 
   getAllHoldings() {

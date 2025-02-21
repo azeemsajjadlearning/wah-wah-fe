@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { finalize } from 'rxjs';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
 import { Task } from 'src/app/models/task';
@@ -106,9 +106,9 @@ export class DetailComponent implements OnInit, OnChanges {
   }
 
   isOverdue(): boolean {
-    return moment(this.taskForm.value.dueDate, moment.ISO_8601).isBefore(
-      moment(),
-      'days'
+    return dayjs(this.taskForm.value.dueDate, 'YYYY-MM-DDTHH:mm:ssZ').isBefore(
+      dayjs(),
+      'day'
     );
   }
 }
