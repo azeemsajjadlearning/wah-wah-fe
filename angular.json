@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "allowedCommonJsDependencies": ["node-irr"],
+            "allowedCommonJsDependencies": ["node-irr", "dayjs"],
             "outputPath": {
               "base": "dist"
             },
