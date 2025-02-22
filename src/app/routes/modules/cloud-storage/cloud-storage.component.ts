@@ -22,9 +22,9 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-    templateUrl: 'cloud-storage.component.html',
-    styleUrls: ['cloud-storage.component.scss'],
-    standalone: false
+  templateUrl: 'cloud-storage.component.html',
+  styleUrls: ['cloud-storage.component.scss'],
+  standalone: false,
 })
 export class CloudStorageComponent implements OnInit {
   folderId: any = null;
@@ -506,19 +506,46 @@ export class CloudStorageComponent implements OnInit {
     this.menuTrigger.openMenu();
   }
 
-  onFolderRightClick(event: MouseEvent, folder: any): void {
-    event.preventDefault();
-    console.log('hello');
+  dragableItem: any;
+  dragType: 'file' | 'folder' | null;
 
-    // this.isFolderContext = true;
-    // this.selectedItem = folder;
-    // this.openContextMenu(event);
+  onDragStart(ele: FolderList | FileList, type: 'file' | 'folder') {
+    this.dragType = type;
+
+    this.dragableItem = ele;
+  }
+
+  onDragEnd() {
+    this.dragableItem = null;
+    this.dragType = null;
+  }
+
+  onDrop(folder: FolderList) {
+    if (this.dragType === 'file') {
+      this.cloudStorageService
+        .moveFile(this.dragableItem.file_id, folder._id)
+        .subscribe((resp) => {
+          if (resp.success) {
+            this.snackBar.open(resp.message, 'X');
+            this.getFilesAndfolders(this.folderId);
+          }
+        });
+    } else if (this.dragType === 'folder') {
+      this.cloudStorageService
+        .moveFolder(this.dragableItem.folder_id, folder._id)
+        .subscribe((resp) => {
+          if (resp.success) {
+            this.snackBar.open(resp.message, 'X');
+            this.getFilesAndfolders(this.folderId);
+          }
+        });
+    }
   }
 }
 
 @Component({
-    templateUrl: 'rename-file.component.html',
-    standalone: false
+  templateUrl: 'rename-file.component.html',
+  standalone: false,
 })
 export class RenameFileDialog {
   constructor(
@@ -537,8 +564,8 @@ export class RenameFileDialog {
 }
 
 @Component({
-    templateUrl: 'file-detail.component.html',
-    standalone: false
+  templateUrl: 'file-detail.component.html',
+  standalone: false,
 })
 export class FileDetailDialog {
   constructor(

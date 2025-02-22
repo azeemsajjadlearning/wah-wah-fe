@@ -11,7 +11,7 @@
   class="overflow-y-auto fixed z-20 w-full bg-slate-400"
 >
   <div
-    class="inline-flex items-center space-x-2 overflow-x-auto whitespace-nowrap sm:space-x-3 lg:space-x-4 p-2"
+    class="inline-flex items-center space-x-2 overflow-x-auto whitespace-nowrap sm:space-x-3 lg:space-x-4 p-2 z-50"
   >
     <ng-container *ngFor="let folder of folderPath; let last = last">
       <ng-container *ngIf="last; else nonLastFolder">
@@ -61,6 +61,11 @@
           *ngFor="let folder of sortedFolderList"
           class="relative w-full max-w-xs justify-self-center bg-white rounded-lg shadow p-4 cursor-pointer hover:shadow-lg transition"
           (click)="openFolder(folder)"
+          dndDropzone
+          (dndDrop)="onDrop(folder)"
+          [dndDraggable]="true"
+          (dndStart)="onDragStart(folder, 'folder')"
+          (dndEnd)="onDragEnd()"
         >
           <button
             mat-icon-button
@@ -109,6 +114,9 @@
         <div
           *ngFor="let file of sortedFileList"
           class="bg-white m-2 flex h-40 w-40 cursor-pointer flex-col rounded-2xl p-4 shadow relative"
+          [dndDraggable]="true"
+          (dndStart)="onDragStart(file, 'file')"
+          (dndEnd)="onDragEnd()"
         >
           <button
             mat-icon-button

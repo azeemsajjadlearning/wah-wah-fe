@@ -25,6 +25,7 @@
     "dayjs": "^1.11.13",
     "file-saver": "^2.0.5",
     "lodash-es": "^4.17.21",
+    "ngx-drag-drop": "^19.0.0",
     "node-irr": "^2.0.5",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
