@@ -37,7 +37,7 @@
 
 <div *ngIf="folderPath && folderPath.length == 1" class="fixed w-full z-20">
   <div class="w-full">
-    <mat-form-field class="w-full">
+    <mat-form-field class="w-full" appearance="outline">
       <mat-label>search...</mat-label>
       <input matInput (keydown.enter)="onEnter($event)" />
     </mat-form-field>
