@@ -89,6 +89,7 @@ import { LoanComponent } from './routes/modules/loan/loan.component';
 import { CreateFolderComponent } from './routes/modules/cloud-storage/create-folder/create-folder.component';
 import { ProgressBarComponent } from './common/progress-bar/progress-bar.component';
 import { DndModule } from 'ngx-drag-drop';
+import { StreamService } from './services/stream.service';
 
 @NgModule({
   declarations: [
@@ -186,6 +187,7 @@ import { DndModule } from 'ngx-drag-drop';
     PhotosService,
     CloudStorageService,
     SalaryService,
+    StreamService,
     provideHttpClient(withInterceptorsFromDi()),
   ],
 })
