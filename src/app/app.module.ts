@@ -90,6 +90,8 @@ import { CreateFolderComponent } from './routes/modules/cloud-storage/create-fol
 import { ProgressBarComponent } from './common/progress-bar/progress-bar.component';
 import { DndModule } from 'ngx-drag-drop';
 import { StreamService } from './services/stream.service';
+import { CCTVService } from './services/cctv.service';
+import { CCTVComponent } from './routes/modules/cctv/cctv.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +106,7 @@ import { StreamService } from './services/stream.service';
     SignInComponent,
     ResetPasswordComponent,
     DashboardComponent,
+    CCTVComponent,
     TaskComponent,
     ProfileComponent,
     IMDbComponent,
@@ -188,6 +191,7 @@ import { StreamService } from './services/stream.service';
     CloudStorageService,
     SalaryService,
     StreamService,
+    CCTVService,
     provideHttpClient(withInterceptorsFromDi()),
   ],
 })

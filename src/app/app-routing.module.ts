@@ -32,6 +32,7 @@ import { PhotosComponent } from './routes/modules/photos/photos.component';
 import { CloudStorageComponent } from './routes/modules/cloud-storage/cloud-storage.component';
 import { SalaryComponent } from './routes/modules/salary/salary.component';
 import { LoanComponent } from './routes/modules/loan/loan.component';
+import { CCTVComponent } from './routes/modules/cctv/cctv.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -74,6 +75,7 @@ const routes: Routes = [
       { path: 'cloud-storage/:folder_id', component: CloudStorageComponent },
       { path: 'salary', component: SalaryComponent },
       { path: 'loan', component: LoanComponent },
+      { path: 'cctv', component: CCTVComponent },
     ],
   },
 ];
