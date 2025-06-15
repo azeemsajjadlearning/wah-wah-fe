@@ -46,28 +46,51 @@
   </div>
 </div>
 
-<div *ngIf="isSingleView" class="p-4 w-full">
+<div *ngIf="isSingleView" class="p-4 w-full h-full">
   <div
-    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2"
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4"
   >
     <h2 class="text-lg font-semibold">
       Live View: Channel {{ getBaseChannel(singleChannel) }}
     </h2>
-    <button
-      mat-stroked-button
-      color="accent"
-      (click)="exitSingleView()"
-      class="px-4 py-1"
-    >
-      ⬅ Back to All Cameras
-    </button>
+    <div class="flex gap-2">
+      <button
+        mat-stroked-button
+        color="accent"
+        (click)="exitSingleView()"
+        class="px-4 py-1"
+      >
+        ⬅ Back to All Cameras
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="viewRecording(singleChannel)"
+        class="px-4 py-1"
+      >
+        ⏮ Playback
+      </button>
+    </div>
   </div>
+
   <div
-    class="relative w-full pt-[56.25%] border rounded-xl shadow-md overflow-hidden"
+    class="w-full border rounded-xl shadow-md overflow-hidden relative transition-all duration-300"
+    [ngClass]="{
+      'flex flex-col justify-center min-h-screen': isFullscreen
+    }"
   >
     <canvas
       id="video-canvas-single"
-      class="absolute top-0 left-0 w-full h-full"
+      class="w-full aspect-video transition-all duration-300 block"
     ></canvas>
+
+    <button
+      mat-icon-button
+      (click)="goFullScreen()"
+      class="fullscreen-btn"
+      aria-label="Toggle Fullscreen"
+    >
+      <mat-icon>{{ isFullscreen ? "fullscreen_exit" : "fullscreen" }}</mat-icon>
+    </button>
   </div>
 </div>

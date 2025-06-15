@@ -22,4 +22,14 @@ export class CCTVService {
       params,
     });
   }
+
+  public viewRecording(channel: string, datetime: any): Observable<any> {
+    const params = new HttpParams()
+      .set('channel', channel)
+      .set('datetime', datetime);
+
+    return this.http.get(environment.api_prefix + 'stream/view-recording', {
+      params,
+    });
+  }
 }

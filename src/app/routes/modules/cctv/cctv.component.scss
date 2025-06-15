@@ -1,0 +1,8 @@
+.fullscreen-btn {
+  @apply absolute bottom-3 right-3 bg-black bg-opacity-60 text-white rounded-full hover:bg-opacity-80 transition;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

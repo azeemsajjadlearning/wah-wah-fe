@@ -18,6 +18,7 @@ export class CCTVComponent implements OnInit, OnDestroy {
   showStartButton = false;
   showChannels = false;
   isSingleView = false;
+  isFullscreen = false;
   singleChannel: string = '';
   channels: string[] = ['102', '202', '302', '402', '502', '602'];
   streamUrls: { [channel: string]: string } = {};
@@ -36,6 +37,17 @@ export class CCTVComponent implements OnInit, OnDestroy {
     } else {
       this.showStartButton = true;
     }
+
+    document.addEventListener('fullscreenchange', () => {
+      this.isFullscreen = !!document.fullscreenElement;
+
+      // Unlock orientation on exit
+      if (!this.isFullscreen && screen.orientation?.unlock) {
+        try {
+          screen.orientation.unlock();
+        } catch {}
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -120,5 +132,63 @@ export class CCTVComponent implements OnInit, OnDestroy {
       });
     });
     this.showChannels = false;
+  }
+
+  viewRecording(channel: string) {
+    Object.keys(this.players).forEach((channel) => {
+      this.cctvService.stopStream(channel).subscribe();
+      this.players[channel].destroy();
+    });
+    this.players = {};
+
+    this.isSingleView = true;
+    this.cdr.detectChanges();
+
+    const datetime = new Date('2025-06-15');
+
+    this.cctvService.viewRecording(channel, datetime).subscribe((res: any) => {
+      const canvas = document.getElementById(
+        `video-canvas-single`
+      ) as HTMLCanvasElement;
+
+      if (canvas && typeof JSMpeg !== 'undefined') {
+        this.players[channel] = new JSMpeg.Player(res.wsUrl, { canvas });
+      } else {
+        console.error('Single view canvas or JSMpeg missing');
+      }
+    });
+  }
+
+  goFullScreen() {
+    const canvas = document.getElementById(
+      'video-canvas-single'
+    ) as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const container = canvas.parentElement;
+    if (!container) return;
+
+    if (!this.isFullscreen) {
+      if (container.requestFullscreen) {
+        container.requestFullscreen();
+      } else if ((container as any).webkitRequestFullscreen) {
+        (container as any).webkitRequestFullscreen();
+      } else if ((container as any).msRequestFullscreen) {
+        (container as any).msRequestFullscreen();
+      }
+
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile && screen.orientation && (screen.orientation as any).lock) {
+        (screen.orientation as any).lock('landscape').catch(() => {});
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      } else if ((document as any).msExitFullscreen) {
+        (document as any).msExitFullscreen();
+      }
+    }
   }
 }
