@@ -93,4 +93,55 @@
       <mat-icon>{{ isFullscreen ? "fullscreen_exit" : "fullscreen" }}</mat-icon>
     </button>
   </div>
+
+  <div *ngIf="isPlayBack">
+    <div class="mt-4">
+      <h3 class="text-lg font-semibold mb-2">Playback Controls</h3>
+      <div class="flex gap-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Select Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            placeholder="Choose a date"
+            [max]="now"
+            [formControl]="selectedDate"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <!-- <button
+          mat-raised-button
+          color="primary"
+          (click)="playRecording()"
+          class="px-4 py-2"
+        >
+          ▶ Play
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          (click)="pauseRecording()"
+          class="px-4 py-2"
+        >
+          ⏸ Pause
+        </button> -->
+        <mat-slider
+          min="0"
+          max="86400"
+          step="60"
+          showTickMarks
+          discrete
+          [displayWith]="formatLabel"
+          style="width: 100%"
+          (change)="onSliderChange($event)"
+        >
+          <input matSliderThumb />
+        </mat-slider>
+      </div>
+    </div>
+  </div>
 </div>

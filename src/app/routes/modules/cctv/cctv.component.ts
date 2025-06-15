@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { CCTVService } from 'src/app/services/cctv.service';
 
 declare var JSMpeg: any;
@@ -19,10 +20,13 @@ export class CCTVComponent implements OnInit, OnDestroy {
   showChannels = false;
   isSingleView = false;
   isFullscreen = false;
+  isPlayBack = false;
   singleChannel: string = '';
   channels: string[] = ['102', '202', '302', '402', '502', '602'];
   streamUrls: { [channel: string]: string } = {};
   players: { [channel: string]: any } = {};
+  now = new Date();
+  selectedDate: FormControl = new FormControl(this.now);
 
   ngOnInit() {
     if (typeof JSMpeg === 'undefined') {
@@ -47,6 +51,13 @@ export class CCTVComponent implements OnInit, OnDestroy {
           screen.orientation.unlock();
         } catch {}
       }
+    });
+
+    this.selectedDate.valueChanges.subscribe((date: Date) => {
+      this.viewRecording(
+        this.getBaseChannel(this.singleChannel || this.channels[0]),
+        date || this.now
+      );
     });
   }
 
@@ -110,6 +121,7 @@ export class CCTVComponent implements OnInit, OnDestroy {
     }
 
     this.isSingleView = false;
+    this.isPlayBack = false;
     this.singleChannel = '';
     this.startStream();
   }
@@ -134,7 +146,11 @@ export class CCTVComponent implements OnInit, OnDestroy {
     this.showChannels = false;
   }
 
-  viewRecording(channel: string) {
+  viewRecording(
+    channel: string,
+    date: any = this.now,
+    withtime: boolean = false
+  ) {
     Object.keys(this.players).forEach((channel) => {
       this.cctvService.stopStream(channel).subscribe();
       this.players[channel].destroy();
@@ -142,11 +158,23 @@ export class CCTVComponent implements OnInit, OnDestroy {
     this.players = {};
 
     this.isSingleView = true;
+    this.isPlayBack = true;
+    this.singleChannel = channel;
     this.cdr.detectChanges();
+    let today;
 
-    const datetime = new Date('2025-06-15');
+    if (withtime) {
+      today = new Date(date);
+    } else {
+      today = new Date(
+        `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+          2,
+          '0'
+        )}-${String(date.getDate()).padStart(2, '0')}`
+      );
+    }
 
-    this.cctvService.viewRecording(channel, datetime).subscribe((res: any) => {
+    this.cctvService.viewRecording(channel, today).subscribe((res: any) => {
       const canvas = document.getElementById(
         `video-canvas-single`
       ) as HTMLCanvasElement;
@@ -190,5 +218,42 @@ export class CCTVComponent implements OnInit, OnDestroy {
         (document as any).msExitFullscreen();
       }
     }
+  }
+
+  playRecording() {
+    console.log('play');
+  }
+
+  pauseRecording() {
+    console.log('pauseRecording');
+  }
+
+  formatLabel(value: number): string {
+    const hours = Math.floor(value / 3600);
+    const minutes = Math.floor((value % 3600) / 60);
+    const seconds = value % 60;
+
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  }
+
+  onSliderChange(event: any) {
+    const seconds = event.target.value;
+    let today = new Date(
+      `${this.selectedDate.value.getFullYear()}-${String(
+        this.selectedDate.value.getMonth() + 1
+      ).padStart(2, '0')}-${String(this.selectedDate.value.getDate()).padStart(
+        2,
+        '0'
+      )}`
+    );
+
+    this.stopAllStreams();
+
+    this.viewRecording(
+      this.getBaseChannel(this.singleChannel || this.channels[0]),
+      today.getTime() + seconds * 1000,
+      true
+    );
   }
 }
