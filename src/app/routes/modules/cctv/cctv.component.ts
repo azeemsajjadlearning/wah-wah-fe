@@ -22,7 +22,7 @@ export class CCTVComponent implements OnInit, OnDestroy {
   isFullscreen = false;
   isPlayBack = false;
   singleChannel: string = '';
-  channels: string[] = ['102', '202', '302', '402', '502', '602'];
+  channels: string[] = ['102', '502', '602', '302', '202', '402'];
   streamUrls: { [channel: string]: string } = {};
   players: { [channel: string]: any } = {};
   now = new Date();
@@ -45,7 +45,6 @@ export class CCTVComponent implements OnInit, OnDestroy {
     document.addEventListener('fullscreenchange', () => {
       this.isFullscreen = !!document.fullscreenElement;
 
-      // Unlock orientation on exit
       if (!this.isFullscreen && screen.orientation?.unlock) {
         try {
           screen.orientation.unlock();

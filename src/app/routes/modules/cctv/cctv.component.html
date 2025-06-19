@@ -28,7 +28,7 @@
   *ngIf="showStartButton && showChannels && !isSingleView"
 >
   <div
-    *ngFor="let channel of channels"
+    *ngFor="let channel of channels; let i = index"
     class="bg-white border rounded-xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-[1.02] cursor-pointer overflow-hidden"
     (click)="showSingleCamera(channel)"
   >
@@ -40,7 +40,7 @@
       <div
         class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded"
       >
-        Channel {{ getBaseChannel(channel) }}
+        Channel {{ i + 1 }}
       </div>
     </div>
   </div>
