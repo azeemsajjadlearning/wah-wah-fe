@@ -37,7 +37,7 @@
       <!-- Task -->
       <ng-container *ngFor="let task of tasks">
         <div
-          [id]="'task-' + task._id"
+          [id]="'task-' + task.id"
           class="group w-full select-none hover:bg-gray-100 h-16 dark:hover:bg-hover"
           [ngClass]="{
             'text-hint': task.completed
@@ -50,7 +50,7 @@
           <!-- Task content -->
           <div class="relative flex items-center h-full pl-10">
             <!-- Selected indicator -->
-            <ng-container *ngIf="selectedTask && selectedTask._id == task._id">
+            <ng-container *ngIf="selectedTask && selectedTask.id == task.id">
               <div
                 class="z-10 absolute -top-px right-0 -bottom-px flex flex-0 w-1 bg-indigo-500"
               ></div>
@@ -107,7 +107,7 @@
               </ng-container>
               <!-- Due date -->
               <div class="text-sm whitespace-nowrap text-secondary mt-3">
-                {{ task.dueDate | date : "LLL dd" }}
+                {{ task.due_date | date : "LLL dd" }}
               </div>
             </a>
           </div>

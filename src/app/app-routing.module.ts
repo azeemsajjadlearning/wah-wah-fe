@@ -33,12 +33,16 @@ import { CloudStorageComponent } from './routes/modules/cloud-storage/cloud-stor
 import { SalaryComponent } from './routes/modules/salary/salary.component';
 import { LoanComponent } from './routes/modules/loan/loan.component';
 import { CCTVComponent } from './routes/modules/cctv/cctv.component';
+import { VerifyEmailComponent } from './routes/auth/verify-email/verify-email.component';
+import { VerifyResetPasswordComponent } from './routes/auth/verify-reset-password/verify-reset-password.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'verify-email', component: VerifyEmailComponent },
+  { path: 'set-reset-password', component: VerifyResetPasswordComponent },
   {
     path: '',
     component: LayoutComponent,

@@ -12,10 +12,10 @@ import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
-    selector: 'app-list',
-    templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss'],
-    standalone: false
+  selector: 'app-list',
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss'],
+  standalone: false,
 })
 export class ListComponent implements OnInit, OnChanges {
   @Output() createNewTask = new EventEmitter<any>();
@@ -53,8 +53,10 @@ export class ListComponent implements OnInit, OnChanges {
 
   toggleCompleted(task: Task): void {
     task.completed = !task.completed;
+    console.log(task);
+
     this.taskService
-      .updateTask(task._id, task)
+      .updateTask(task.id, task)
       .pipe(
         catchError((err) => {
           this.confirmationService.open({

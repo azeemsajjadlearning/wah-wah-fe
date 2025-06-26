@@ -89,6 +89,7 @@ export class CloudStorageComponent implements OnInit {
           res.result[0].message_ids.forEach((element: any) => {
             chunkUrls.push(element);
           });
+          console.log(chunkUrls);
 
           const chunkBlobs: Blob[] = [];
 
@@ -241,7 +242,7 @@ export class CloudStorageComponent implements OnInit {
       folderDialog.afterClosed().subscribe((val) => {
         if (val) {
           this.cloudStorageService
-            .renameFolder(folder._id, val)
+            .renameFolder(folder.folder_id, val)
             .pipe(finalize(() => this.getFilesAndfolders(this.folderId)))
             .subscribe((resp) => {
               if (resp.success)
@@ -251,7 +252,7 @@ export class CloudStorageComponent implements OnInit {
       });
     } else if (type == 'delete') {
       this.cloudStorageService
-        .deleteFolder(folder._id)
+        .deleteFolder(folder.folder_id)
         .pipe(
           catchError((err) => {
             this.snackBar.open(err.error?.error, 'X', { duration: 3000 });
@@ -295,10 +296,10 @@ export class CloudStorageComponent implements OnInit {
   }
 
   openFolder(folder: FolderList): void {
-    this.router.navigateByUrl(`/cloud-storage/${folder._id}`);
+    this.router.navigateByUrl(`/cloud-storage/${folder.folder_id}`);
   }
 
-  goPath(folder: FolderPath): void {
+  goPath(folder: any): void {
     this.router.navigateByUrl(`/cloud-storage/${folder.folder_id}`);
   }
 
@@ -515,7 +516,7 @@ export class CloudStorageComponent implements OnInit {
   onDrop(folder: FolderList) {
     if (this.dragType === 'file') {
       this.cloudStorageService
-        .moveFile(this.dragableItem.file_id, folder._id)
+        .moveFile(this.dragableItem.file_id, folder.folder_id)
         .subscribe((resp) => {
           if (resp.success) {
             this.snackBar.open(resp.message, 'X');
@@ -524,7 +525,7 @@ export class CloudStorageComponent implements OnInit {
         });
     } else if (this.dragType === 'folder') {
       this.cloudStorageService
-        .moveFolder(this.dragableItem.folder_id, folder._id)
+        .moveFolder(this.dragableItem.folder_id, folder.folder_id)
         .subscribe((resp) => {
           if (resp.success) {
             this.snackBar.open(resp.message, 'X');

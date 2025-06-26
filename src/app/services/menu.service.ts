@@ -17,13 +17,13 @@ export class MenuService {
     );
   }
 
-  public givePermission(userId: string, menuId: string): Observable<any> {
+  public givePermission(userId: number, menuId: number): Observable<any> {
     return this.http.get(
       environment.api_prefix + `menu/give-permission/${userId}/${menuId}`
     );
   }
 
-  public deletePermission(userId: string, menuId: string): Observable<any> {
+  public deletePermission(userId: number, menuId: number): Observable<any> {
     return this.http.get(
       environment.api_prefix + `menu/remove-permission/${userId}/${menuId}`
     );

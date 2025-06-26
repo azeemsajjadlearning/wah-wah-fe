@@ -1,8 +1,11 @@
 export interface Task {
-  _id: string;
+  id: number;
   title: string;
-  notes: string;
-  completed: boolean;
-  dueDate: string | null;
-  priority: 0 | 1 | 2;
+  completed?: boolean;
+  due_date?: string | null;
+  notes?: string | null;
+  priority?: number | null;
+  user_id: number;
+  created_on?: string;
+  updated_on?: string;
 }

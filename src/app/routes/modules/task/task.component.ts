@@ -12,10 +12,10 @@ import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
-    selector: 'selector-name',
-    templateUrl: 'task.component.html',
-    styleUrls: ['task.component.scss'],
-    standalone: false
+  selector: 'selector-name',
+  templateUrl: 'task.component.html',
+  styleUrls: ['task.component.scss'],
+  standalone: false,
 })
 export class TaskComponent implements OnInit {
   @ViewChild(MatDrawer) drawer!: MatDrawer;
@@ -30,8 +30,10 @@ export class TaskComponent implements OnInit {
   ngOnInit(): void {}
 
   getNewTask(task: Task) {
+    console.log(task);
+
     if (task != null) {
-      if (task._id == null) {
+      if (task.id == null) {
         this.taskService
           .createTask(task)
           .pipe(
@@ -68,7 +70,7 @@ export class TaskComponent implements OnInit {
           .subscribe();
       } else {
         this.taskService
-          .updateTask(task._id, task)
+          .updateTask(task.id, task)
           .pipe(
             catchError((err) => {
               this.confirmationService.open({

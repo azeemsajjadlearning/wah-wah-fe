@@ -1,0 +1,72 @@
+<div
+  *ngIf="state === 'loading'"
+  class="flex items-center justify-center min-h-screen bg-white"
+>
+  <mat-spinner></mat-spinner>
+</div>
+
+<div
+  *ngIf="state === 'success'"
+  class="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-100 to-green-50 px-4"
+>
+  <mat-card
+    class="p-8 max-w-lg w-full shadow-2xl rounded-2xl border border-green-300 bg-white text-center"
+  >
+    <div class="flex justify-center mb-6">
+      <mat-icon
+        class="text-green-600 text-6xl"
+        style="height: 70px !important; width: 70px"
+        >check_circle</mat-icon
+      >
+    </div>
+    <h1 class="text-3xl font-bold text-green-700 mb-2">
+      Your Email Has Been Verified!
+    </h1>
+    <p class="text-gray-600 mb-6 text-lg">
+      Thank you for confirming your email address. Your account is now active
+      and ready to use.
+    </p>
+    <div class="flex justify-center">
+      <button
+        mat-raised-button
+        color="primary"
+        routerLink="/sign-in"
+        class="rounded-full px-6 py-2 shadow-md hover:shadow-lg transition"
+      >
+        Go to Login
+      </button>
+    </div>
+  </mat-card>
+</div>
+
+<div
+  *ngIf="state === 'error'"
+  class="flex items-center justify-center min-h-screen bg-gradient-to-br from-red-100 to-red-50 px-4"
+>
+  <mat-card
+    class="p-8 max-w-lg w-full shadow-2xl rounded-2xl border border-red-300 bg-white text-center"
+  >
+    <div class="flex justify-center mb-6">
+      <mat-icon
+        class="text-red-600 text-6xl"
+        style="height: 70px !important; width: 70px"
+        >error</mat-icon
+      >
+    </div>
+    <h1 class="text-3xl font-bold text-red-700 mb-2">Verification Failed</h1>
+    <p class="text-gray-600 mb-6 text-lg">
+      This verification link is invalid or has expired. Please try registering
+      again.
+    </p>
+    <div class="flex justify-center">
+      <button
+        mat-raised-button
+        color="primary"
+        routerLink="/sign-up"
+        class="rounded-full px-6 py-2 shadow-md hover:shadow-lg transition"
+      >
+        Go to Register
+      </button>
+    </div>
+  </mat-card>
+</div>

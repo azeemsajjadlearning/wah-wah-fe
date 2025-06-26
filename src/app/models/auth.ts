@@ -1,4 +1,5 @@
 export interface SignUpUser {
+  name: string;
   email: string;
   password: string;
 }
@@ -9,20 +10,19 @@ export interface SignInUser {
 }
 
 export interface User {
-  _id: string;
-  user_id: string;
-  name?: any;
+  id: number;
+  name: string;
   email: string;
-  phone?: any;
-  occupation?: any;
-  photoURL?: any;
-  dob?: any;
-  gender?: 'male' | 'female' | 'other';
-  country?: any;
-  state?: any;
-  city?: any;
-  about?: any;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  phone: string | null;
+  occupation: string | null;
+  photo_url: string | null;
+  dob: string | null;
+  gender: string | null;
+  country: string | null;
+  state: string | null;
+  city: string | null;
+  about: string | null;
+  is_verified: boolean;
+  created_on: string;
+  updated_on: string;
 }

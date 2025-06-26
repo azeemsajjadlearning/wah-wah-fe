@@ -5,21 +5,15 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 import { environment } from 'src/app/environments/environment';
 import { User } from 'src/app/models/auth';
 import { AuthService } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { ConfirmationService } from '../confirmation/confirmation.service';
 
 @Component({
-    selector: 'app-layout',
-    templateUrl: './layout.component.html',
-    styleUrls: ['./layout.component.scss'],
-    standalone: false
+  selector: 'app-layout',
+  templateUrl: './layout.component.html',
+  styleUrls: ['./layout.component.scss'],
+  standalone: false,
 })
 export class LayoutComponent {
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private confirmationService: ConfirmationService
-  ) {
+  constructor(private authService: AuthService, private router: Router) {
     setInterval(() => {
       this.currentTime = new Date();
     }, 1000);
@@ -52,33 +46,8 @@ export class LayoutComponent {
   }
 
   logout() {
-    this.authService.logOut().subscribe((res) => {
-      if (res.success) {
-        localStorage.removeItem(environment.token);
-        this.router.navigateByUrl('sign-in');
-      } else {
-        this.confirmationService.open({
-          title: 'Error',
-          icon: {
-            color: 'warn',
-            name: 'error',
-            show: true,
-          },
-          message: res.err.message || 'something went wrong!',
-          dismissible: false,
-          actions: {
-            confirm: {
-              label: 'Ok!',
-              color: 'warn',
-              show: true,
-            },
-            cancel: {
-              show: false,
-            },
-          },
-        });
-      }
-    });
+    localStorage.removeItem(environment.token);
+    this.router.navigateByUrl('sign-in');
   }
 
   btnClicked() {

@@ -1,37 +1,48 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, finalize } from 'rxjs';
 import { ConfirmationService } from 'src/app/common/confirmation/confirmation.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-  templateUrl: 'signup.component.html',
-  styleUrls: ['signup.component.scss'],
+  templateUrl: 'verify-reset-password.component.html',
   standalone: false,
 })
-export class SignUpComponent implements OnInit {
+export class VerifyResetPasswordComponent implements OnInit {
+  token: string | null = null;
+  password = new FormControl('', [
+    Validators.required,
+    Validators.minLength(6),
+  ]);
+  state: 'loading' | 'success' | 'error' | 'form' = 'loading';
+  errorMessage = '';
+
   constructor(
-    private fb: FormBuilder,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
     private router: Router
-  ) {}
-
-  signUpForm: FormGroup;
-
-  ngOnInit() {
-    this.signUpForm = this.fb.group({
-      name: [null, Validators.required],
-      email: [null, [Validators.required, Validators.email]],
-      password: [null, Validators.required],
+  ) {
+    this.route.queryParamMap.subscribe((params) => {
+      this.token = params.get('token');
+      if (!this.token) {
+        this.state = 'error';
+        this.errorMessage = 'Invalid password reset link';
+      } else {
+        this.state = 'form';
+      }
     });
   }
 
-  signUpFormSubmit() {
-    this.signUpForm.disable();
+  ngOnInit() {}
+
+  async resetPassword() {
+    if (this.password.invalid || !this.token) return;
+
+    this.state = 'loading';
     this.authService
-      .signUp(this.signUpForm.value)
+      .resetPassword(this.token, this.password.value)
       .pipe(
         catchError((err) => {
           this.confirmationService.open({
@@ -41,7 +52,8 @@ export class SignUpComponent implements OnInit {
               name: 'error',
               show: true,
             },
-            message: 'something went wrong',
+            message:
+              err.error?.message || err.error?.error || 'something went wrong!',
             dismissible: false,
             actions: {
               confirm: {
@@ -54,12 +66,15 @@ export class SignUpComponent implements OnInit {
               },
             },
           });
-          throw new Error(err);
+          throw err;
         }),
-        finalize(() => this.signUpForm.enable())
+        finalize(() => {
+          this.state = 'form';
+        })
       )
-      .subscribe((res) => {
-        if (res.success) {
+      .subscribe((resp) => {
+        if (resp?.success) {
+          this.state = 'success';
           const pop = this.confirmationService.open({
             title: 'Success',
             icon: {
@@ -67,7 +82,7 @@ export class SignUpComponent implements OnInit {
               name: 'done',
               show: true,
             },
-            message: 'User Created! Please verify your email!',
+            message: resp?.message || 'Success!',
             dismissible: false,
             actions: {
               confirm: {
@@ -85,30 +100,9 @@ export class SignUpComponent implements OnInit {
             this.router.navigateByUrl('/sign-in');
           });
         } else {
-          const pop = this.confirmationService.open({
-            title: 'Error',
-            icon: {
-              color: 'warn',
-              name: 'error',
-              show: true,
-            },
-            message: res.err.message,
-            dismissible: false,
-            actions: {
-              confirm: {
-                label: 'Ok!',
-                color: 'warn',
-                show: true,
-              },
-              cancel: {
-                show: false,
-              },
-            },
-          });
-
-          pop.afterClosed().subscribe(() => {
-            this.signUpForm.enable();
-          });
+          this.state = 'error';
+          this.errorMessage =
+            resp?.message || 'Something went wrong. Please try again.';
         }
       });
   }

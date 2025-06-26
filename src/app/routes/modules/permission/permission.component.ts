@@ -7,10 +7,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
-    selector: 'app-permission',
-    templateUrl: './permission.component.html',
-    styleUrls: ['./permission.component.scss'],
-    standalone: false
+  selector: 'app-permission',
+  templateUrl: './permission.component.html',
+  styleUrls: ['./permission.component.scss'],
+  standalone: false,
 })
 export class PermissionComponent {
   users: User[];
@@ -38,7 +38,7 @@ export class PermissionComponent {
   change(event: any, user: User, item: SideMenu) {
     if (event.target.checked) {
       this.menuService
-        .givePermission(user.user_id, item._id)
+        .givePermission(user.id, item._id)
         .pipe(
           catchError((err) => {
             this.confirmationService.open({
@@ -71,7 +71,7 @@ export class PermissionComponent {
         .subscribe();
     } else {
       this.menuService
-        .deletePermission(user.user_id, item._id)
+        .deletePermission(user.id, item._id)
         .pipe(
           catchError((err) => {
             this.confirmationService.open({
@@ -105,11 +105,11 @@ export class PermissionComponent {
     }
   }
 
-  checkUserMenu(user_id: string, menu: string) {
+  checkUserMenu(user: User, menu: SideMenu) {
     for (let i = 0; i < this.allPermission.length; i++) {
       if (
-        this.allPermission[i].users.includes(user_id) &&
-        this.allPermission[i].menu === menu
+        this.allPermission[i].user_id === user.id &&
+        this.allPermission[i].menu_id === menu._id
       ) {
         return true;
       }

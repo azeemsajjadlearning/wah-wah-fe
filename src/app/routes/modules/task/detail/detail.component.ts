@@ -42,11 +42,11 @@ export class DetailComponent implements OnInit, OnChanges {
 
   private createForm() {
     this.taskForm = this._formBuilder.group({
-      _id: this.task?._id || null,
+      id: this.task?.id || null,
       title: this.task?.title || null,
       notes: this.task?.notes || null,
       completed: this.task?.completed || false,
-      dueDate: this.task?.dueDate || null,
+      due_date: this.task?.due_date || null,
       priority: this.task?.priority || 1,
     });
   }
@@ -89,7 +89,7 @@ export class DetailComponent implements OnInit, OnChanges {
     confirm.afterClosed().subscribe((res: string) => {
       if (res == 'confirmed') {
         this.taskService
-          .deleteTask(this.task._id)
+          .deleteTask(this.task.id)
           .pipe(
             finalize(() => {
               this.onSubmit.emit(null);
@@ -106,7 +106,7 @@ export class DetailComponent implements OnInit, OnChanges {
   }
 
   isOverdue(): boolean {
-    return dayjs(this.taskForm.value.dueDate, 'YYYY-MM-DDTHH:mm:ssZ').isBefore(
+    return dayjs(this.taskForm.value.due_date, 'YYYY-MM-DDTHH:mm:ssZ').isBefore(
       dayjs(),
       'day'
     );

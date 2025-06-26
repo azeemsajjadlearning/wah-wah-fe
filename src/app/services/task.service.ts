@@ -45,23 +45,23 @@ export class TaskService {
     return this.http.post(environment.api_prefix + 'tasks', {
       title: task?.title,
       completed: task?.completed,
-      dueDate: task?.dueDate,
+      due_date: task?.due_date,
       notes: task?.notes,
       priority: task?.priority,
     });
   }
 
-  public updateTask(id: string, task: Task) {
+  public updateTask(id: number, task: Task) {
     return this.http.put(environment.api_prefix + 'tasks/' + id, {
       title: task?.title,
       completed: task?.completed,
-      dueDate: task?.dueDate,
+      due_date: task?.due_date,
       notes: task?.notes,
       priority: task?.priority,
     });
   }
 
-  public deleteTask(id: string) {
+  public deleteTask(id: number) {
     return this.http.delete(environment.api_prefix + 'tasks/' + id, {});
   }
 }

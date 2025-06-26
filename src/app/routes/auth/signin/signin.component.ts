@@ -7,10 +7,10 @@ import { environment } from 'src/app/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
-    selector: 'selector-name',
-    templateUrl: 'signin.component.html',
-    styleUrls: ['signin.component.scss'],
-    standalone: false
+  selector: 'selector-name',
+  templateUrl: 'signin.component.html',
+  styleUrls: ['signin.component.scss'],
+  standalone: false,
 })
 export class SignInComponent implements OnInit {
   constructor(
@@ -36,6 +36,8 @@ export class SignInComponent implements OnInit {
       .signIn(this.signInForm.value)
       .pipe(
         catchError((err) => {
+          console.log(err.error.message);
+
           this.confirmationService.open({
             title: 'Error',
             icon: {
@@ -44,9 +46,7 @@ export class SignInComponent implements OnInit {
               show: true,
             },
             message:
-              err.error?.err?.message ||
-              err.error?.error ||
-              'something went wrong!',
+              err.error?.message || err.error?.error || 'something went wrong!',
             dismissible: false,
             actions: {
               confirm: {
@@ -68,8 +68,8 @@ export class SignInComponent implements OnInit {
       )
       .subscribe((res) => {
         if (res.success) {
-          localStorage.setItem(environment.token, res.result);
-          this.router.navigateByUrl('/dashboard');
+          localStorage.setItem(environment.token, res.result.token);
+          this.router.navigateByUrl('/task');
         } else {
           this.confirmationService.open({
             title: 'Error',

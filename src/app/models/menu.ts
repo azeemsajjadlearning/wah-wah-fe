@@ -31,23 +31,19 @@ export interface MenuItem {
 }
 
 export interface SideMenu {
-  _id: string;
+  _id: number;
   id: string;
   title: string;
   type: string;
   icon: string;
   link: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  created_on: string;
+  updated_on: string;
 }
 
 export interface AllPermission {
-  _id: string;
-  users: string[];
-  menu: string;
-  permissions: string[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  id: number;
+  user_id: number;
+  menu_id: number;
+  created_on: string;
 }

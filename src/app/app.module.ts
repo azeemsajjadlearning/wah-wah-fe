@@ -92,6 +92,8 @@ import { DndModule } from 'ngx-drag-drop';
 import { StreamService } from './services/stream.service';
 import { CCTVService } from './services/cctv.service';
 import { CCTVComponent } from './routes/modules/cctv/cctv.component';
+import { VerifyEmailComponent } from './routes/auth/verify-email/verify-email.component';
+import { VerifyResetPasswordComponent } from './routes/auth/verify-reset-password/verify-reset-password.component';
 
 @NgModule({
   declarations: [
@@ -105,6 +107,8 @@ import { CCTVComponent } from './routes/modules/cctv/cctv.component';
     SignUpComponent,
     SignInComponent,
     ResetPasswordComponent,
+    VerifyEmailComponent,
+    VerifyResetPasswordComponent,
     DashboardComponent,
     CCTVComponent,
     TaskComponent,

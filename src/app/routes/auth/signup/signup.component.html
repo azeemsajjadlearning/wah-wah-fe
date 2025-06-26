@@ -120,6 +120,15 @@
             (ngSubmit)="signUpForm.valid && signUpFormSubmit()"
           >
             <!-- Name field -->
+            <mat-label>Name</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+              <input matInput formControlName="name" />
+              <mat-error *ngIf="signUpForm.get('name')?.hasError('required')">
+                Name is required
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Name field -->
             <mat-label>Email</mat-label>
             <mat-form-field class="w-full" appearance="outline">
               <input matInput formControlName="email" />

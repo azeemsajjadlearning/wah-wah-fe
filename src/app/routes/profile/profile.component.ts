@@ -8,10 +8,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ThirdPartyService } from 'src/app/services/third-party.service';
 
 @Component({
-    selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.scss'],
-    standalone: false
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss'],
+  standalone: false,
 })
 export class ProfileComponent {
   currentUser: User;
@@ -39,7 +39,7 @@ export class ProfileComponent {
       this.currentUser = resp[1].result;
 
       this.userForm = this._formbuilder.group({
-        user_id: this.currentUser.user_id,
+        id: this.currentUser.id,
         name: this.currentUser.name || null,
         email: { value: this.currentUser.email || null, disabled: true },
         phone: this.currentUser.phone || null,
