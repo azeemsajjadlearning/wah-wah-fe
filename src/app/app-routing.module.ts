@@ -37,7 +37,7 @@ import { VerifyEmailComponent } from './routes/auth/verify-email/verify-email.co
 import { VerifyResetPasswordComponent } from './routes/auth/verify-reset-password/verify-reset-password.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: '', pathMatch: 'full', redirectTo: 'task' },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
