@@ -89,8 +89,6 @@ export class CloudStorageComponent implements OnInit {
           res.result[0].message_ids.forEach((element: any) => {
             chunkUrls.push(element);
           });
-          console.log(chunkUrls);
-
           const chunkBlobs: Blob[] = [];
 
           this.cloudStorageService.setOperation('Download');

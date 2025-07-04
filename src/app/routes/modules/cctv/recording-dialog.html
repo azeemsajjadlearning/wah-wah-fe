@@ -1,0 +1,50 @@
+<h2 mat-dialog-title class="text-xl font-semibold">📹 Record Segment</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+  <mat-dialog-content class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="datePicker"
+        placeholder="Select date"
+        formControlName="date"
+        required
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="datePicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #datePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Time</mat-label>
+      <input matInput type="time" formControlName="time" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full sm:col-span-2">
+      <mat-label>Duration (seconds)</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="duration"
+        placeholder="e.g. 60"
+        required
+        min="1"
+      />
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="flex justify-end gap-2 pt-4">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      ⏺ Start Recording
+    </button>
+  </mat-dialog-actions>
+</form>

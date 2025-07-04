@@ -1,8 +1,30 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { environment } from 'src/app/environments/environment';
 import { CCTVService } from 'src/app/services/cctv.service';
 
 declare var JSMpeg: any;
+
+interface Recordings {
+  filename: string;
+  size: string;
+  downloadUrl: string;
+  created_on: Date;
+}
 
 @Component({
   selector: 'app-cctv',
@@ -13,7 +35,8 @@ declare var JSMpeg: any;
 export class CCTVComponent implements OnInit, OnDestroy {
   constructor(
     private cctvService: CCTVService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {}
 
   showStartButton = false;
@@ -27,6 +50,16 @@ export class CCTVComponent implements OnInit, OnDestroy {
   players: { [channel: string]: any } = {};
   now = new Date();
   selectedDate: FormControl = new FormControl(this.now);
+  recordingList: Recordings[] = [];
+  dataSource = new MatTableDataSource<Recordings>();
+
+  displayedColumns: string[] = ['filename', 'size', 'created_on', 'action'];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   ngOnInit() {
     if (typeof JSMpeg === 'undefined') {
@@ -57,6 +90,11 @@ export class CCTVComponent implements OnInit, OnDestroy {
         this.getBaseChannel(this.singleChannel || this.channels[0]),
         date || this.now
       );
+    });
+
+    this.cctvService.getAllRecordings().subscribe((resp) => {
+      this.recordingList = resp.recordings;
+      this.dataSource.data = this.recordingList;
     });
   }
 
@@ -186,6 +224,31 @@ export class CCTVComponent implements OnInit, OnDestroy {
     });
   }
 
+  openRecordingForm() {
+    const recordingDialogRef = this.dialog.open(RecordingDialog, {
+      width: '400px',
+    });
+
+    recordingDialogRef.afterClosed().subscribe((val) => {
+      this.cctvService
+        .recordSegment(
+          this.getBaseChannel(this.singleChannel),
+          val.start,
+          val.duration
+        )
+        .subscribe((resp) => {
+          console.log(resp);
+        });
+    });
+  }
+
+  downloadVideo(recording: Recordings) {
+    window.open(
+      new URL(environment.api_prefix).origin + recording.downloadUrl,
+      '_blank'
+    );
+  }
+
   goFullScreen() {
     const canvas = document.getElementById(
       'video-canvas-single'
@@ -253,6 +316,51 @@ export class CCTVComponent implements OnInit, OnDestroy {
       this.getBaseChannel(this.singleChannel || this.channels[0]),
       today.getTime() + seconds * 1000,
       true
+    );
+  }
+}
+
+@Component({
+  templateUrl: 'recording-dialog.html',
+  standalone: false,
+})
+export class RecordingDialog {
+  constructor(
+    public dialogRef: MatDialogRef<RecordingDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder
+  ) {}
+
+  form = this.fb.group({
+    date: [new Date(), Validators.required],
+    time: ['12:00', Validators.required],
+    duration: [60, [Validators.required, Validators.min(1)]],
+  });
+
+  submit() {
+    let input = {
+      date: this.form.get('date')?.value,
+      time: this.form.get('time')?.value,
+    };
+
+    let start = this.combineDateAndTime(input);
+
+    this.dialogRef.close({
+      start: start,
+      duration: this.form.get('duration')?.value,
+    });
+  }
+
+  private combineDateAndTime({ date, time }: any): Date {
+    const baseDate = new Date(date);
+    const [hours, minutes] = time.split(':').map(Number);
+
+    return new Date(
+      baseDate.getFullYear(),
+      baseDate.getMonth(),
+      baseDate.getDate(),
+      hours,
+      minutes
     );
   }
 }

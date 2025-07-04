@@ -91,7 +91,10 @@ import { ProgressBarComponent } from './common/progress-bar/progress-bar.compone
 import { DndModule } from 'ngx-drag-drop';
 import { StreamService } from './services/stream.service';
 import { CCTVService } from './services/cctv.service';
-import { CCTVComponent } from './routes/modules/cctv/cctv.component';
+import {
+  CCTVComponent,
+  RecordingDialog,
+} from './routes/modules/cctv/cctv.component';
 import { VerifyEmailComponent } from './routes/auth/verify-email/verify-email.component';
 import { VerifyResetPasswordComponent } from './routes/auth/verify-reset-password/verify-reset-password.component';
 
@@ -153,6 +156,7 @@ import { VerifyResetPasswordComponent } from './routes/auth/verify-reset-passwor
     ProgressBarComponent,
     RenameFileDialog,
     FileDetailDialog,
+    RecordingDialog,
   ],
   bootstrap: [AppComponent],
   imports: [

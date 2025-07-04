@@ -32,4 +32,23 @@ export class CCTVService {
       params,
     });
   }
+
+  public recordSegment(
+    channel: string,
+    starttime: any,
+    duration: number
+  ): Observable<any> {
+    const params = new HttpParams()
+      .set('channel', channel)
+      .set('start', starttime)
+      .set('duration', duration);
+
+    return this.http.get(environment.api_prefix + 'stream/record-segment', {
+      params,
+    });
+  }
+
+  public getAllRecordings(): Observable<any> {
+    return this.http.get(environment.api_prefix + 'stream/get-all-recordings');
+  }
 }

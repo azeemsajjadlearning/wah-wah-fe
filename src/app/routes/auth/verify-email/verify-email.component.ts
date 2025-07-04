@@ -12,7 +12,6 @@ export class VerifyEmailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private authService: AuthService) {
     this.route.queryParamMap.subscribe((params) => {
-      console.log(params.get('token'));
       this.authService
         .verfiyEmail(params.get('token'))
         .pipe(
