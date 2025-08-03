@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "starthost": "ng serve --host 192.168.29.182",
+    "starthost": "ng serve --host 192.168.29.27",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
